@@ -1,0 +1,152 @@
+  generator client {
+    provider        = "prisma-client-js"
+    previewFeatures = ["postgresqlExtensions"]
+  }
+
+  datasource db {
+    provider   = "postgresql"
+    extensions = [vector]
+  }
+
+  // ========================
+  // 사용자
+  // ========================
+  model User {
+    id            String   @id @default(uuid())
+    googleId      String   @unique
+    email         String   @unique
+    name          String
+    profileImage  String?
+    createdAt     DateTime @default(now())
+    updatedAt     DateTime @updatedAt
+
+    stories       Story[]      // 창작 스토리
+    chatRoom      ChatRoom?    // 1:1 관계
+  }
+
+  // ========================
+  // 카테고리 (API 없이 DB만 사용)
+  // ========================
+  model Category {
+    id     Int     @id @default(autoincrement())
+    name   String  // 세계문학, 한국문학, 창작
+    slug   String  @unique  // world_lit, korean_lit, creative
+    order  Int     @default(0)
+
+    stories Story[]
+  }
+
+  // ========================
+  // 스토리 (작품)
+  // ========================
+  model Story {
+    id          String   @id @default(uuid())
+    title       String
+    authorName  String   // 원작 작가명
+    description String?  // 한 줄 소개
+    summary     String?  @db.VarChar(3000)  // 줄거리
+    coverColor  String   @default("bg-stone-800")
+    tags        String[]
+    isOfficial  Boolean  @default(false)  // 공식 vs 창작
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    categoryId  Int
+    category    Category @relation(fields: [categoryId], references: [id])
+
+    creatorId   String?  // 창작 스토리인 경우 작성자
+    creator     User?    @relation(fields: [creatorId], references: [id])
+
+    characters  Character[]
+    contents    StoryContent[]
+
+    @@index([categoryId])
+    @@index([createdAt])
+  }
+
+  // ========================
+  // 등장인물
+  // ========================
+  model Character {
+    id           String   @id @default(uuid())
+    name         String
+    role         String   // 주인공, 조연 등
+    description  String
+    personality  String?  @db.Text  // AI 프롬프트용 성격 설정
+    firstMessage String?  // 첫 인사말
+    imageColor   String   @default("bg-stone-400")
+    voiceId      String?  // ElevenLabs voice ID
+    createdAt    DateTime @default(now())
+
+    storyId     String
+    story       Story    @relation(fields: [storyId], references: [id], onDelete: Cascade)
+
+    chatRoomCharacters ChatRoomCharacter[]
+
+    @@unique([storyId, name])
+    @@index([storyId])
+  }
+
+  // ========================
+  // 원작 텍스트 청크 (RAG)
+  // ========================
+  model StoryContent {
+    id          String                       @id @default(uuid())
+    content     String                       @db.Text
+    chunkIndex  Int
+    embedding   Unsupported("vector(1536)")?
+    createdAt   DateTime @default(now())
+
+    storyId     String
+    story       Story    @relation(fields: [storyId], references: [id], onDelete: Cascade)
+
+    @@index([storyId, chunkIndex])
+  }
+
+  // ========================
+  // 채팅방 (사용자당 1개)
+  // ========================
+  model ChatRoom {
+    id        String   @id @default(uuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    userId    String   @unique  // 사용자당 1개
+    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    characters ChatRoomCharacter[]
+  }
+
+  // ========================
+  // 채팅방-캐릭터 연결
+  // ========================
+  model ChatRoomCharacter {
+    id        String   @id @default(uuid())
+    addedAt   DateTime @default(now())
+
+    chatRoomId  String
+    chatRoom    ChatRoom  @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
+
+    characterId String
+    character   Character @relation(fields: [characterId], references: [id])
+
+    messages    ChatMessage[]
+
+    @@unique([chatRoomId, characterId])
+    @@index([chatRoomId])
+  }
+
+  // ========================
+  // 채팅 메시지
+  // ========================
+  model ChatMessage {
+    id        String   @id @default(uuid())
+    role      String   // user | assistant
+    content   String   @db.Text
+    createdAt DateTime @default(now())
+
+    chatRoomCharacterId String
+    chatRoomCharacter   ChatRoomCharacter @relation(fields: [chatRoomCharacterId], references: [id], onDelete: Cascade)
+
+    @@index([chatRoomCharacterId, createdAt])
+  }
