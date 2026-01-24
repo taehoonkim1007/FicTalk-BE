@@ -1,0 +1,12 @@
+export type ErrorCode =
+  | "VALIDATION_ERROR"
+  | "AUTH_INVALID_TOKEN"
+  | "AUTH_EXPIRED_TOKEN"
+  | "GUEST_NOT_ALLOWED"
+  | "USER_NOT_FOUND"
+  | "BAD_REQUEST"
+  | "INTERNAL_SERVER_ERROR"
+  // 기본 HTTP 에러 매핑
+  | "TOKEN_INVALID"
+  | "NOT_FOUND"
+  | "CONFLICT";
