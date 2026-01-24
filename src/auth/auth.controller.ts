@@ -60,7 +60,7 @@ export class AuthController {
 
     res.cookie("refreshToken", tokens.refreshToken, {
       httpOnly: true,
-      secure: isProduction,
+      secure: isProduction ? true : false,
       sameSite: isProduction ? "none" : "lax",
       maxAge: REFRESH_TOKEN_TTL,
     });
@@ -70,19 +70,37 @@ export class AuthController {
 
   @Public()
   @Post("refresh")
-  async refresh(@Body() dto: RefreshTokenDto) {
+  async refresh(@Body() dto: RefreshTokenDto, @Res({ passthrough: true }) res: Response) {
     this.logger.debug("Token Refresh Requested");
     const tokens = await this.authService.refreshTokens(dto.refreshToken);
+
+    const isProduction = process.env.NODE_ENV === "production";
+
+    res.cookie("refreshToken", tokens.refreshToken, {
+      httpOnly: true,
+      secure: isProduction ? true : false,
+      sameSite: isProduction ? "none" : "lax",
+      maxAge: REFRESH_TOKEN_TTL,
+    });
 
     return tokens;
   }
 
   @Post("logout")
-  async logout(@CurrentUser() user: AuthenticatedUser) {
+  async logout(@CurrentUser() user: AuthenticatedUser, @Res({ passthrough: true }) res: Response) {
     if (user.role === "user") {
       await this.authService.logout(user.id);
       this.logger.log(`User Logged Out: ${user.id}`);
     }
+
+    const isProduction = process.env.NODE_ENV === "production";
+
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: isProduction ? true : false,
+      sameSite: isProduction ? "none" : "lax",
+      path: "/",
+    });
 
     return { message: "Logged out successfully" };
   }
