@@ -29,7 +29,7 @@ const bootstrap = async () => {
   );
 
   // Global Exception Filter
-  app.useGlobalFilters(new GlobalExceptionFilter());
+  app.useGlobalFilters(new GlobalExceptionFilter(configService));
 
   const port = configService.get<number>("PORT") || 3000;
   await app.listen(port);
