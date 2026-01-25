@@ -9,4 +9,9 @@ export type ErrorCode =
   // 기본 HTTP 에러 매핑
   | "TOKEN_INVALID"
   | "NOT_FOUND"
-  | "CONFLICT";
+  | "CONFLICT"
+  // Story
+  | "STORY_NOT_FOUND"
+  | "STORY_NOT_OWNER"
+  | "CATEGORY_NOT_FOUND"
+  | "CHARACTER_NOT_FOUND";

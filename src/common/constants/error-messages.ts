@@ -13,6 +13,12 @@ export const ERROR_MESSAGES: Record<ErrorCode, string> = {
   // User
   USER_NOT_FOUND: "사용자를 찾을 수 없습니다.",
 
+  // Story
+  STORY_NOT_FOUND: "스토리를 찾을 수 없습니다.",
+  STORY_NOT_OWNER: "본인의 스토리만 수정/삭제할 수 있습니다.",
+  CATEGORY_NOT_FOUND: "카테고리를 찾을 수 없습니다.",
+  CHARACTER_NOT_FOUND: "캐릭터를 찾을 수 없습니다.",
+
   // Common
   BAD_REQUEST: "잘못된 요청입니다.",
   NOT_FOUND: "리소스를 찾을 수 없습니다.",
