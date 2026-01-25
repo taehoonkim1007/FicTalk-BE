@@ -7,9 +7,12 @@ import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { AuthModule } from "./auth/auth.module";
 import { JwtAuthGuard } from "./auth/guards/jwt-auth.guard";
+import { CategoriesModule } from "./categories/categories.module";
+import { CharactersModule } from "./characters/characters.module";
 import { GlobalExceptionFilter } from "./common/filters/http-exception.filter";
 import { PrismaModule } from "./prisma/prisma.module";
 import { RedisModule } from "./redis/redis.module";
+import { StoriesModule } from "./stories/stories.module";
 
 @Module({
   imports: [
@@ -30,6 +33,9 @@ import { RedisModule } from "./redis/redis.module";
     PrismaModule,
     RedisModule,
     AuthModule,
+    CategoriesModule,
+    CharactersModule,
+    StoriesModule,
   ],
   controllers: [AppController],
   providers: [
