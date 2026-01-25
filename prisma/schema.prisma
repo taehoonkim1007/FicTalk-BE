@@ -25,7 +25,7 @@
   }
 
   // ========================
-  // 카테고리 (API 없이 DB만 사용)
+  // 카테고리
   // ========================
   model Category {
     id     Int     @id @default(autoincrement())
@@ -43,11 +43,12 @@
     id          String   @id @default(uuid())
     title       String
     authorName  String   // 원작 작가명
-    description String?  // 한 줄 소개
-    summary     String?  @db.VarChar(3000)  // 줄거리
+    description String   // 한 줄 소개
+    summary     String   @db.VarChar(3000)  // 줄거리
     coverColor  String   @default("bg-stone-800")
-    tags        String[]
     isOfficial  Boolean  @default(false)  // 공식 vs 창작
+    marketingTitle       String? // 홍보용 제목 (Hero Slide용)
+    marketingDescription String? // 홍보용 문구 (Hero Slide용)
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
 
