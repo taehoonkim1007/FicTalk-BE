@@ -83,9 +83,14 @@ export class StoriesRepository {
         description: true,
         summary: true,
         coverColor: true,
-
         isOfficial: true,
         createdAt: true,
+        creator: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
         category: {
           select: {
             id: true,

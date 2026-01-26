@@ -25,6 +25,10 @@ export interface StoriesListResponse {
 
 export interface StoryDetailResponse extends StoryResponse {
   summary: string;
+  creator: {
+    id: string;
+    name: string;
+  } | null;
   characters: CharacterResponse[];
 }
 
