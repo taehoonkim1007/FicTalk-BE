@@ -45,6 +45,7 @@ export class CharactersRepository {
   async create(storyId: string, dto: CreateCharacterDto): Promise<CharacterDetail> {
     return this.prisma.character.create({
       data: {
+        id: dto.id,
         storyId,
         name: dto.name,
         role: dto.role,

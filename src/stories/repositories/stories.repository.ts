@@ -1,8 +1,9 @@
 import { Injectable } from "@nestjs/common";
 import { type Prisma } from "@prisma/client";
 
+import { type CreateCharacterDto } from "../../characters/dto/create-character.dto";
 import { PrismaService } from "../../prisma/prisma.service";
-import { type CreateCharacterDto, type CreateStoryDto } from "../dto/create-story.dto";
+import { type CreateStoryDto } from "../dto/create-story.dto";
 import { type GetStoriesDto } from "../dto/get-stories.dto";
 import { type HeroSlideResponse } from "../dto/hero-slide.dto";
 import {
@@ -135,6 +136,7 @@ export class StoriesRepository {
   ): Promise<CreatedStoryResponse> {
     const charactersData: Prisma.CharacterCreateWithoutStoryInput[] =
       dto.characters?.map((char: CreateCharacterDto) => ({
+        id: char.id,
         name: char.name,
         role: char.role,
         description: char.description,
