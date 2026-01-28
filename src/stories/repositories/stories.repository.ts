@@ -291,67 +291,72 @@ export class StoriesRepository {
   }
 
   async findHeroSlides(): Promise<HeroSlideResponse[]> {
-    const categories = await this.prisma.category.findMany({
-      orderBy: { order: "asc" },
+    // 캐릭터가 있는 스토리를 가져옴 (공식 스토리 우선, 최신순)
+    const stories = await this.prisma.story.findMany({
+      where: {
+        characters: { some: {} },
+      },
+      orderBy: [{ isOfficial: "desc" }, { createdAt: "desc" }],
+      take: 20, // 20개 가져와서 셔플 후 10개 선택
       select: {
-        slug: true,
-        stories: {
-          where: {
-            characters: { some: {} },
+        id: true,
+        title: true,
+        seriesTitle: true,
+        authorName: true,
+        description: true,
+        marketingTitle: true,
+        marketingDescription: true,
+        coverColor: true,
+        coverImage: true,
+        category: {
+          select: {
+            slug: true,
           },
-          orderBy: [{ isOfficial: "desc" }, { createdAt: "desc" }],
+        },
+        characters: {
           select: {
             id: true,
-            title: true,
-            seriesTitle: true,
-            authorName: true,
-            description: true,
-            marketingTitle: true,
-            marketingDescription: true,
-            coverColor: true,
-            coverImage: true,
-            characters: {
-              take: 1,
-              select: {
-                id: true,
-                name: true,
-                firstMessage: true,
-              },
-            },
+            name: true,
+            role: true,
+            firstMessage: true,
           },
         },
       },
     });
 
-    return categories
-      .filter((cat) => cat.stories.length > 0)
-      .map((cat) => {
-        const randomStory = cat.stories[Math.floor(Math.random() * cat.stories.length)];
-        const character = randomStory.characters[0];
+    // Fisher-Yates 셔플 알고리즘으로 랜덤 정렬 후 10개 선택
+    const shuffled = stories
+      .filter((story) => story.characters.length > 0)
+      .sort(() => Math.random() - 0.5)
+      .slice(0, 10);
 
-        return {
-          category: cat.slug,
-          story: {
-            id: randomStory.id,
-            title: randomStory.title,
-            seriesTitle: randomStory.seriesTitle,
-            authorName: randomStory.authorName,
-            coverColor: randomStory.coverColor,
-            coverImage: randomStory.coverImage,
-          },
-          character: {
-            id: character.id,
-            name: character.name,
-            firstMessage: character.firstMessage,
-          },
-          slide: {
-            marketingTitle: randomStory.marketingTitle ?? randomStory.title,
-            title: randomStory.title,
-            description: randomStory.marketingDescription ?? randomStory.description,
-            image: randomStory.coverImage,
-          },
-        };
-      });
+    return shuffled.map((story) => {
+      // 주인공 우선, 없으면 첫 번째 캐릭터
+      const character = story.characters.find((c) => c.role === "주인공") ?? story.characters[0];
+
+      return {
+        category: story.category.slug,
+        story: {
+          id: story.id,
+          title: story.title,
+          seriesTitle: story.seriesTitle,
+          authorName: story.authorName,
+          coverColor: story.coverColor,
+          coverImage: story.coverImage,
+        },
+        character: {
+          id: character.id,
+          name: character.name,
+          firstMessage: character.firstMessage,
+        },
+        slide: {
+          marketingTitle: story.marketingTitle ?? story.title,
+          title: story.title,
+          description: story.marketingDescription ?? story.description,
+          image: story.coverImage,
+        },
+      };
+    });
   }
 
   private buildWhereClause(dto: GetStoriesDto): Prisma.StoryWhereInput {
