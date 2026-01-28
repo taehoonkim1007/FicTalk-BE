@@ -17,6 +17,11 @@ export class CategoriesRepository {
         name: true,
         slug: true,
         order: true,
+        title: true,
+        emoji: true,
+        description: true,
+        colorClass: true,
+        iconName: true,
       },
     });
   }
