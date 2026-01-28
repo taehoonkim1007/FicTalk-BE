@@ -1,3 +1,4 @@
+import { join } from "path";
 import { ValidationPipe } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { NestFactory } from "@nestjs/core";
@@ -9,6 +10,11 @@ import { GlobalExceptionFilter } from "./common/filters/http-exception.filter";
 const bootstrap = async () => {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const configService = app.get(ConfigService);
+
+  // 정적 파일 서빙 설정 (dist/src/main.js 기준 → ../../public/uploads)
+  app.useStaticAssets(join(__dirname, "../..", "public/uploads"), {
+    prefix: "/uploads",
+  });
 
   // 프록시 서버 신뢰 설정
   app.set("trust proxy", 1);
