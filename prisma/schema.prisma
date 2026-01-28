@@ -33,6 +33,13 @@
     slug   String  @unique  // world_lit, korean_lit, creative
     order  Int     @default(0)
 
+    // UI Metadata
+    title       String  @default("") // Display Title (e.g., "시대를 초월한 세계 명작")
+    emoji       String  @default("📚")
+    description String  @default("")
+    colorClass  String  @default("text-stone-500")
+    iconName    String  @default("book-open")
+
     stories Story[]
   }
 
@@ -43,9 +50,10 @@
     id          String   @id @default(uuid())
     title       String
     authorName  String   // 원작 작가명
-    description String   // 한 줄 소개
-    summary     String   @db.VarChar(3000)  // 줄거리
+    description String   @db.VarChar(1000)   // 한 줄 소개
+    summary     String   @db.VarChar(4000)  // 줄거리
     coverColor  String   @default("bg-stone-800")
+    coverImage  String?  @db.VarChar(2048) // [NEW] 커버 이미지 URL (Optional)
     isOfficial  Boolean  @default(false)  // 공식 vs 창작
     marketingTitle       String? // 홍보용 제목 (Hero Slide용)
     marketingDescription String? // 홍보용 문구 (Hero Slide용)
@@ -72,10 +80,13 @@
     id           String   @id @default(uuid())
     name         String
     role         String   // 주인공, 조연 등
-    description  String
+    description  String   @db.VarChar(1000)
     personality  String?  @db.Text  // AI 프롬프트용 성격 설정
     firstMessage String?  // 첫 인사말
-    imageColor   String   @default("bg-stone-400")
+    profileImage    String?  @db.VarChar(2048) // [NEW] 프로필 이미지 URL (Optional)
+    backgroundImage String?  @db.VarChar(2048) // [NEW] 배경 이미지 URL (Optional)
+    imageColor      String   @default("bg-stone-400")
+    backgroundColor String   @default("bg-stone-900") // [NEW] 배경 이미지 Fallback Color
     voiceId      String?  // ElevenLabs voice ID
     createdAt    DateTime @default(now())
 
