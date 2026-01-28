@@ -334,7 +334,8 @@ export class StoriesRepository {
             firstMessage: character.firstMessage,
           },
           slide: {
-            title: story.marketingTitle ?? story.title,
+            marketingTitle: story.marketingTitle ?? story.title,
+            title: story.title,
             description: story.marketingDescription ?? story.description,
             image: story.coverImage,
           },

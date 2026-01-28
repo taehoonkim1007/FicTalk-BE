@@ -34,4 +34,19 @@ export class CreateCharacterDto {
   @IsString()
   @MaxLength(500)
   imageColor?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(2048)
+  profileImage?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(2048)
+  backgroundImage?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(500)
+  backgroundColor?: string;
 }

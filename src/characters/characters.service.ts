@@ -1,19 +1,54 @@
 import { ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
 
 import { ERROR_MESSAGES } from "../common/constants/error-messages";
+import { type CharacterDetailResponse } from "../stories/dto/story-response.dto";
+import {
+  type CharactersListResponse,
+  type CharacterWithStoryResponse,
+} from "./dto/character-response.dto";
 import { type CreateCharacterDto } from "./dto/create-character.dto";
+import { type GetCharactersDto } from "./dto/get-characters.dto";
 import { type UpdateCharacterDto } from "./dto/update-character.dto";
-import { CharactersRepository, type CharacterDetail } from "./repositories/characters.repository";
+import { CharactersRepository } from "./repositories/characters.repository";
 
 @Injectable()
 export class CharactersService {
   constructor(private readonly charactersRepository: CharactersRepository) {}
 
-  async create(storyId: string, dto: CreateCharacterDto): Promise<CharacterDetail> {
+  async findAll(dto: GetCharactersDto): Promise<CharactersListResponse> {
+    const { characters, total } = await this.charactersRepository.findMany(dto);
+    const limit = dto.limit ?? 20;
+
+    return {
+      characters,
+      pagination: {
+        page: dto.page ?? 1,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
+  }
+
+  async findOne(id: string): Promise<CharacterWithStoryResponse> {
+    const character = await this.charactersRepository.findByIdWithDetails(id);
+
+    if (!character) {
+      throw new NotFoundException(ERROR_MESSAGES.CHARACTER_NOT_FOUND);
+    }
+
+    return character;
+  }
+
+  async create(storyId: string, dto: CreateCharacterDto): Promise<CharacterDetailResponse> {
     return this.charactersRepository.create(storyId, dto);
   }
 
-  async update(id: string, dto: UpdateCharacterDto, userId: string): Promise<CharacterDetail> {
+  async update(
+    id: string,
+    dto: UpdateCharacterDto,
+    userId: string,
+  ): Promise<CharacterDetailResponse> {
     await this.verifyCharacterOwnership(id, userId);
     return this.charactersRepository.update(id, dto);
   }
