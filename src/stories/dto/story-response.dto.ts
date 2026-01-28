@@ -19,6 +19,7 @@ export class PaginationResponse {
 export class StoryResponse {
   id: string;
   title: string;
+  seriesTitle: string | null;
   authorName: string;
   description: string;
   coverColor: string;
@@ -53,6 +54,7 @@ export class StoryDetailResponse extends StoryResponse {
 export class CreatedStoryResponse {
   id: string;
   title: string;
+  seriesTitle: string | null;
   authorName: string;
   description: string;
   summary: string;
@@ -68,6 +70,7 @@ export class CreatedStoryResponse {
 export class UpdatedStoryResponse {
   id: string;
   title: string;
+  seriesTitle: string | null;
   authorName: string;
   description: string;
   summary: string;

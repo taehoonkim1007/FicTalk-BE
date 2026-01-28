@@ -9,6 +9,11 @@ export class UpdateStoryDto {
 
   @IsOptional()
   @IsString()
+  @MaxLength(200)
+  seriesTitle?: string;
+
+  @IsOptional()
+  @IsString()
   @IsNotEmpty()
   @MaxLength(100)
   authorName?: string;

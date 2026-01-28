@@ -54,6 +54,7 @@ export class CharactersRepository {
           select: {
             id: true,
             title: true,
+            seriesTitle: true,
             authorName: true,
             coverColor: true,
             coverImage: true,
@@ -97,6 +98,7 @@ export class CharactersRepository {
             select: {
               id: true,
               title: true,
+              seriesTitle: true,
               authorName: true,
               coverColor: true,
               coverImage: true,

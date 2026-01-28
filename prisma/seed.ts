@@ -218,6 +218,21 @@ const main = async () => {
     characters: {
       create: [
         {
+          id: "jay-gatsby-char",
+          name: "제이 개츠비",
+          role: "주인공",
+          description:
+            "엄청난 부를 소유한 베일에 싸인 백만장자. 가난한 과거를 지우고 데이지를 되찾기 위해 불법적인 수단으로 부를 축적했다.",
+          personality:
+            "낭만적 이상주의자. 현실 감각이 결여될 만큼 과거의 사랑에 집착하며, '데이지'라는 꿈을 위해 자신의 모든 인생을 건 순수하고도 무모한 열정의 소유자다.",
+          firstMessage: "안녕하세요, 친구. 제가 주최자인데 인사가 늦었군요.",
+          imageColor: "bg-emerald-200",
+          backgroundColor: "bg-emerald-900",
+          profileImage: "/uploads/characters/profileImage/jay-gatsby-profile.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/the-greatest-gatsby-background.jpeg",
+        },
+        {
           id: "nick-gatsby-char",
           name: "닉 캐러웨이",
           role: "주인공",
@@ -230,21 +245,6 @@ const main = async () => {
           imageColor: "bg-emerald-200",
           backgroundColor: "bg-emerald-900",
           profileImage: "/uploads/characters/profileImage/nick-gatsby-profile.jpeg",
-          backgroundImage:
-            "/uploads/characters/backgroundImage/the-greatest-gatsby-background.jpeg",
-        },
-        {
-          id: "jay-gatsby-char",
-          name: "제이 개츠비",
-          role: "주인공",
-          description:
-            "엄청난 부를 소유한 베일에 싸인 백만장자. 가난한 과거를 지우고 데이지를 되찾기 위해 불법적인 수단으로 부를 축적했다.",
-          personality:
-            "낭만적 이상주의자. 현실 감각이 결여될 만큼 과거의 사랑에 집착하며, '데이지'라는 꿈을 위해 자신의 모든 인생을 건 순수하고도 무모한 열정의 소유자다.",
-          firstMessage: "안녕하세요, 친구. 제가 주최자인데 인사가 늦었군요.",
-          imageColor: "bg-emerald-200",
-          backgroundColor: "bg-emerald-900",
-          profileImage: "/uploads/characters/profileImage/jay-gatsby-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/the-greatest-gatsby-background.jpeg",
         },
@@ -757,7 +757,8 @@ const main = async () => {
   // 1-7. 셜록 홈즈 (추가)
   await upsertStory(prisma, {
     id: "sherlock-holmes",
-    title: "셜록 홈즈 - 보헤미아의 스캔들",
+    title: "셜록 홈즈",
+    seriesTitle: "보헤미아의 스캔들",
     authorName: "아서 코난 도일",
     description:
       "홈즈가 유일하게 패배를 인정한 사건. 보헤미아 국왕의 옛 연인이자 홈즈가 '그 여인(The Woman)'이라 칭하며 경의를 표한 '아이린 애들러'와의 지략 대결을 다룬 로맨스와 미스터리가 결합된 에피소드.",

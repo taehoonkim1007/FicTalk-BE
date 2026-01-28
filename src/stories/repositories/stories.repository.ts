@@ -31,6 +31,7 @@ export class StoriesRepository {
         select: {
           id: true,
           title: true,
+          seriesTitle: true,
           authorName: true,
           description: true,
           coverColor: true,
@@ -62,6 +63,7 @@ export class StoriesRepository {
       select: {
         id: true,
         title: true,
+        seriesTitle: true,
         authorName: true,
         description: true,
         coverColor: true,
@@ -87,6 +89,7 @@ export class StoriesRepository {
       select: {
         id: true,
         title: true,
+        seriesTitle: true,
         authorName: true,
         description: true,
         summary: true,
@@ -164,6 +167,7 @@ export class StoriesRepository {
     const story = (await this.prisma.story.create({
       data: {
         title: dto.title,
+        seriesTitle: dto.seriesTitle,
         authorName: dto.authorName,
         description: dto.description,
         summary: dto.summary,
@@ -179,6 +183,7 @@ export class StoriesRepository {
       select: {
         id: true,
         title: true,
+        seriesTitle: true,
         authorName: true,
         description: true,
         summary: true,
@@ -222,6 +227,7 @@ export class StoriesRepository {
       where: { id },
       data: {
         title: dto.title,
+        seriesTitle: dto.seriesTitle,
         authorName: dto.authorName,
         description: dto.description,
         summary: dto.summary,
@@ -231,6 +237,7 @@ export class StoriesRepository {
       select: {
         id: true,
         title: true,
+        seriesTitle: true,
         authorName: true,
         description: true,
         summary: true,
@@ -289,11 +296,14 @@ export class StoriesRepository {
       select: {
         slug: true,
         stories: {
-          take: 1,
+          where: {
+            characters: { some: {} },
+          },
           orderBy: [{ isOfficial: "desc" }, { createdAt: "desc" }],
           select: {
             id: true,
             title: true,
+            seriesTitle: true,
             authorName: true,
             description: true,
             marketingTitle: true,
@@ -314,19 +324,20 @@ export class StoriesRepository {
     });
 
     return categories
-      .filter((cat) => cat.stories.length > 0 && cat.stories[0].characters.length > 0)
+      .filter((cat) => cat.stories.length > 0)
       .map((cat) => {
-        const story = cat.stories[0];
-        const character = story.characters[0];
+        const randomStory = cat.stories[Math.floor(Math.random() * cat.stories.length)];
+        const character = randomStory.characters[0];
 
         return {
           category: cat.slug,
           story: {
-            id: story.id,
-            title: story.title,
-            authorName: story.authorName,
-            coverColor: story.coverColor,
-            coverImage: story.coverImage,
+            id: randomStory.id,
+            title: randomStory.title,
+            seriesTitle: randomStory.seriesTitle,
+            authorName: randomStory.authorName,
+            coverColor: randomStory.coverColor,
+            coverImage: randomStory.coverImage,
           },
           character: {
             id: character.id,
@@ -334,10 +345,10 @@ export class StoriesRepository {
             firstMessage: character.firstMessage,
           },
           slide: {
-            marketingTitle: story.marketingTitle ?? story.title,
-            title: story.title,
-            description: story.marketingDescription ?? story.description,
-            image: story.coverImage,
+            marketingTitle: randomStory.marketingTitle ?? randomStory.title,
+            title: randomStory.title,
+            description: randomStory.marketingDescription ?? randomStory.description,
+            image: randomStory.coverImage,
           },
         };
       });

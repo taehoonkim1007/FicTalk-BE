@@ -49,6 +49,7 @@
   model Story {
     id          String   @id @default(uuid())
     title       String
+    seriesTitle String?  // 시리즈명 (장편 소설의 경우)
     authorName  String   // 원작 작가명
     description String   @db.VarChar(1000)   // 한 줄 소개
     summary     String   @db.VarChar(4000)  // 줄거리

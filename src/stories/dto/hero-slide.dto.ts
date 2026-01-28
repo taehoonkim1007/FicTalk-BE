@@ -1,6 +1,7 @@
 export class HeroSlideStorySnippet {
   id: string;
   title: string;
+  seriesTitle: string | null;
   authorName: string;
   coverColor: string;
   coverImage: string | null;

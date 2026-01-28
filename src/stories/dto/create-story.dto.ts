@@ -17,6 +17,11 @@ export class CreateStoryDto {
   @MaxLength(200)
   title: string;
 
+  @IsOptional()
+  @IsString()
+  @MaxLength(200)
+  seriesTitle?: string;
+
   @IsNotEmpty()
   @IsString()
   @MaxLength(100)
