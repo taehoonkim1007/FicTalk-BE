@@ -1,84 +1,83 @@
-export interface StoryResponse {
+export class StoryCategoryResponse {
+  id: number;
+  name: string;
+  slug: string;
+}
+
+export class StoryCreatorResponse {
+  id: string;
+  name: string;
+}
+
+export class PaginationResponse {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+}
+
+export class StoryResponse {
   id: string;
   title: string;
   authorName: string;
   description: string;
   coverColor: string;
+  coverImage: string | null;
   isOfficial: boolean;
   createdAt: Date;
-  category: {
-    id: number;
-    name: string;
-    slug: string;
-  };
+  category: StoryCategoryResponse;
 }
 
-export interface StoriesListResponse {
+export class StoriesListResponse {
   stories: StoryResponse[];
-  pagination: {
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
-  };
+  pagination: PaginationResponse;
 }
 
-export interface StoryDetailResponse extends StoryResponse {
-  summary: string;
-  creator: {
-    id: string;
-    name: string;
-  } | null;
-  characters: CharacterResponse[];
-}
-
-export interface CharacterResponse {
+export class CharacterResponse {
   id: string;
   name: string;
   role: string;
   description: string;
   imageColor: string;
+  profileImage: string | null;
+  backgroundImage: string | null;
+  backgroundColor: string;
 }
 
-export interface CreatedStoryResponse {
-  id: string;
-  title: string;
-  authorName: string;
-  description: string;
+export class StoryDetailResponse extends StoryResponse {
   summary: string;
-  coverColor: string;
-  isOfficial: boolean;
-  createdAt: Date;
-  category: {
-    id: number;
-    name: string;
-    slug: string;
-  };
-  creator: {
-    id: string;
-    name: string;
-  };
+  creator: StoryCreatorResponse | null;
   characters: CharacterResponse[];
 }
 
-export interface UpdatedStoryResponse {
+export class CreatedStoryResponse {
   id: string;
   title: string;
   authorName: string;
   description: string;
   summary: string;
   coverColor: string;
+  coverImage: string | null;
+  isOfficial: boolean;
+  createdAt: Date;
+  category: StoryCategoryResponse;
+  creator: StoryCreatorResponse;
+  characters: CharacterResponse[];
+}
+
+export class UpdatedStoryResponse {
+  id: string;
+  title: string;
+  authorName: string;
+  description: string;
+  summary: string;
+  coverColor: string;
+  coverImage: string | null;
   isOfficial: boolean;
   updatedAt: Date;
 }
 
-export interface CharactersListResponse {
-  storyId: string;
-  storyTitle: string;
-  characters: CharacterDetailResponse[];
-}
-
-export interface CharacterDetailResponse {
+export class CharacterDetailResponse {
   id: string;
   name: string;
   role: string;
@@ -86,5 +85,14 @@ export interface CharacterDetailResponse {
   personality: string | null;
   firstMessage: string | null;
   imageColor: string;
+  profileImage: string | null;
+  backgroundImage: string | null;
+  backgroundColor: string;
   createdAt?: Date;
+}
+
+export class CharactersListResponse {
+  storyId: string;
+  storyTitle: string;
+  characters: CharacterDetailResponse[];
 }

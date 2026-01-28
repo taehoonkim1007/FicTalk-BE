@@ -34,6 +34,7 @@ export class StoriesRepository {
           authorName: true,
           description: true,
           coverColor: true,
+          coverImage: true,
           isOfficial: true,
           createdAt: true,
           category: {
@@ -48,11 +49,14 @@ export class StoriesRepository {
       this.prisma.story.count({ where }),
     ]);
 
-    return { stories, total };
+    return {
+      stories,
+      total,
+    };
   }
 
   async findMyStories(creatorId: string): Promise<StoryResponse[]> {
-    return this.prisma.story.findMany({
+    const stories = await this.prisma.story.findMany({
       where: { creatorId },
       orderBy: { createdAt: "desc" },
       select: {
@@ -61,6 +65,7 @@ export class StoriesRepository {
         authorName: true,
         description: true,
         coverColor: true,
+        coverImage: true,
         isOfficial: true,
         createdAt: true,
         category: {
@@ -72,10 +77,12 @@ export class StoriesRepository {
         },
       },
     });
+
+    return stories;
   }
 
   async findById(id: string): Promise<StoryDetailResponse | null> {
-    return this.prisma.story.findUnique({
+    const story = await this.prisma.story.findUnique({
       where: { id },
       select: {
         id: true,
@@ -84,6 +91,7 @@ export class StoriesRepository {
         description: true,
         summary: true,
         coverColor: true,
+        coverImage: true,
         isOfficial: true,
         createdAt: true,
         creator: {
@@ -106,10 +114,15 @@ export class StoriesRepository {
             role: true,
             description: true,
             imageColor: true,
+            profileImage: true,
+            backgroundImage: true,
+            backgroundColor: true,
           },
         },
       },
     });
+
+    return story;
   }
 
   async findByIdWithCreator(id: string): Promise<{ id: string; creatorId: string | null } | null> {
@@ -143,15 +156,19 @@ export class StoriesRepository {
         personality: char.personality,
         firstMessage: char.firstMessage,
         imageColor: char.imageColor ?? "bg-stone-400",
+        profileImage: char.profileImage,
+        backgroundImage: char.backgroundImage,
+        backgroundColor: char.backgroundColor ?? "bg-stone-900",
       })) ?? [];
 
-    return this.prisma.story.create({
+    const story = (await this.prisma.story.create({
       data: {
         title: dto.title,
         authorName: dto.authorName,
         description: dto.description,
         summary: dto.summary,
         coverColor: dto.coverColor ?? "bg-stone-800",
+        coverImage: dto.coverImage,
         isOfficial: false,
         categoryId,
         creatorId,
@@ -166,6 +183,7 @@ export class StoriesRepository {
         description: true,
         summary: true,
         coverColor: true,
+        coverImage: true,
         isOfficial: true,
         createdAt: true,
         category: {
@@ -188,14 +206,19 @@ export class StoriesRepository {
             role: true,
             description: true,
             imageColor: true,
+            profileImage: true,
+            backgroundImage: true,
+            backgroundColor: true,
           },
         },
       },
-    }) as Promise<CreatedStoryResponse>;
+    })) as CreatedStoryResponse;
+
+    return story;
   }
 
   async update(id: string, dto: UpdateStoryDto): Promise<UpdatedStoryResponse> {
-    return this.prisma.story.update({
+    const updatedStory = await this.prisma.story.update({
       where: { id },
       data: {
         title: dto.title,
@@ -203,6 +226,7 @@ export class StoriesRepository {
         description: dto.description,
         summary: dto.summary,
         coverColor: dto.coverColor,
+        coverImage: dto.coverImage,
       },
       select: {
         id: true,
@@ -211,10 +235,13 @@ export class StoriesRepository {
         description: true,
         summary: true,
         coverColor: true,
+        coverImage: true,
         isOfficial: true,
         updatedAt: true,
       },
     });
+
+    return updatedStory;
   }
 
   async delete(id: string): Promise<void> {
@@ -237,7 +264,11 @@ export class StoriesRepository {
             description: true,
             personality: true,
             firstMessage: true,
+
             imageColor: true,
+            profileImage: true,
+            backgroundImage: true,
+            backgroundColor: true,
           },
         },
       },
@@ -268,6 +299,7 @@ export class StoriesRepository {
             marketingTitle: true,
             marketingDescription: true,
             coverColor: true,
+            coverImage: true,
             characters: {
               take: 1,
               select: {
@@ -294,6 +326,7 @@ export class StoriesRepository {
             title: story.title,
             authorName: story.authorName,
             coverColor: story.coverColor,
+            coverImage: story.coverImage,
           },
           character: {
             id: character.id,
@@ -303,7 +336,7 @@ export class StoriesRepository {
           slide: {
             title: story.marketingTitle ?? story.title,
             description: story.marketingDescription ?? story.description,
-            image: `bg-gradient-to-r ${story.coverColor} to-stone-900`,
+            image: story.coverImage,
           },
         };
       });
@@ -320,7 +353,6 @@ export class StoriesRepository {
       where.OR = [
         { title: { contains: dto.search, mode: "insensitive" } },
         { authorName: { contains: dto.search, mode: "insensitive" } },
-        { description: { contains: dto.search, mode: "insensitive" } },
       ];
     }
 

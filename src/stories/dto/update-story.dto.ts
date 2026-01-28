@@ -30,4 +30,9 @@ export class UpdateStoryDto {
   @IsNotEmpty()
   @MaxLength(500)
   coverColor?: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(2048)
+  coverImage?: string;
 }

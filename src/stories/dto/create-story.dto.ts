@@ -37,6 +37,11 @@ export class CreateStoryDto {
   @MaxLength(500)
   coverColor?: string;
 
+  @IsOptional()
+  @IsString()
+  @MaxLength(2048)
+  coverImage?: string;
+
   @IsNotEmpty()
   @IsString()
   categorySlug: string;
