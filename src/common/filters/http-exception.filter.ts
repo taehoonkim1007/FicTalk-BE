@@ -7,6 +7,7 @@ import {
   type ExceptionFilter,
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
+import { AxiosError } from "axios";
 import type { Request, Response } from "express";
 
 import { type ErrorCode } from "../constants/error-codes";
@@ -33,10 +34,28 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
 
-    const status =
-      exception instanceof HttpException ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR;
+    // AxiosError인 경우 AI 서버 응답 상태 코드 사용
+    let status: number;
+    if (exception instanceof AxiosError) {
+      status = exception.response?.status ?? HttpStatus.INTERNAL_SERVER_ERROR;
+    } else if (exception instanceof HttpException) {
+      status = exception.getStatus();
+    } else {
+      status = HttpStatus.INTERNAL_SERVER_ERROR;
+    }
 
     const isServerError = status >= 500;
+
+    // AxiosError 상세 로깅
+    if (exception instanceof AxiosError) {
+      const method = exception.config?.method?.toUpperCase();
+      const url = exception.config?.url;
+      const responseStatus = exception.response?.status;
+      const responseData: unknown = exception.response?.data;
+
+      this.logger.error(`Axios Error: ${method} ${url} - ${responseStatus}`);
+      this.logger.error(`AI Server Response: ${JSON.stringify(responseData)}`);
+    }
 
     const actualError = this.extractErrorInfo(exception, status);
 
@@ -70,10 +89,26 @@ export class GlobalExceptionFilter implements ExceptionFilter {
 
   /**
    * Exception에서 code와 message 추출
+   * - AxiosError → AI 서버 응답에서 메시지 추출
    * - 문자열 에러 코드 → ERROR_MESSAGES에서 메시지 조회
    * - 기타 → 기본 메시지 사용
    */
   private extractErrorInfo(exception: unknown, status: number): { code: string; message: string } {
+    // AxiosError인 경우 AI 서버 응답에서 메시지 추출
+    if (exception instanceof AxiosError && exception.response?.data) {
+      const data: unknown = exception.response.data;
+      if (this.isAiServerErrorResponse(data)) {
+        return {
+          code: "AI_SERVER_ERROR",
+          message: data.detail || data.message || "AI 서버 오류가 발생했습니다.",
+        };
+      }
+      return {
+        code: "AI_SERVER_ERROR",
+        message: "AI 서버 오류가 발생했습니다.",
+      };
+    }
+
     if (exception instanceof HttpException) {
       const exceptionResponse = exception.getResponse();
 
@@ -156,5 +191,19 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       409: "요청이 현재 상태와 충돌합니다.",
     };
     return messageMap[status] ?? "서버 오류가 발생했습니다.";
+  }
+
+  /**
+   * AI 서버 에러 응답 형식인지 검증하는 타입 가드
+   */
+  private isAiServerErrorResponse(data: unknown): data is { detail?: string; message?: string } {
+    if (typeof data !== "object" || data === null) {
+      return false;
+    }
+    const obj = data as Record<string, unknown>;
+    return (
+      (typeof obj.detail === "string" || obj.detail === undefined) &&
+      (typeof obj.message === "string" || obj.message === undefined)
+    );
   }
 }
