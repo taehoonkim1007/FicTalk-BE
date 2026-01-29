@@ -38,6 +38,5 @@ export class UpdateStoryDto {
 
   @IsOptional()
   @IsString()
-  @MaxLength(2048)
   coverImage?: string;
 }

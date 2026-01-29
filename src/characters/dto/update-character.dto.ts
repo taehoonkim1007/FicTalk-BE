@@ -20,12 +20,12 @@ export class UpdateCharacterDto {
 
   @IsOptional()
   @IsString()
-  @MaxLength(2000)
+  @MaxLength(500)
   personality?: string;
 
   @IsOptional()
   @IsString()
-  @MaxLength(500)
+  @MaxLength(100)
   firstMessage?: string;
 
   @IsOptional()
@@ -36,12 +36,10 @@ export class UpdateCharacterDto {
 
   @IsOptional()
   @IsString()
-  @MaxLength(2048)
   profileImage?: string;
 
   @IsOptional()
   @IsString()
-  @MaxLength(2048)
   backgroundImage?: string;
 
   @IsOptional()

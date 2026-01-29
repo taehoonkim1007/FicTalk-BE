@@ -1,6 +1,7 @@
 import { ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
 
 import { ERROR_MESSAGES } from "../common/constants/error-messages";
+import { FileStorageService } from "../common/services/file-storage.service";
 import { type CharacterDetailResponse } from "../stories/dto/story-response.dto";
 import {
   type CharactersListResponse,
@@ -13,7 +14,10 @@ import { CharactersRepository } from "./repositories/characters.repository";
 
 @Injectable()
 export class CharactersService {
-  constructor(private readonly charactersRepository: CharactersRepository) {}
+  constructor(
+    private readonly charactersRepository: CharactersRepository,
+    private readonly fileStorageService: FileStorageService,
+  ) {}
 
   async findAll(dto: GetCharactersDto): Promise<CharactersListResponse> {
     const { characters, total } = await this.charactersRepository.findMany(dto);
@@ -41,7 +45,20 @@ export class CharactersService {
   }
 
   async create(storyId: string, dto: CreateCharacterDto): Promise<CharacterDetailResponse> {
-    return this.charactersRepository.create(storyId, dto);
+    // base64 이미지를 파일로 저장
+    const processedDto = {
+      ...dto,
+      profileImage: await this.fileStorageService.processImage(
+        dto.profileImage,
+        "characters/profileImage",
+      ),
+      backgroundImage: await this.fileStorageService.processImage(
+        dto.backgroundImage,
+        "characters/backgroundImage",
+      ),
+    };
+
+    return this.charactersRepository.create(storyId, processedDto);
   }
 
   async update(
@@ -50,12 +67,36 @@ export class CharactersService {
     userId: string,
   ): Promise<CharacterDetailResponse> {
     await this.verifyCharacterOwnership(id, userId);
-    return this.charactersRepository.update(id, dto);
+
+    // base64 이미지를 파일로 저장
+    const processedDto = {
+      ...dto,
+      profileImage: await this.fileStorageService.processImage(
+        dto.profileImage,
+        "characters/profileImage",
+      ),
+      backgroundImage: await this.fileStorageService.processImage(
+        dto.backgroundImage,
+        "characters/backgroundImage",
+      ),
+    };
+
+    return this.charactersRepository.update(id, processedDto);
   }
 
   async delete(id: string, userId: string): Promise<void> {
     await this.verifyCharacterOwnership(id, userId);
+
+    // 삭제 전 캐릭터 이미지 정보 조회
+    const character = await this.charactersRepository.findByIdWithDetails(id);
+
     await this.charactersRepository.delete(id);
+
+    // AI 생성 이미지 파일 삭제
+    if (character) {
+      await this.fileStorageService.deleteImage(character.profileImage);
+      await this.fileStorageService.deleteImage(character.backgroundImage);
+    }
   }
 
   private async verifyCharacterOwnership(characterId: string, userId: string): Promise<void> {

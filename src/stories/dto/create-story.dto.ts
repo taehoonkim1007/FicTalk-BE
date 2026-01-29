@@ -29,12 +29,12 @@ export class CreateStoryDto {
 
   @IsNotEmpty()
   @IsString()
-  @MaxLength(300)
+  @MaxLength(500)
   description: string;
 
   @IsNotEmpty()
   @IsString()
-  @MaxLength(3000)
+  @MaxLength(4000)
   summary: string;
 
   @IsOptional()
@@ -44,7 +44,6 @@ export class CreateStoryDto {
 
   @IsOptional()
   @IsString()
-  @MaxLength(2048)
   coverImage?: string;
 
   @IsNotEmpty()

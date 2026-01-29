@@ -1,5 +1,13 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from "@nestjs/common";
 
+import {
+  GenerateCharactersDto,
+  GenerateProfileImageDto,
+  GenerateSummaryDto,
+  type GenerateCharactersResponse,
+  type GenerateProfileImageResponse,
+  type GenerateSummaryResponse,
+} from "../ai/dto/story-generation.dto";
 import { type AuthenticatedUser } from "../auth/types/auth.types";
 import { CharactersService } from "../characters/characters.service";
 import { CreateCharacterDto } from "../characters/dto/create-character.dto";
@@ -73,6 +81,32 @@ export class StoriesController {
   ): Promise<{ message: string }> {
     await this.storiesService.delete(id, user.id);
     return { message: "스토리가 삭제되었습니다." };
+  }
+
+  // ========================
+  // AI Generation
+  // ========================
+
+  @Public()
+  @Post("generate/summary")
+  async generateSummary(@Body() dto: GenerateSummaryDto): Promise<GenerateSummaryResponse> {
+    return this.storiesService.generateSummary(dto);
+  }
+
+  @Public()
+  @Post("generate/characters")
+  async generateCharacters(
+    @Body() dto: GenerateCharactersDto,
+  ): Promise<GenerateCharactersResponse> {
+    return this.storiesService.generateCharacters(dto);
+  }
+
+  @Public()
+  @Post("generate/profile-image")
+  async generateProfileImage(
+    @Body() dto: GenerateProfileImageDto,
+  ): Promise<GenerateProfileImageResponse> {
+    return this.storiesService.generateProfileImage(dto);
   }
 
   // ========================
