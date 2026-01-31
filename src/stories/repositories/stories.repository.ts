@@ -125,6 +125,10 @@ export class StoriesRepository {
       },
     });
 
+    if (story) {
+      this.sortCharactersByRole(story.characters);
+    }
+
     return story;
   }
 
@@ -173,6 +177,7 @@ export class StoriesRepository {
         summary: dto.summary,
         coverColor: dto.coverColor ?? "bg-stone-800",
         coverImage: dto.coverImage,
+        backgroundImage: dto.backgroundImage,
         isOfficial: false,
         categoryId,
         creatorId,
@@ -189,6 +194,7 @@ export class StoriesRepository {
         summary: true,
         coverColor: true,
         coverImage: true,
+        backgroundImage: true,
         isOfficial: true,
         createdAt: true,
         category: {
@@ -219,6 +225,8 @@ export class StoriesRepository {
       },
     })) as CreatedStoryResponse;
 
+    this.sortCharactersByRole(story.characters);
+
     return story;
   }
 
@@ -233,6 +241,7 @@ export class StoriesRepository {
         summary: dto.summary,
         coverColor: dto.coverColor,
         coverImage: dto.coverImage,
+        backgroundImage: dto.backgroundImage,
       },
       select: {
         id: true,
@@ -243,6 +252,7 @@ export class StoriesRepository {
         summary: true,
         coverColor: true,
         coverImage: true,
+        backgroundImage: true,
         isOfficial: true,
         updatedAt: true,
       },
@@ -282,6 +292,8 @@ export class StoriesRepository {
     });
 
     if (!story) return null;
+
+    this.sortCharactersByRole(story.characters);
 
     return {
       storyId: story.id,
@@ -374,5 +386,16 @@ export class StoriesRepository {
     }
 
     return where;
+  }
+
+  /**
+   * 캐릭터 목록을 주인공 우선으로 정렬
+   */
+  private sortCharactersByRole(characters: { role: string }[]): void {
+    characters.sort((a, b) => {
+      if (a.role === "주인공" && b.role !== "주인공") return -1;
+      if (a.role !== "주인공" && b.role === "주인공") return 1;
+      return 0;
+    });
   }
 }

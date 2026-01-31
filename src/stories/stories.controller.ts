@@ -1,10 +1,16 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from "@nestjs/common";
 
 import {
+  GenerateBackgroundImageDto,
+  GenerateCharacterBackgroundImageDto,
   GenerateCharactersDto,
+  GenerateCoverImageDto,
   GenerateProfileImageDto,
   GenerateSummaryDto,
+  type GenerateBackgroundImageResponse,
+  type GenerateCharacterBackgroundImageResponse,
   type GenerateCharactersResponse,
+  type GenerateCoverImageResponse,
   type GenerateProfileImageResponse,
   type GenerateSummaryResponse,
 } from "../ai/dto/story-generation.dto";
@@ -107,6 +113,30 @@ export class StoriesController {
     @Body() dto: GenerateProfileImageDto,
   ): Promise<GenerateProfileImageResponse> {
     return this.storiesService.generateProfileImage(dto);
+  }
+
+  @Public()
+  @Post("generate/cover-image")
+  async generateCoverImage(
+    @Body() dto: GenerateCoverImageDto,
+  ): Promise<GenerateCoverImageResponse> {
+    return this.storiesService.generateCoverImage(dto);
+  }
+
+  @Public()
+  @Post("generate/background-image")
+  async generateBackgroundImage(
+    @Body() dto: GenerateBackgroundImageDto,
+  ): Promise<GenerateBackgroundImageResponse> {
+    return this.storiesService.generateBackgroundImage(dto);
+  }
+
+  @Public()
+  @Post("generate/character-background-image")
+  async generateCharacterBackgroundImage(
+    @Body() dto: GenerateCharacterBackgroundImageDto,
+  ): Promise<GenerateCharacterBackgroundImageResponse> {
+    return this.storiesService.generateCharacterBackgroundImage(dto);
   }
 
   // ========================

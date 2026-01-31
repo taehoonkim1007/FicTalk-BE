@@ -79,6 +79,10 @@ export class CharactersRepository {
       where.name = { contains: dto.search, mode: "insensitive" };
     }
 
+    if (dto.role) {
+      where.role = dto.role;
+    }
+
     const [characters, total] = await Promise.all([
       this.prisma.character.findMany({
         where,

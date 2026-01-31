@@ -46,6 +46,10 @@ export class CreateStoryDto {
   @IsString()
   coverImage?: string;
 
+  @IsOptional()
+  @IsString()
+  backgroundImage?: string;
+
   @IsNotEmpty()
   @IsString()
   categorySlug: string;

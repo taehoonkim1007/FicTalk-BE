@@ -39,4 +39,8 @@ export class UpdateStoryDto {
   @IsOptional()
   @IsString()
   coverImage?: string;
+
+  @IsOptional()
+  @IsString()
+  backgroundImage?: string;
 }

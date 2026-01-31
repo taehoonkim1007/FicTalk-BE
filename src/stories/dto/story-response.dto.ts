@@ -60,6 +60,7 @@ export class CreatedStoryResponse {
   summary: string;
   coverColor: string;
   coverImage: string | null;
+  backgroundImage: string | null;
   isOfficial: boolean;
   createdAt: Date;
   category: StoryCategoryResponse;
@@ -76,6 +77,7 @@ export class UpdatedStoryResponse {
   summary: string;
   coverColor: string;
   coverImage: string | null;
+  backgroundImage: string | null;
   isOfficial: boolean;
   updatedAt: Date;
 }

@@ -7,8 +7,14 @@ import {
 
 import { AiService } from "../ai/ai.service";
 import {
+  type GenerateBackgroundImageDto,
+  type GenerateBackgroundImageResponse,
+  type GenerateCharacterBackgroundImageDto,
+  type GenerateCharacterBackgroundImageResponse,
   type GenerateCharactersDto,
   type GenerateCharactersResponse,
+  type GenerateCoverImageDto,
+  type GenerateCoverImageResponse,
   type GenerateProfileImageDto,
   type GenerateProfileImageResponse,
   type GenerateSummaryDto,
@@ -179,15 +185,31 @@ export class StoriesService {
   // AI Generation
   // ========================
 
-  async generateSummary(dto: GenerateSummaryDto): Promise<GenerateSummaryResponse> {
+  generateSummary(dto: GenerateSummaryDto): Promise<GenerateSummaryResponse> {
     return this.aiService.generateSummary(dto);
   }
 
-  async generateCharacters(dto: GenerateCharactersDto): Promise<GenerateCharactersResponse> {
+  generateCharacters(dto: GenerateCharactersDto): Promise<GenerateCharactersResponse> {
     return this.aiService.generateCharacters(dto);
   }
 
-  async generateProfileImage(dto: GenerateProfileImageDto): Promise<GenerateProfileImageResponse> {
+  generateProfileImage(dto: GenerateProfileImageDto): Promise<GenerateProfileImageResponse> {
     return this.aiService.generateProfileImage(dto);
+  }
+
+  generateCoverImage(dto: GenerateCoverImageDto): Promise<GenerateCoverImageResponse> {
+    return this.aiService.generateCoverImage(dto);
+  }
+
+  generateBackgroundImage(
+    dto: GenerateBackgroundImageDto,
+  ): Promise<GenerateBackgroundImageResponse> {
+    return this.aiService.generateBackgroundImage(dto);
+  }
+
+  generateCharacterBackgroundImage(
+    dto: GenerateCharacterBackgroundImageDto,
+  ): Promise<GenerateCharacterBackgroundImageResponse> {
+    return this.aiService.generateCharacterBackgroundImage(dto);
   }
 }
