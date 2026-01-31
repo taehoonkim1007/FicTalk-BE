@@ -116,7 +116,7 @@ const main = async () => {
 
   // 1-1. 어린 왕자 (기존)
   await upsertStory(prisma, {
-    id: "little-prince",
+    id: "faed880b-ae1b-5567-8749-ef4318d1ac9f",
     title: "어린 왕자",
     authorName: "생텍쥐페리",
     description:
@@ -124,6 +124,7 @@ const main = async () => {
     summary: World_Lit_Summary.littlePrince,
     coverColor: "bg-sky-900",
     coverImage: "/uploads/stories/coverImage/little-prince-cover.jpeg",
+    backgroundImage: "/uploads/stories/backgroundImage/little-prince-background.jpeg",
     marketingTitle: "중요한 건 눈에 보이지 않아",
     marketingDescription: "사막에서 만난 신비로운 소년과 대화해보세요.",
     isOfficial: true,
@@ -131,7 +132,7 @@ const main = async () => {
     characters: {
       create: [
         {
-          id: "little-prince-char",
+          id: "cf9e787c-1196-5600-8f52-462bf161bba3",
           name: "어린왕자",
           role: "주인공",
           description: "B612 소행성에서 온 순수한 영혼",
@@ -140,10 +141,11 @@ const main = async () => {
           imageColor: "bg-sky-200",
           backgroundColor: "bg-sky-900",
           profileImage: "/uploads/characters/profileImage/little-prince-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/little-prince-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/little-prince-little-prince-background.jpeg",
         },
         {
-          id: "me-little-prince-char",
+          id: "f0c9d574-1894-5436-addd-185541ff831f",
           name: "나",
           role: "주인공",
           description:
@@ -154,10 +156,10 @@ const main = async () => {
           imageColor: "bg-sky-200",
           backgroundColor: "bg-sky-900",
           profileImage: "/uploads/characters/profileImage/me-little-prince-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/little-prince-background.jpeg",
+          backgroundImage: "/uploads/characters/backgroundImage/me-little-prince-background.jpeg",
         },
         {
-          id: "rose-little-prince-char",
+          id: "b31c2adb-654a-5a8b-8d15-2c412d1de7c6",
           name: "장미",
           role: "조연",
           description: "어린 왕자의 별에 핀 유일한 꽃. 아름답지만 가시가 있고 자존심이 세다.",
@@ -167,10 +169,10 @@ const main = async () => {
           imageColor: "bg-sky-200",
           backgroundColor: "bg-sky-900",
           profileImage: "/uploads/characters/profileImage/rose-little-prince-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/little-prince-background.jpeg",
+          backgroundImage: "/uploads/characters/backgroundImage/rose-little-prince-background.jpeg",
         },
         {
-          id: "fox-little-prince-char",
+          id: "99f1ddb5-4c91-513b-98b3-fbd1437fa664",
           name: "여우",
           role: "조연",
           description:
@@ -181,10 +183,10 @@ const main = async () => {
           imageColor: "bg-sky-200",
           backgroundColor: "bg-sky-900",
           profileImage: "/uploads/characters/profileImage/fox-little-prince-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/little-prince-background.jpeg",
+          backgroundImage: "/uploads/characters/backgroundImage/fox-little-prince-background.jpeg",
         },
         {
-          id: "snake-little-prince-char",
+          id: "328486d7-4f9e-5bb3-b595-cd23ef18defe",
           name: "뱀",
           role: "조연",
           description:
@@ -195,7 +197,8 @@ const main = async () => {
           imageColor: "bg-sky-200",
           backgroundColor: "bg-sky-900",
           profileImage: "/uploads/characters/profileImage/snake-little-prince-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/little-prince-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/snake-little-prince-background.jpeg",
         },
       ],
     },
@@ -203,7 +206,7 @@ const main = async () => {
 
   // 1-2. 위대한 개츠비 (기존)
   await upsertStory(prisma, {
-    id: "great-gatsby",
+    id: "ac7d5157-002d-51fa-8da8-63f157019d5c",
     title: "위대한 개츠비",
     authorName: "F. 스콧 피츠제럴드",
     description:
@@ -211,6 +214,7 @@ const main = async () => {
     summary: World_Lit_Summary.greatGatsby,
     coverColor: "bg-emerald-900",
     coverImage: "/uploads/stories/coverImage/the-great-gatsby-cover.jpeg",
+    backgroundImage: "/uploads/stories/backgroundImage/the-greatest-gatsby-background.jpeg",
     marketingTitle: "저 녹색 불빛을 향해",
     marketingDescription: "1920년대 뉴욕, 화려한 파티 뒤에 숨겨진 이야기.",
     isOfficial: true,
@@ -218,7 +222,7 @@ const main = async () => {
     characters: {
       create: [
         {
-          id: "jay-gatsby-char",
+          id: "84fe2dfe-0e21-5579-8ae9-671683309740",
           name: "제이 개츠비",
           role: "주인공",
           description:
@@ -230,10 +234,10 @@ const main = async () => {
           backgroundColor: "bg-emerald-900",
           profileImage: "/uploads/characters/profileImage/jay-gatsby-profile.jpeg",
           backgroundImage:
-            "/uploads/characters/backgroundImage/the-greatest-gatsby-background.jpeg",
+            "/uploads/characters/backgroundImage/jay-gatsby-the-greatest-gatsby-background.jpeg",
         },
         {
-          id: "nick-gatsby-char",
+          id: "cdcc6343-feee-59b0-b3b7-e2ca69705058",
           name: "닉 캐러웨이",
           role: "주인공",
           description:
@@ -246,10 +250,10 @@ const main = async () => {
           backgroundColor: "bg-emerald-900",
           profileImage: "/uploads/characters/profileImage/nick-gatsby-profile.jpeg",
           backgroundImage:
-            "/uploads/characters/backgroundImage/the-greatest-gatsby-background.jpeg",
+            "/uploads/characters/backgroundImage/nick-gatsby-the-greatest-gatsby-background.jpeg",
         },
         {
-          id: "daisy-gatsby-char",
+          id: "b2521eb3-d01b-58d3-8984-ea3dd378b9c6",
           name: "데이지 뷰캐넌",
           role: "주인공",
           description:
@@ -262,10 +266,10 @@ const main = async () => {
           backgroundColor: "bg-emerald-900",
           profileImage: "/uploads/characters/profileImage/daisy-gatsby-profile.jpeg",
           backgroundImage:
-            "/uploads/characters/backgroundImage/the-greatest-gatsby-background.jpeg",
+            "/uploads/characters/backgroundImage/daisy-gatsby-the-greatest-gatsby-background.jpeg",
         },
         {
-          id: "tom-gatsby-char",
+          id: "f9eea917-fb5a-5756-8d0d-a77dfa71bf6e",
           name: "톰 뷰캐넌",
           role: "조연",
           description:
@@ -277,10 +281,10 @@ const main = async () => {
           backgroundColor: "bg-emerald-900",
           profileImage: "/uploads/characters/profileImage/tom-gatsby-profile.jpeg",
           backgroundImage:
-            "/uploads/characters/backgroundImage/the-greatest-gatsby-background.jpeg",
+            "/uploads/characters/backgroundImage/tom-gatsby-the-greatest-gatsby-background.jpeg",
         },
         {
-          id: "jordan-gatsby-char",
+          id: "5323fdeb-1fb3-5bba-824a-63f00caa902a",
           name: "조던 베이커",
           role: "조연",
           description: "데이지의 친구이자 프로 골프 선수. 닉과 썸을 타는 관계다.",
@@ -292,10 +296,10 @@ const main = async () => {
           backgroundColor: "bg-emerald-900",
           profileImage: "/uploads/characters/profileImage/jordan-gatsby-profile.jpeg",
           backgroundImage:
-            "/uploads/characters/backgroundImage/the-greatest-gatsby-background.jpeg",
+            "/uploads/characters/backgroundImage/jordan-gatsby-the-greatest-gatsby-background.jpeg",
         },
         {
-          id: "myrtle-gatsby-char",
+          id: "2f1078e2-3bcf-51c4-917d-ed9695f062b3",
           name: "머틀 윌슨",
           role: "조연",
           description:
@@ -307,10 +311,10 @@ const main = async () => {
           backgroundColor: "bg-emerald-900",
           profileImage: "/uploads/characters/profileImage/myrtle-gatsby-profile.jpeg",
           backgroundImage:
-            "/uploads/characters/backgroundImage/the-greatest-gatsby-background.jpeg",
+            "/uploads/characters/backgroundImage/myrtle-gatsby-the-greatest-gatsby-background.jpeg",
         },
         {
-          id: "george-gatsby-char",
+          id: "38ac84fe-63f0-5871-a0d3-87aa3e0d3b3c",
           name: "조지 윌슨",
           role: "조연",
           description: "가난한 자동차 정비소 주인. 아내 머틀을 사랑하지만 무능력하다.",
@@ -321,7 +325,7 @@ const main = async () => {
           backgroundColor: "bg-emerald-900",
           profileImage: "/uploads/characters/profileImage/george-gatsby-profile.jpeg",
           backgroundImage:
-            "/uploads/characters/backgroundImage/the-greatest-gatsby-background.jpeg",
+            "/uploads/characters/backgroundImage/george-gatsby-the-greatest-gatsby-background.jpeg",
         },
       ],
     },
@@ -329,7 +333,7 @@ const main = async () => {
 
   // 1-3. 1984 (기존)
   await upsertStory(prisma, {
-    id: "nineteen-eighty-four",
+    id: "cf1fa24a-9e18-53aa-9b03-5c6186e64ca1",
     title: "1984",
     authorName: "조지 오웰",
     description:
@@ -337,6 +341,7 @@ const main = async () => {
     summary: World_Lit_Summary.nineteenEightyFour,
     coverColor: "bg-slate-900",
     coverImage: "/uploads/stories/coverImage/1984-cover.jpeg",
+    backgroundImage: "/uploads/stories/backgroundImage/1984-background.jpeg",
     marketingTitle: "빅 브라더가 당신을 지켜보고 있다",
     marketingDescription: "감시 사회에서 자유를 꿈꾸는 한 남자의 이야기.",
     isOfficial: true,
@@ -344,7 +349,7 @@ const main = async () => {
     characters: {
       create: [
         {
-          id: "winston-smith-1984-char",
+          id: "3e284696-761d-5a66-a5c5-b2804bad1db2",
           name: "윈스턴 스미스",
           role: "주인공",
           description:
@@ -356,10 +361,10 @@ const main = async () => {
           imageColor: "bg-blue-300",
           backgroundColor: "bg-slate-900",
           profileImage: "/uploads/characters/profileImage/winston-smith-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/1984-background.jpeg",
+          backgroundImage: "/uploads/characters/backgroundImage/winston-smith-1984-background.jpeg",
         },
         {
-          id: "julia-1984-char",
+          id: "248dc841-ce47-51bd-b445-ce3306bc6494",
           name: "줄리아",
           role: "주인공",
           description:
@@ -370,10 +375,10 @@ const main = async () => {
           imageColor: "bg-blue-300",
           backgroundColor: "bg-slate-900",
           profileImage: "/uploads/characters/profileImage/julia-1984-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/1984-background.jpeg",
+          backgroundImage: "/uploads/characters/backgroundImage/julia-1984-background.jpeg",
         },
         {
-          id: "obrien-1984-char",
+          id: "08a0783f-eab2-54d5-8d15-0b6440c87e98",
           name: "오브라이언",
           role: "주인공",
           description:
@@ -384,10 +389,10 @@ const main = async () => {
           imageColor: "bg-blue-300",
           backgroundColor: "bg-slate-900",
           profileImage: "/uploads/characters/profileImage/obrien-1984-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/1984-background.jpeg",
+          backgroundImage: "/uploads/characters/backgroundImage/obrien-1984-background.jpeg",
         },
         {
-          id: "charrington-1984-char",
+          id: "5aacfb73-2be2-51bb-ba50-46fbf507dad5",
           name: "채링턴",
           role: "조연",
           description:
@@ -398,10 +403,10 @@ const main = async () => {
           imageColor: "bg-blue-300",
           backgroundColor: "bg-slate-900",
           profileImage: "/uploads/characters/profileImage/charrington-1984-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/1984-background.jpeg",
+          backgroundImage: "/uploads/characters/backgroundImage/charrington-1984-background.jpeg",
         },
         {
-          id: "parsons-1984-char",
+          id: "a93cd632-46a0-5625-b787-e30eb61f9f46",
           name: "파슨스",
           role: "조연",
           description:
@@ -413,7 +418,7 @@ const main = async () => {
           imageColor: "bg-blue-300",
           backgroundColor: "bg-slate-900",
           profileImage: "/uploads/characters/profileImage/parsons-1984-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/1984-background.jpeg",
+          backgroundImage: "/uploads/characters/backgroundImage/parsons-1984-background.jpeg",
         },
       ],
     },
@@ -421,7 +426,7 @@ const main = async () => {
 
   // 1-4. 데미안 (추가)
   await upsertStory(prisma, {
-    id: "demian",
+    id: "4f63d7f0-0bd5-5e49-8f22-ca8c62396ffd",
     title: "데미안",
     authorName: "헤르만 헤세",
     description:
@@ -429,6 +434,7 @@ const main = async () => {
     summary: World_Lit_Summary.demian,
     coverColor: "bg-stone-800",
     coverImage: "/uploads/stories/coverImage/demian-cover.jpeg",
+    backgroundImage: "/uploads/stories/backgroundImage/demian-background.jpeg",
     marketingTitle: "새는 알을 깨고 나온다",
     marketingDescription: "진정한 자아를 찾아 떠나는 내면의 여정.",
     isOfficial: true,
@@ -436,7 +442,7 @@ const main = async () => {
     characters: {
       create: [
         {
-          id: "emil-sinclair-demian-char",
+          id: "0bc7f8c0-531d-5bfe-818a-eea23f26a7f4",
           name: "에밀 싱클레어",
           role: "주인공",
           description:
@@ -448,10 +454,11 @@ const main = async () => {
           imageColor: "bg-stone-300",
           backgroundColor: "bg-stone-800",
           profileImage: "/uploads/characters/profileImage/emil-sinclair-demian-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/demian-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/emil-sinclair-demian-background.jpeg",
         },
         {
-          id: "max-demian-demian-char",
+          id: "74c41165-f491-5dfa-a08d-01443f308956",
           name: "막스 데미안",
           role: "멘토",
           description:
@@ -463,10 +470,10 @@ const main = async () => {
           imageColor: "bg-stone-300",
           backgroundColor: "bg-stone-800",
           profileImage: "/uploads/characters/profileImage/max-demian-deamian-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/demian-background.jpeg",
+          backgroundImage: "/uploads/characters/backgroundImage/max-demian-demian-background.jpeg",
         },
         {
-          id: "miss-eva-demian-char",
+          id: "daae84ef-f219-5370-bd25-a287baf6b07a",
           name: "에바 부인",
           role: "조연",
           description:
@@ -478,10 +485,10 @@ const main = async () => {
           imageColor: "bg-stone-300",
           backgroundColor: "bg-stone-800",
           profileImage: "/uploads/characters/profileImage/miss-eva-demina-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/demian-background.jpeg",
+          backgroundImage: "/uploads/characters/backgroundImage/miss-eva-demian-background.jpeg",
         },
         {
-          id: "pistorius-demian-char",
+          id: "808903f9-e4c5-5d23-bfbe-7fbb6bf26e32",
           name: "피스토리우스",
           role: "조연",
           description:
@@ -493,10 +500,10 @@ const main = async () => {
           imageColor: "bg-stone-300",
           backgroundColor: "bg-stone-800",
           profileImage: "/uploads/characters/profileImage/pistorius-demian-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/demian-background.jpeg",
+          backgroundImage: "/uploads/characters/backgroundImage/pistorius-demian-background.jpeg",
         },
         {
-          id: "franz-kromer-demian-char",
+          id: "c04d8eb5-a62a-57cb-afe5-53445dc1dd1b",
           name: "프란츠 크로머",
           role: "조연",
           description:
@@ -508,7 +515,8 @@ const main = async () => {
           imageColor: "bg-stone-300",
           backgroundColor: "bg-stone-800",
           profileImage: "/uploads/characters/profileImage/franz-kromer-demian-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/demian-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/franz-kromer-demian-background.jpeg",
         },
       ],
     },
@@ -516,7 +524,7 @@ const main = async () => {
 
   // 1-5. 변신 (추가)
   await upsertStory(prisma, {
-    id: "metamorphosis",
+    id: "ca06c32e-61c9-5e4b-b69a-0db3fe828b33",
     title: "변신",
     authorName: "프란츠 카프카",
     description:
@@ -524,6 +532,7 @@ const main = async () => {
     summary: World_Lit_Summary.metamorphosis,
     coverColor: "bg-neutral-900",
     coverImage: "/uploads/stories/coverImage/metamorphosis-cover.jpeg",
+    backgroundImage: "/uploads/stories/backgroundImage/metamorphosis-background.jpeg",
     marketingTitle: "어느 날 아침, 눈을 떴을 때...",
     marketingDescription: "현대인의 불안과 소외를 다룬 카프카의 걸작.",
     isOfficial: true,
@@ -531,7 +540,7 @@ const main = async () => {
     characters: {
       create: [
         {
-          id: "gregor-metamorphosis-char",
+          id: "7e6e2481-af9f-530d-ab23-da4026be9db4",
           name: "그레고르 잠자",
           role: "주인공",
           description:
@@ -543,10 +552,11 @@ const main = async () => {
           imageColor: "bg-neutral-400",
           backgroundColor: "bg-neutral-900",
           profileImage: "/uploads/characters/profileImage/gregor-samsa-metamorphosis-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/metamorphosis-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/gregor-samsa-metamorphosis-background.jpeg",
         },
         {
-          id: "grete-metamorphosis-char",
+          id: "832e1adf-aff4-579b-9254-fefd6b24e04b",
           name: "그레테 잠자",
           role: "주인공",
           description:
@@ -557,10 +567,11 @@ const main = async () => {
           imageColor: "bg-neutral-400",
           backgroundColor: "bg-neutral-900",
           profileImage: "/uploads/characters/profileImage/grete-samsa-metamorphosis-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/metamorphosis-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/grete-samsa-metamorphosis-background.jpeg",
         },
         {
-          id: "mr-samsa-metamorphosis-char",
+          id: "4898284b-3ea3-544d-afd8-caef65157826",
           name: "잠자 씨",
           role: "조연",
           description:
@@ -571,10 +582,11 @@ const main = async () => {
           imageColor: "bg-neutral-400",
           backgroundColor: "bg-neutral-900",
           profileImage: "/uploads/characters/profileImage/mr-samsa-metamorphosis-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/metamorphosis-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/mr-samsa-metamorphosis-background.jpeg",
         },
         {
-          id: "mrs-samsa-metamorphosis-char",
+          id: "91b5cc4a-2658-5c64-9144-79b36aafa9ee",
           name: "잠자 부인",
           role: "조연",
           description:
@@ -585,10 +597,11 @@ const main = async () => {
           imageColor: "bg-neutral-400",
           backgroundColor: "bg-neutral-900",
           profileImage: "/uploads/characters/profileImage/mrs-samsa-metamorphosis-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/metamorphosis-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/mrs-samsa-metamorphosis-background.jpeg",
         },
         {
-          id: "maid-grandma-metamorphosis-char",
+          id: "3618b915-243c-5915-b2b8-a633bba50c67",
           name: "파출부 할머니",
           role: "조연",
           description:
@@ -599,7 +612,8 @@ const main = async () => {
           imageColor: "bg-neutral-400",
           backgroundColor: "bg-neutral-900",
           profileImage: "/uploads/characters/profileImage/maid-grandma-metamorphosis-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/metamorphosis-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/maid-grandma-metamorphosis-background.jpeg",
         },
       ],
     },
@@ -607,7 +621,7 @@ const main = async () => {
 
   // 1-6. 오만과 편견 (추가)
   await upsertStory(prisma, {
-    id: "pride-and-prejudice",
+    id: "a69bb4d8-13ab-5a6b-8f88-a552d7988f15",
     title: "오만과 편견",
     authorName: "제인 오스틴",
     description:
@@ -615,6 +629,7 @@ const main = async () => {
     summary: World_Lit_Summary.prideAndPrejudice,
     coverColor: "bg-rose-900",
     coverImage: "/uploads/stories/coverImage/pride-and-prejudice-cover.jpeg",
+    backgroundImage: "/uploads/stories/backgroundImage/pride-and-prejudice-background.jpeg",
     marketingTitle: "사랑을 시작하는 우리의 자세",
     marketingDescription: "오만함과 편견을 넘어 진정한 사랑을 확인하다.",
     isOfficial: true,
@@ -622,7 +637,7 @@ const main = async () => {
     characters: {
       create: [
         {
-          id: "elizabeth-bennet-pride-and-prejudice-char",
+          id: "608c183f-32d1-5ea1-a18a-7052cfb6af60",
           name: "엘리자베스 베넷",
           role: "주인공",
           description:
@@ -636,10 +651,10 @@ const main = async () => {
           profileImage:
             "/uploads/characters/profileImage/elizabeth-bennet-pride-and-prejudice-profile.jpeg",
           backgroundImage:
-            "/uploads/characters/backgroundImage/pride-and-prejudice-background.jpeg",
+            "/uploads/characters/backgroundImage/elizabeth-bennet-pride-and-prejudice-background.jpeg",
         },
         {
-          id: "darcy-pride-and-prejudice-char",
+          id: "12726d64-bc0a-577f-a116-8d8f270c8176",
           name: "피츠윌리엄 다아시",
           role: "주인공",
           description:
@@ -652,10 +667,10 @@ const main = async () => {
           profileImage:
             "/uploads/characters/profileImage/fitzwilliam-darcy-pride-and-prejudice-profile.jpeg",
           backgroundImage:
-            "/uploads/characters/backgroundImage/pride-and-prejudice-background.jpeg",
+            "/uploads/characters/backgroundImage/fitzwilliam-darcy-pride-and-prejudice-background.jpeg",
         },
         {
-          id: "jane-bennet-pride-and-prejudice-char",
+          id: "f51f6b6f-ad29-5367-96b0-9ba64990e05a",
           name: "제인 베넷",
           role: "조연",
           description: "베넷 가의 맏딸. 마을 최고의 미녀로 꼽히며 빙리와 사랑에 빠진다.",
@@ -667,10 +682,10 @@ const main = async () => {
           profileImage:
             "/uploads/characters/profileImage/jane-bennet-pride-and-prejudice-profile.jpeg",
           backgroundImage:
-            "/uploads/characters/backgroundImage/pride-and-prejudice-background.jpeg",
+            "/uploads/characters/backgroundImage/jane-bennet-pride-and-prejudice-background.jpeg",
         },
         {
-          id: "charles-bingley-pride-and-prejudice-char",
+          id: "2db915c8-e751-585d-a02f-bc1802ff0fa9",
           name: "찰스 빙리",
           role: "조연",
           description:
@@ -683,10 +698,10 @@ const main = async () => {
           profileImage:
             "/uploads/characters/profileImage/charles-binglee-pride-and-prejudice-profile.jpeg",
           backgroundImage:
-            "/uploads/characters/backgroundImage/pride-and-prejudice-background.jpeg",
+            "/uploads/characters/backgroundImage/charles-binglee-pride-and-prejudice-background.jpeg",
         },
         {
-          id: "mr-bennet-pride-and-prejudice-char",
+          id: "4cfc89d0-21f6-5749-b817-c44e383ffd62",
           name: "베넷 씨",
           role: "조연",
           description:
@@ -700,10 +715,10 @@ const main = async () => {
           profileImage:
             "/uploads/characters/profileImage/mr-bennet-pride-and-prejudice-profile.jpeg",
           backgroundImage:
-            "/uploads/characters/backgroundImage/pride-and-prejudice-background.jpeg",
+            "/uploads/characters/backgroundImage/mr-bennet-pride-and-prejudice-background.jpeg",
         },
         {
-          id: "mrs-bennet-pride-and-prejudice-char",
+          id: "9e9ee0e7-1227-5d1f-97c8-c3792d8df4ae",
           name: "베넷 부인",
           role: "조연",
           description: "다섯 딸의 어머니. 신경질적이고 수다스럽다.",
@@ -716,10 +731,10 @@ const main = async () => {
           profileImage:
             "/uploads/characters/profileImage/mrs-bennet-pride-and-prejudice-profile.jpeg",
           backgroundImage:
-            "/uploads/characters/backgroundImage/pride-and-prejudice-background.jpeg",
+            "/uploads/characters/backgroundImage/mrs-bennet-pride-and-prejudice-background.jpeg",
         },
         {
-          id: "george-wickham-pride-and-prejudice-char",
+          id: "7603f328-97e0-52aa-ade1-8b1a1b11cfbc",
           name: "조지 위컴",
           role: "조연",
           description: "민병대 장교. 잘생긴 외모와 현란한 말솜씨로 사람들을 매혹시킨다.",
@@ -732,10 +747,10 @@ const main = async () => {
           profileImage:
             "/uploads/characters/profileImage/george-wickham-pride-and-prejudice-profile.jpeg",
           backgroundImage:
-            "/uploads/characters/backgroundImage/pride-and-prejudice-background.jpeg",
+            "/uploads/characters/backgroundImage/george-wickham-pride-and-prejudice-background.jpeg",
         },
         {
-          id: "william-collins-pride-and-prejudice-char",
+          id: "a3536569-d3d0-5983-b548-626e20a2ae33",
           name: "윌리엄 콜린스",
           role: "조연",
           description: "베넷 가의 먼 친척이자 목사. 베넷 씨 사후 롱본의 상속자.",
@@ -748,7 +763,7 @@ const main = async () => {
           profileImage:
             "/uploads/characters/profileImage/william-collins-pride-and-prejudice-profile.jpeg",
           backgroundImage:
-            "/uploads/characters/backgroundImage/pride-and-prejudice-background.jpeg",
+            "/uploads/characters/backgroundImage/william-collins-pride-and-prejudice-background.jpeg",
         },
       ],
     },
@@ -756,7 +771,7 @@ const main = async () => {
 
   // 1-7. 셜록 홈즈 (추가)
   await upsertStory(prisma, {
-    id: "sherlock-holmes",
+    id: "6a1c0044-6819-5d9d-9336-5bc4418f5875",
     title: "셜록 홈즈",
     seriesTitle: "보헤미아의 스캔들",
     authorName: "아서 코난 도일",
@@ -765,6 +780,7 @@ const main = async () => {
     summary: World_Lit_Summary.sherlockHolmes,
     coverColor: "bg-zinc-800",
     coverImage: "/uploads/stories/coverImage/sherlock-holmes-cover.jpeg",
+    backgroundImage: "/uploads/stories/backgroundImage/sherlock-holmes-background.jpeg",
     marketingTitle: "불가능을 제외하고 남은 것",
     marketingDescription: "그것이 아무리 믿을 수 없는 것이라 해도 진실이다.",
     isOfficial: true,
@@ -772,7 +788,7 @@ const main = async () => {
     characters: {
       create: [
         {
-          id: "sherlock-holmes-sherlock-char",
+          id: "4a54918d-441e-597e-b94b-16510118b698",
           name: "셜록 홈즈",
           role: "주인공",
           description:
@@ -784,10 +800,11 @@ const main = async () => {
           imageColor: "bg-zinc-300",
           backgroundColor: "bg-zinc-800",
           profileImage: "/uploads/characters/profileImage/sherlock-homes-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/sherlock-holmes-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/sherlock-homes-sherlock-holmes-background.jpeg",
         },
         {
-          id: "irene-adler-sherlock-char",
+          id: "65f15bd5-ca23-571a-8ae5-5d6e42eec074",
           name: "아이린 애들러",
           role: "주인공",
           description:
@@ -799,10 +816,11 @@ const main = async () => {
           imageColor: "bg-zinc-300",
           backgroundColor: "bg-zinc-800",
           profileImage: "/uploads/characters/profileImage/irene-adler-sherlock-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/sherlock-holmes-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/irene-adler-sherlock-holmes-background.jpeg",
         },
         {
-          id: "john-watson-sherlock-char",
+          id: "bf90344f-2534-5bab-8156-85feaee29141",
           name: "존 왓슨",
           role: "조연",
           description:
@@ -814,10 +832,11 @@ const main = async () => {
           imageColor: "bg-zinc-300",
           backgroundColor: "bg-zinc-800",
           profileImage: "/uploads/characters/profileImage/john-watson-sherlock-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/sherlock-holmes-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/john-watson-sherlock-holmes-background.jpeg",
         },
         {
-          id: "king-bohemia-sherlock-char",
+          id: "6ba57ae1-6ec3-50e7-9455-d60352176fa9",
           name: "보헤미아 국왕",
           role: "조연",
           description: "독일어권 보헤미아의 왕. 거구에 화려한 옷차림을 했으며 체면을 중시한다.",
@@ -828,7 +847,8 @@ const main = async () => {
           imageColor: "bg-zinc-300",
           backgroundColor: "bg-zinc-800",
           profileImage: "/uploads/characters/profileImage/king-bohemia-sherlock-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/sherlock-holmes-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/king-bohemia-sherlock-holmes-background.jpeg",
         },
       ],
     },
@@ -836,7 +856,7 @@ const main = async () => {
 
   // 1-8. 노인과 바다 (추가)
   await upsertStory(prisma, {
-    id: "old-man-sea",
+    id: "f088ac42-b678-518b-9481-251c68662e3b",
     title: "노인과 바다",
     authorName: "어니스트 헤밍웨이",
     description:
@@ -844,6 +864,7 @@ const main = async () => {
     summary: World_Lit_Summary.oldManAndTheSea,
     coverColor: "bg-blue-900",
     coverImage: "/uploads/stories/coverImage/old-man-sea-cover.jpeg",
+    backgroundImage: "/uploads/stories/backgroundImage/old-man-sea-background.jpeg",
     marketingTitle: "인간은 파괴될지언정 패배하지 않는다",
     marketingDescription: "불굴의 의지로 운명에 맞서는 인간의 존엄성.",
     isOfficial: true,
@@ -851,7 +872,7 @@ const main = async () => {
     characters: {
       create: [
         {
-          id: "santiago-old-man-and-the-sea-char",
+          id: "a8992fb3-3363-512d-a1a4-c99df42f7119",
           name: "산티아고",
           role: "주인공",
           description:
@@ -863,10 +884,11 @@ const main = async () => {
           imageColor: "bg-blue-400",
           backgroundColor: "bg-blue-900",
           profileImage: "/uploads/characters/profileImage/santiago-old-and-the-sea-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/old-man-sea-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/santiago-old-man-sea-background.jpeg",
         },
         {
-          id: "marlin-old-man-and-the-sea-char",
+          id: "6e960ac6-8876-5845-aeff-21a1a86ffcb3",
           name: "마놀린",
           role: "조연",
           description:
@@ -878,7 +900,7 @@ const main = async () => {
           imageColor: "bg-blue-400",
           backgroundColor: "bg-blue-900",
           profileImage: "/uploads/characters/profileImage/marlin-old-and-the-sea-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/old-man-sea-background.jpeg",
+          backgroundImage: "/uploads/characters/backgroundImage/marlin-old-man-sea-background.jpeg",
         },
       ],
     },
@@ -891,7 +913,7 @@ const main = async () => {
 
   // 2-1. 소나기 (기존)
   await upsertStory(prisma, {
-    id: "shower",
+    id: "e788a0c1-5c14-5a4c-a617-8c4dd0130eda",
     title: "소나기",
     authorName: "황순원",
     description:
@@ -899,6 +921,7 @@ const main = async () => {
     summary: Korean_Lit_Summary.shower,
     coverColor: "bg-violet-900",
     coverImage: "/uploads/stories/coverImage/shower-cover.jpeg",
+    backgroundImage: "/uploads/stories/backgroundImage/shower-background.jpeg",
     marketingTitle: "소나기가 내리던 그 날",
     marketingDescription: "소년과 소녀의 짧고 아름다운 첫사랑 이야기.",
     isOfficial: true,
@@ -906,7 +929,7 @@ const main = async () => {
     characters: {
       create: [
         {
-          id: "boy-shower-char",
+          id: "95268a15-aa45-5869-b040-278201d729d1",
           name: "소년",
           role: "주인공",
           description:
@@ -917,10 +940,10 @@ const main = async () => {
           imageColor: "bg-violet-200",
           backgroundColor: "bg-violet-900",
           profileImage: "/uploads/characters/profileImage/boy-shower-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/shower-background.jpeg",
+          backgroundImage: "/uploads/characters/backgroundImage/boy-shower-background.jpeg",
         },
         {
-          id: "girl-shower-char",
+          id: "08adee45-07a2-58b6-9b10-9706174e91e2",
           name: "소녀",
           role: "히로인",
           description:
@@ -931,7 +954,7 @@ const main = async () => {
           imageColor: "bg-pink-200",
           backgroundColor: "bg-pink-900",
           profileImage: "/uploads/characters/profileImage/girl-shower-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/shower-background.jpeg",
+          backgroundImage: "/uploads/characters/backgroundImage/girl-shower-background.jpeg",
         },
       ],
     },
@@ -939,7 +962,7 @@ const main = async () => {
 
   // 2-2. 운수 좋은 날 (추가)
   await upsertStory(prisma, {
-    id: "lucky-day",
+    id: "4fc1a01a-46a0-5447-a594-d403092871b2",
     title: "운수 좋은 날",
     authorName: "현진건",
     description:
@@ -947,6 +970,7 @@ const main = async () => {
     summary: Korean_Lit_Summary.luckyDay,
     coverColor: "bg-gray-800",
     coverImage: "/uploads/stories/coverImage/lucky-day-cover.jpeg",
+    backgroundImage: "/uploads/stories/backgroundImage/lucky-day-background.jpeg",
     marketingTitle: "설렁탕을 사왔는데 왜 먹질 못하니",
     marketingDescription: "일제강점기 하층민의 비참한 현실을 그린 사실주의 수작.",
     isOfficial: true,
@@ -954,7 +978,7 @@ const main = async () => {
     characters: {
       create: [
         {
-          id: "kim-chumji-luckyday-char",
+          id: "3dd651b7-1b2f-5bb8-8c2f-293b7e354adf",
           name: "김첨지",
           role: "주인공",
           description:
@@ -966,10 +990,11 @@ const main = async () => {
           imageColor: "bg-gray-300",
           backgroundColor: "bg-gray-800",
           profileImage: "/uploads/characters/profileImage/kim-chumji-luckyday-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/lucky-day-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/kim-chumji-lucky-day-background.jpeg",
         },
         {
-          id: "wife-luckyday-char",
+          id: "50812680-4c50-568d-98e3-904d8ceb15ef",
           name: "아내",
           role: "조연",
           description:
@@ -981,10 +1006,10 @@ const main = async () => {
           imageColor: "bg-gray-300",
           backgroundColor: "bg-gray-800",
           profileImage: "/uploads/characters/profileImage/wife-luckday-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/lucky-day-background.jpeg",
+          backgroundImage: "/uploads/characters/backgroundImage/wife-lucky-day-background.jpeg",
         },
         {
-          id: "chi-sam-luckyday-char",
+          id: "09ebde3d-5b3e-51df-9f71-7d78201d4876",
           name: "치삼",
           role: "조연",
           description: "김첨지의 친구. 살이 찐 얼굴에 구레나룻이 난 인력거꾼 동료다.",
@@ -995,10 +1020,10 @@ const main = async () => {
           imageColor: "bg-gray-300",
           backgroundColor: "bg-gray-800",
           profileImage: "/uploads/characters/profileImage/chi-sam-luckyday-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/lucky-day-background.jpeg",
+          backgroundImage: "/uploads/characters/backgroundImage/chi-sam-lucky-day-background.jpeg",
         },
         {
-          id: "student-luckyday-char",
+          id: "ae15a415-442b-53b8-a88d-91dfb4bcbe70",
           name: "학생",
           role: "조연",
           description:
@@ -1009,7 +1034,7 @@ const main = async () => {
           imageColor: "bg-gray-300",
           backgroundColor: "bg-gray-800",
           profileImage: "/uploads/characters/profileImage/student-luckyday-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/lucky-day-background.jpeg",
+          backgroundImage: "/uploads/characters/backgroundImage/student-lucky-day-background.jpeg",
         },
       ],
     },
@@ -1017,7 +1042,7 @@ const main = async () => {
 
   // 2-3. 봄봄 (추가)
   await upsertStory(prisma, {
-    id: "spring-spring",
+    id: "9803c190-4a5c-5e96-a82b-d2a342ccb858",
     title: "봄봄",
     authorName: "김유정",
     description:
@@ -1025,6 +1050,7 @@ const main = async () => {
     summary: Korean_Lit_Summary.springSpring,
     coverColor: "bg-lime-900",
     coverImage: "/uploads/stories/coverImage/bom-bom-cover.jpeg",
+    backgroundImage: "/uploads/stories/backgroundImage/spring-spring-background.jpeg",
     marketingTitle: "성례는 언제 시켜줄 건가요!",
     marketingDescription: "해학적인 웃음 속에 담긴 농촌 청년의 순박한 사랑.",
     isOfficial: true,
@@ -1032,7 +1058,7 @@ const main = async () => {
     characters: {
       create: [
         {
-          id: "me-spring-char",
+          id: "24029b0b-24ae-5dc6-ad77-c260712283a2",
           name: "나",
           role: "주인공",
           description:
@@ -1044,10 +1070,10 @@ const main = async () => {
           imageColor: "bg-lime-200",
           backgroundColor: "bg-lime-900",
           profileImage: "/uploads/characters/profileImage/me-spring-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/spring-spring-background.jpeg",
+          backgroundImage: "/uploads/characters/backgroundImage/me-spring-spring-background.jpeg",
         },
         {
-          id: "bongfil-spring-char",
+          id: "0cf4576d-6dd8-5553-bd6a-83653b5bfac6",
           name: "봉필",
           role: "조연",
           description:
@@ -1058,10 +1084,11 @@ const main = async () => {
           imageColor: "bg-lime-200",
           backgroundColor: "bg-lime-900",
           profileImage: "/uploads/characters/profileImage/bong-pil-spring-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/spring-spring-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/bong-pil-spring-spring-background.jpeg",
         },
         {
-          id: "jeomsun-spring-char",
+          id: "67d92992-58e4-5826-8a43-270578629060",
           name: "점순이",
           role: "조연",
           description:
@@ -1072,10 +1099,11 @@ const main = async () => {
           imageColor: "bg-orange-200",
           backgroundColor: "bg-orange-900",
           profileImage: "/uploads/characters/profileImage/jeomsun-spring-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/spring-spring-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/jeomsun-spring-spring-background.jpeg",
         },
         {
-          id: "gujang-spring-char",
+          id: "d06cee44-ee41-59c5-9fd1-994f75fea10d",
           name: "구장님",
           role: "조연",
           description: "마을의 이장. 공정한 재판관인 척하지만 실속을 챙기는 인물이다.",
@@ -1085,10 +1113,11 @@ const main = async () => {
           imageColor: "bg-orange-200",
           backgroundColor: "bg-orange-900",
           profileImage: "/uploads/characters/profileImage/gujang-spring-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/spring-spring-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/gujang-spring-spring-background.jpeg",
         },
         {
-          id: "moong-tae-spring-char",
+          id: "59d4b2f7-d9a9-5f57-9703-f601ecda43e1",
           name: "뭉태",
           role: "조연",
           description: "이웃집 친구. 장인님과 사이가 좋지 않다.",
@@ -1098,7 +1127,8 @@ const main = async () => {
           imageColor: "bg-orange-200",
           backgroundColor: "bg-orange-900",
           profileImage: "/uploads/characters/profileImage/moong-tae-spring-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/spring-spring-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/moong-tae-spring-spring-background.jpeg",
         },
       ],
     },
@@ -1106,7 +1136,7 @@ const main = async () => {
 
   // 2-4. 날개 (추가)
   await upsertStory(prisma, {
-    id: "wings",
+    id: "17f7b237-d260-5d9b-a4ed-1b35117d10d7",
     title: "날개",
     authorName: "이상",
     description:
@@ -1114,6 +1144,7 @@ const main = async () => {
     summary: Korean_Lit_Summary.wings,
     coverColor: "bg-zinc-700",
     coverImage: "/uploads/stories/coverImage/wings-cover.jpeg",
+    backgroundImage: "/uploads/stories/backgroundImage/wings-background.jpeg",
     marketingTitle: "날개야 다시 돋아라",
     marketingDescription: "식민지 지식인의 분열된 자아와 내면 의식의 흐름.",
     isOfficial: true,
@@ -1121,7 +1152,7 @@ const main = async () => {
     characters: {
       create: [
         {
-          id: "me-wings-char",
+          id: "580989cc-cca1-594c-a3b4-338459f2e021",
           name: "나",
           role: "주인공",
           description:
@@ -1133,10 +1164,10 @@ const main = async () => {
           imageColor: "bg-zinc-200",
           backgroundColor: "bg-zinc-800",
           profileImage: "/uploads/characters/profileImage/wings-me-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/wings-background.jpeg",
+          backgroundImage: "/uploads/characters/backgroundImage/wings-me-wings-background.jpeg",
         },
         {
-          id: "wife-wings-char",
+          id: "0e66c84a-9ac1-568a-908a-6ba8e427d158",
           name: "아내",
           role: "조연",
           description:
@@ -1148,7 +1179,7 @@ const main = async () => {
           imageColor: "bg-zinc-200",
           backgroundColor: "bg-zinc-800",
           profileImage: "/uploads/characters/profileImage/wife-wings-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/wings-background.jpeg",
+          backgroundImage: "/uploads/characters/backgroundImage/wife-wings-background.jpeg",
         },
       ],
     },
@@ -1156,7 +1187,7 @@ const main = async () => {
 
   // 2-5. 메밀꽃 필 무렵 (추가)
   await upsertStory(prisma, {
-    id: "buckwheat",
+    id: "f7e27809-8035-5bfd-8deb-7e4542f699b8",
     title: "메밀꽃 필 무렵",
     authorName: "이효석",
     description:
@@ -1164,6 +1195,7 @@ const main = async () => {
     summary: Korean_Lit_Summary.buckWheat,
     coverColor: "bg-indigo-900",
     coverImage: "/uploads/stories/coverImage/buckwheat-cover.jpeg",
+    backgroundImage: "/uploads/stories/backgroundImage/buckwheat-background.jpeg",
     marketingTitle: "숨이 막힐 듯 하얀 메밀꽃",
     marketingDescription: "한국 문학사상 가장 서정적이고 아름다운 묘사.",
     isOfficial: true,
@@ -1171,7 +1203,7 @@ const main = async () => {
     characters: {
       create: [
         {
-          id: "heo-saengwon-buckwheat-char",
+          id: "a0a7a134-97b8-5493-9489-36e74e5337c9",
           name: "허 생원",
           role: "주인공",
           description:
@@ -1183,10 +1215,11 @@ const main = async () => {
           imageColor: "bg-indigo-200",
           backgroundColor: "bg-indigo-900",
           profileImage: "/uploads/characters/profileImage/heo-saengwon-buckwheat-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/buckwheat-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/heo-saengwon-buckwheat-background.jpeg",
         },
         {
-          id: "dong-buckwheat-char",
+          id: "fbaf07f3-e594-55a3-a986-ff9d91cc10d7",
           name: "동이",
           role: "조연",
           description:
@@ -1198,10 +1231,10 @@ const main = async () => {
           imageColor: "bg-indigo-200",
           backgroundColor: "bg-indigo-900",
           profileImage: "/uploads/characters/profileImage/dong-buckwheat-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/buckwheat-background.jpeg",
+          backgroundImage: "/uploads/characters/backgroundImage/dong-buckwheat-background.jpeg",
         },
         {
-          id: "cho-sundal-buckwheat-char",
+          id: "578abc05-2da0-5887-8c7c-7948647add1c",
           name: "조 선달",
           role: "조연",
           description:
@@ -1213,7 +1246,8 @@ const main = async () => {
           imageColor: "bg-indigo-200",
           backgroundColor: "bg-indigo-900",
           profileImage: "/uploads/characters/profileImage/cho-sundal-buckwheat-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/buckwheat-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/cho-sundal-buckwheat-background.jpeg",
         },
       ],
     },
@@ -1221,7 +1255,7 @@ const main = async () => {
 
   // 2-6. 동백꽃 (추가)
   await upsertStory(prisma, {
-    id: "camellia",
+    id: "76599026-2aac-58fa-a27e-18e9fca016d5",
     title: "동백꽃",
     authorName: "김유정",
     description:
@@ -1229,6 +1263,7 @@ const main = async () => {
     summary: Korean_Lit_Summary.camellia,
     coverColor: "bg-yellow-900",
     coverImage: "/uploads/stories/coverImage/camellia-cover.jpeg",
+    backgroundImage: "/uploads/stories/backgroundImage/camellia-background.jpeg",
     marketingTitle: "느 집엔 이거 없지?",
     marketingDescription: "알싸한 노란 동백꽃 향기 같은 풋사랑 이야기.",
     isOfficial: true,
@@ -1236,7 +1271,7 @@ const main = async () => {
     characters: {
       create: [
         {
-          id: "me-camellia-char",
+          id: "f6604971-9931-541e-8660-4fb27db228dc",
           name: "나",
           role: "주인공",
           description:
@@ -1247,10 +1282,10 @@ const main = async () => {
           imageColor: "bg-yellow-200",
           backgroundColor: "bg-yellow-900",
           profileImage: "/uploads/characters/profileImage/me-camellia-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/camellia-background.jpeg",
+          backgroundImage: "/uploads/characters/backgroundImage/me-camellia-background.jpeg",
         },
         {
-          id: "jeomsun-camellia-char",
+          id: "d83e6b7a-c6e1-573c-8aa4-38372293da31",
           name: "점순이",
           role: "주인공",
           description:
@@ -1261,10 +1296,10 @@ const main = async () => {
           imageColor: "bg-red-200",
           backgroundColor: "bg-red-900",
           profileImage: "/uploads/characters/profileImage/jeomsun-camellia-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/camellia-background.jpeg",
+          backgroundImage: "/uploads/characters/backgroundImage/jeomsun-camellia-background.jpeg",
         },
         {
-          id: "mother-camellia-char",
+          id: "17590721-f788-52ae-9a2b-b55039a5e240",
           name: "어머니",
           role: "조연",
           description: "'나'의 어머니. 소작농 처지에서 마름 집과 갈등이 생길까 봐 늘 노심초사한다.",
@@ -1274,7 +1309,7 @@ const main = async () => {
           imageColor: "bg-red-200",
           backgroundColor: "bg-red-900",
           profileImage: "/uploads/characters/profileImage/mother-camellia-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/camellia-background.jpeg",
+          backgroundImage: "/uploads/characters/backgroundImage/mother-camellia-background.jpeg",
         },
       ],
     },
@@ -1282,7 +1317,7 @@ const main = async () => {
 
   // 2-7. 홍길동전 (추가)
   await upsertStory(prisma, {
-    id: "hong-gildong",
+    id: "894cd032-d952-5086-94d6-553de9bb2ae7",
     title: "홍길동전",
     authorName: "허균",
     description:
@@ -1290,6 +1325,7 @@ const main = async () => {
     summary: Korean_Lit_Summary.hongGilDong,
     coverColor: "bg-blue-800",
     coverImage: "/uploads/stories/coverImage/hong-gildong-cover.jpeg",
+    backgroundImage: "/uploads/stories/backgroundImage/hong-gildong-background.jpeg",
     marketingTitle: "아버지를 아버지라 부르지 못하고",
     marketingDescription: "조선 시대의 불합리에 맞선 영웅의 이야기.",
     isOfficial: true,
@@ -1297,7 +1333,7 @@ const main = async () => {
     characters: {
       create: [
         {
-          id: "gildong-char",
+          id: "54508ead-4a9c-5b34-a787-e9c543e4e98e",
           name: "홍길동",
           role: "주인공",
           description:
@@ -1309,10 +1345,11 @@ const main = async () => {
           imageColor: "bg-blue-300",
           backgroundColor: "bg-blue-800",
           profileImage: "/uploads/characters/profileImage/hong-gil-dong-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/hong-gildong-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/hong-gil-dong-hong-gildong-background.jpeg",
         },
         {
-          id: "hong-panseo-honggildong-char",
+          id: "9c502c6d-aa8e-5efc-bd89-47668eed8694",
           name: "홍 판서",
           role: "조연",
           description:
@@ -1323,10 +1360,11 @@ const main = async () => {
           imageColor: "bg-blue-300",
           backgroundColor: "bg-blue-800",
           profileImage: "/uploads/characters/profileImage/hong-panseo-honggildong-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/hong-gildong-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/hong-panseo-hong-gildong-background.jpeg",
         },
         {
-          id: "choran-honggildong-char",
+          id: "df48bfb0-9cd2-555d-89c2-70de4d05b7e9",
           name: "초란",
           role: "조연",
           description:
@@ -1338,10 +1376,11 @@ const main = async () => {
           imageColor: "bg-blue-300",
           backgroundColor: "bg-blue-800",
           profileImage: "/uploads/characters/profileImage/choran-honggildong-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/hong-gildong-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/choran-hong-gildong-background.jpeg",
         },
         {
-          id: "hong-inhyeong-honggildong-char",
+          id: "abe0f4eb-945e-5cce-989a-49fa6f44aee9",
           name: "홍인형",
           role: "조연",
           description:
@@ -1352,10 +1391,11 @@ const main = async () => {
           imageColor: "bg-blue-300",
           backgroundColor: "bg-blue-800",
           profileImage: "/uploads/characters/profileImage/hong-inhyeong-honggildong-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/hong-gildong-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/hong-inhyeong-hong-gildong-background.jpeg",
         },
         {
-          id: "chun-sum-honggildong-char",
+          id: "42fdcbb8-3662-500d-9b8d-78297823657a",
           name: "춘섬",
           role: "조연",
           description:
@@ -1366,10 +1406,11 @@ const main = async () => {
           imageColor: "bg-blue-300",
           backgroundColor: "bg-blue-800",
           profileImage: "/uploads/characters/profileImage/chun-sum-honggildong-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/hong-gildong-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/chun-sum-hong-gildong-background.jpeg",
         },
         {
-          id: "chosun-king-honggildong-char",
+          id: "e95f1e43-381d-5c7e-9804-144a1ae9d476",
           name: "임금",
           role: "조연",
           description:
@@ -1380,7 +1421,8 @@ const main = async () => {
           imageColor: "bg-blue-300",
           backgroundColor: "bg-blue-800",
           profileImage: "/uploads/characters/profileImage/chosun-king-honggildong-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/hong-gildong-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/chosun-king-hong-gildong-background.jpeg",
         },
       ],
     },
@@ -1388,7 +1430,7 @@ const main = async () => {
 
   // 2-8. 구운몽 (추가)
   await upsertStory(prisma, {
-    id: "guunmong",
+    id: "da4b1a67-cd82-54ce-9496-a3958b67002c",
     title: "구운몽",
     authorName: "김만중",
     description:
@@ -1396,6 +1438,7 @@ const main = async () => {
     summary: Korean_Lit_Summary.guUnMong,
     coverColor: "bg-purple-900",
     coverImage: "/uploads/stories/coverImage/guunmong-cover.jpeg",
+    backgroundImage: "/uploads/stories/backgroundImage/guunmong-background.jpeg",
     marketingTitle: "인생은 일장춘몽이라",
     marketingDescription: "꿈과 현실을 오가는 환상적인 이야기.",
     isOfficial: true,
@@ -1403,7 +1446,7 @@ const main = async () => {
     characters: {
       create: [
         {
-          id: "seongjin-guunmong-char",
+          id: "5fc2e907-83d4-5b21-909d-187bc6423446",
           name: "성진/양소유",
           role: "주인공",
           description:
@@ -1415,10 +1458,10 @@ const main = async () => {
           imageColor: "bg-purple-300",
           backgroundColor: "bg-purple-900",
           profileImage: "/uploads/characters/profileImage/seongjin-guunmong-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/guunmong-background.jpeg",
+          backgroundImage: "/uploads/characters/backgroundImage/seongjin-guunmong-background.jpeg",
         },
         {
-          id: "yookgwan-guunmong-char",
+          id: "7665c633-fd3e-5ba7-b042-c1a1b3ec9445",
           name: "육관 대사",
           role: "조연",
           description:
@@ -1430,7 +1473,7 @@ const main = async () => {
           imageColor: "bg-purple-300",
           backgroundColor: "bg-purple-900",
           profileImage: "/uploads/characters/profileImage/yookgwan-guunmong-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/guunmong-background.jpeg",
+          backgroundImage: "/uploads/characters/backgroundImage/yookgwan-guunmong-background.jpeg",
         },
       ],
     },
@@ -1443,7 +1486,7 @@ const main = async () => {
 
   // 3-1. 심야 편의점의 불청객
   await upsertStory(prisma, {
-    id: "midnight-store",
+    id: "79009e9b-0651-5435-a303-f4f34fb4a427",
     title: "심야 편의점",
     authorName: "AI 작가",
     description:
@@ -1451,6 +1494,7 @@ const main = async () => {
     summary: Creative_Summary.midnightStore,
     coverColor: "bg-indigo-950",
     coverImage: "/uploads/stories/coverImage/midnight-store-cover.jpeg",
+    backgroundImage: "/uploads/stories/backgroundImage/midnight-store-background.jpeg",
     marketingTitle: "어서 오세요, 귀신님",
     marketingDescription: "오싹하지만 따뜻한 사연이 있는 심야 편의점.",
     isOfficial: false,
@@ -1458,7 +1502,7 @@ const main = async () => {
     characters: {
       create: [
         {
-          id: "joon-woo-midnight-char",
+          id: "2a91ece4-c2fc-553c-b4ad-e39af420057b",
           name: "이준우",
           role: "주인공",
           description:
@@ -1469,10 +1513,11 @@ const main = async () => {
           imageColor: "bg-indigo-300",
           backgroundColor: "bg-indigo-950",
           profileImage: "/uploads/characters/profileImage/lee-junwoo-midnight-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/midnight-store-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/lee-junwoo-midnight-store-background.jpeg",
         },
         {
-          id: "ahjeossi-midnight-char",
+          id: "3e57cb09-c424-5fc7-815d-ffe0a29c6274",
           name: "아저씨",
           role: "조연",
           description:
@@ -1483,10 +1528,11 @@ const main = async () => {
           imageColor: "bg-indigo-300",
           backgroundColor: "bg-indigo-950",
           profileImage: "/uploads/characters/profileImage/ahjeossi-midnight-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/midnight-store-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/ahjeossi-midnight-store-background.jpeg",
         },
         {
-          id: "escapee-midnight-char",
+          id: "03582ec4-d74d-5e2d-9fff-3e939d7fcf30",
           name: "탈옥범",
           role: "조연",
           description:
@@ -1497,10 +1543,11 @@ const main = async () => {
           imageColor: "bg-indigo-300",
           backgroundColor: "bg-indigo-950",
           profileImage: "/uploads/characters/profileImage/escapee-midnight-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/midnight-store-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/escapee-midnight-store-background.jpeg",
         },
         {
-          id: "store-owner-midnight-char",
+          id: "b2d3d398-1f58-500f-b15e-9686181a2b84",
           name: "점장",
           role: "조연",
           description:
@@ -1512,7 +1559,8 @@ const main = async () => {
           imageColor: "bg-indigo-300",
           backgroundColor: "bg-indigo-950",
           profileImage: "/uploads/characters/profileImage/store-owner-midnight-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/midnight-store-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/store-owner-midnight-store-background.jpeg",
         },
       ],
     },
@@ -1520,7 +1568,7 @@ const main = async () => {
 
   // 3-2. 공작가의 가짜 연인
   await upsertStory(prisma, {
-    id: "fake-lover",
+    id: "17eaa0fd-7539-5949-96ed-5226feaec946",
     title: "공작가의 가짜 연인",
     authorName: "로판 마스터",
     description:
@@ -1528,6 +1576,7 @@ const main = async () => {
     summary: Creative_Summary.fakeLover,
     coverColor: "bg-rose-950",
     coverImage: "/uploads/stories/coverImage/fake-lover-cover.jpeg",
+    backgroundImage: "/uploads/stories/backgroundImage/fake-lover-background.jpeg",
     marketingTitle: "딱 3년만 연인 연기합니다",
     marketingDescription: "서로를 이용하려다 진짜 사랑에 빠지는 로맨스 판타지.",
     isOfficial: false,
@@ -1535,7 +1584,7 @@ const main = async () => {
     characters: {
       create: [
         {
-          id: "rosetti-fake-lover-char",
+          id: "f77680c4-45bf-5717-884e-de3bfcbd0ce2",
           name: "엘리아나 로제티",
           role: "주인공",
           description:
@@ -1547,10 +1596,10 @@ const main = async () => {
           imageColor: "bg-slate-800",
           backgroundColor: "bg-slate-900",
           profileImage: "/uploads/characters/profileImage/rosetti-fake-lover-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/fake-lover-background.jpeg",
+          backgroundImage: "/uploads/characters/backgroundImage/rosetti-fake-lover-background.jpeg",
         },
         {
-          id: "kallian-fake-lover-char",
+          id: "7a78653d-aee3-5e24-93c9-a30ac36c79fb",
           name: "칼리안 드 윈터",
           role: "주인공",
           description:
@@ -1562,10 +1611,10 @@ const main = async () => {
           imageColor: "bg-slate-800",
           backgroundColor: "bg-slate-900",
           profileImage: "/uploads/characters/profileImage/kallian-fake-lover-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/fake-lover-background.jpeg",
+          backgroundImage: "/uploads/characters/backgroundImage/kallian-fake-lover-background.jpeg",
         },
         {
-          id: "vivian-fake-lover-char",
+          id: "a4d193cb-8e7b-5082-b875-78d3556f83c6",
           name: "비비안",
           role: "조연",
           description:
@@ -1576,10 +1625,10 @@ const main = async () => {
           imageColor: "bg-slate-800",
           backgroundColor: "bg-slate-900",
           profileImage: "/uploads/characters/profileImage/vivian-fake-lover-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/fake-lover-background.jpeg",
+          backgroundImage: "/uploads/characters/backgroundImage/vivian-fake-lover-background.jpeg",
         },
         {
-          id: "alfred-fake-lover-char",
+          id: "9bc71f6e-c00f-5324-ae92-86b4d9a48afb",
           name: "알프레드",
           role: "조연",
           description: "윈터 공작가의 노련한 집사. 칼리안이 어릴 때부터 모셔왔다.",
@@ -1590,7 +1639,7 @@ const main = async () => {
           imageColor: "bg-slate-800",
           backgroundColor: "bg-slate-900",
           profileImage: "/uploads/characters/profileImage/alfred-fake-lover-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/fake-lover-background.jpeg",
+          backgroundImage: "/uploads/characters/backgroundImage/alfred-fake-lover-background.jpeg",
         },
       ],
     },
@@ -1598,7 +1647,7 @@ const main = async () => {
 
   // 3-3. 좀비 고등학교
   await upsertStory(prisma, {
-    id: "zombie-high",
+    id: "e930a2ae-e5a9-5911-9450-32748f045afb",
     title: "좀비 고등학교",
     authorName: "스릴러 팩토리",
     description:
@@ -1606,6 +1655,7 @@ const main = async () => {
     summary: Creative_Summary.zombieHighSchool,
     coverColor: "bg-red-950",
     coverImage: "/uploads/stories/coverImage/zombie-high-cover.jpeg",
+    backgroundImage: "/uploads/stories/backgroundImage/zombie-high-background.jpeg",
     marketingTitle: "오늘 급식은... 우리야?",
     marketingDescription: "숨 막히는 긴장감, 친구를 믿을 수 없는 상황.",
     isOfficial: false,
@@ -1613,7 +1663,7 @@ const main = async () => {
     characters: {
       create: [
         {
-          id: "kang-jiwoo-zombie-highschool-char",
+          id: "323ebd7e-386e-59f9-9722-781874f1e09d",
           name: "강지우",
           role: "주인공",
           description:
@@ -1625,10 +1675,11 @@ const main = async () => {
           backgroundColor: "bg-red-950",
           profileImage:
             "/uploads/characters/profileImage/kang-jiwoo-zombie-highschool-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/zombie-high-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/kang-jiwoo-zombie-high-background.jpeg",
         },
         {
-          id: "kim-minseok-zombie-highschool-char",
+          id: "0c27b2a8-5894-502e-9b1a-907e1e8414ab",
           name: "김민석",
           role: "조연",
           description:
@@ -1641,10 +1692,11 @@ const main = async () => {
           backgroundColor: "bg-red-950",
           profileImage:
             "/uploads/characters/profileImage/kim-minseok-zombie-highschool-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/zombie-high-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/kim-minseok-zombie-high-background.jpeg",
         },
         {
-          id: "lee-soyeon-zombie-highschool-char",
+          id: "42dac5d5-7cd7-52ad-bec6-cea246fb029d",
           name: "이소연",
           role: "조연",
           description:
@@ -1656,7 +1708,8 @@ const main = async () => {
           backgroundColor: "bg-red-950",
           profileImage:
             "/uploads/characters/profileImage/lee-soyeon-zombie-highschool-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/zombie-high-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/lee-soyeon-zombie-high-background.jpeg",
         },
       ],
     },
@@ -1664,7 +1717,7 @@ const main = async () => {
 
   // 3-4. 돌아온 SSS급 헌터
   await upsertStory(prisma, {
-    id: "return-hunter",
+    id: "dee4f0c7-69de-54d9-873f-0e538a234a53",
     title: "돌아온 SSS급 헌터",
     authorName: "현판 장인",
     description:
@@ -1672,6 +1725,7 @@ const main = async () => {
     summary: Creative_Summary.sssClass,
     coverColor: "bg-blue-950",
     coverImage: "/uploads/stories/coverImage/return-hunter-cover.jpeg",
+    backgroundImage: "/uploads/stories/backgroundImage/return-hunter-background.jpeg",
     marketingTitle: "이번 생은 꿀 빨며 삽니다",
     marketingDescription: "미래의 지식과 압도적인 힘으로 세상을 놀라게 하다.",
     isOfficial: false,
@@ -1679,7 +1733,7 @@ const main = async () => {
     characters: {
       create: [
         {
-          id: "kang-jinhyeok-sssClass-char",
+          id: "7e89ddac-3329-515b-82ef-725accc395e5",
           name: "강진혁",
           role: "주인공",
           description:
@@ -1690,10 +1744,11 @@ const main = async () => {
           imageColor: "bg-blue-500",
           backgroundColor: "bg-blue-950",
           profileImage: "/uploads/characters/profileImage/kang-jinhyeok-sssClass-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/return-hunter-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/kang-jinhyeok-return-hunter-background.jpeg",
         },
         {
-          id: "yoo-jimin-sssClass-char",
+          id: "065101b8-920e-5ce8-b7b4-a72157c1e606",
           name: "유지민",
           role: "조연",
           description:
@@ -1704,10 +1759,11 @@ const main = async () => {
           imageColor: "bg-blue-500",
           backgroundColor: "bg-blue-950",
           profileImage: "/uploads/characters/profileImage/yoo-jimin-sssClass-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/return-hunter-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/yoo-jimin-return-hunter-background.jpeg",
         },
         {
-          id: "park-taesu-sssClass-char",
+          id: "29e59dbd-d238-5b48-b4f1-e13a713afc00",
           name: "박태수",
           role: "조연",
           description:
@@ -1718,10 +1774,11 @@ const main = async () => {
           imageColor: "bg-blue-500",
           backgroundColor: "bg-blue-950",
           profileImage: "/uploads/characters/profileImage/park-taesu-sssClass-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/return-hunter-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/park-taesu-return-hunter-background.jpeg",
         },
         {
-          id: "ballock-sssClass-char",
+          id: "bee826a3-51e0-5c18-b69d-f2c646b804a8",
           name: "발록",
           role: "조연",
           description:
@@ -1732,7 +1789,8 @@ const main = async () => {
           imageColor: "bg-blue-500",
           backgroundColor: "bg-blue-950",
           profileImage: "/uploads/characters/profileImage/ballock-sssClass-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/return-hunter-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/ballock-return-hunter-background.jpeg",
         },
       ],
     },
@@ -1740,7 +1798,7 @@ const main = async () => {
 
   // 3-5. 우주 정거장 9호
   await upsertStory(prisma, {
-    id: "space-station",
+    id: "47342d4d-bcbb-5679-82f7-5df6c12bda4d",
     title: "우주 정거장 9호",
     authorName: "SF 몽상가",
     description:
@@ -1748,6 +1806,7 @@ const main = async () => {
     summary: Creative_Summary.spaceStation,
     coverColor: "bg-purple-950",
     coverImage: "/uploads/stories/coverImage/space-station-cover.jpeg",
+    backgroundImage: "/uploads/stories/backgroundImage/space-station-background.jpeg",
     marketingTitle: "지구인은 출입 금지...가 아닙니다",
     marketingDescription: "광활한 우주 속 소소하고 따뜻한 이야기.",
     isOfficial: false,
@@ -1755,7 +1814,7 @@ const main = async () => {
     characters: {
       create: [
         {
-          id: "han-taeju-space-station-char",
+          id: "7d8a817b-9a50-5ae4-b2c6-104ed75f3acc",
           name: "한태주",
           role: "주인공",
           description:
@@ -1766,10 +1825,11 @@ const main = async () => {
           imageColor: "bg-purple-400",
           backgroundColor: "bg-purple-950",
           profileImage: "/uploads/characters/profileImage/han-taejoo-space-station-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/space-station-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/han-taejoo-space-station-background.jpeg",
         },
         {
-          id: "gururuk-space-station-char",
+          id: "03dab2da-a0ec-58a7-a350-3d058f766e54",
           name: "꾸르륵",
           role: "조연",
           description:
@@ -1781,10 +1841,11 @@ const main = async () => {
           imageColor: "bg-purple-400",
           backgroundColor: "bg-purple-950",
           profileImage: "/uploads/characters/profileImage/gururuk-space-station-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/space-station-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/gururuk-space-station-background.jpeg",
         },
         {
-          id: "Gerard-space-station-char",
+          id: "59aef9d1-06a7-57fb-870c-d3c452ecab04",
           name: "제라드",
           role: "조연",
           description:
@@ -1796,10 +1857,11 @@ const main = async () => {
           imageColor: "bg-purple-400",
           backgroundColor: "bg-purple-950",
           profileImage: "/uploads/characters/profileImage/Gerard-space-station-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/space-station-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/Gerard-space-station-background.jpeg",
         },
         {
-          id: "alpha-three-space-station-char",
+          id: "b1c226ca-4555-5a75-9385-d226fe12e556",
           name: "알파-3",
           role: "조연",
           description:
@@ -1811,7 +1873,8 @@ const main = async () => {
           imageColor: "bg-purple-400",
           backgroundColor: "bg-purple-950",
           profileImage: "/uploads/characters/profileImage/alpha-three-space-station-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/space-station-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/alpha-three-space-station-background.jpeg",
         },
       ],
     },
@@ -1819,7 +1882,7 @@ const main = async () => {
 
   // 3-6. 조선 퇴마록
   await upsertStory(prisma, {
-    id: "joseon-exorcist",
+    id: "344d1c74-bee6-5e2e-8adc-34ae46a1d6cf",
     title: "조선 퇴마록",
     authorName: "역사 판타지",
     description:
@@ -1827,6 +1890,7 @@ const main = async () => {
     summary: Creative_Summary.joseonExorcist,
     coverColor: "bg-stone-900",
     coverImage: "/uploads/stories/coverImage/joseon-exorcist-cover.jpeg",
+    backgroundImage: "/uploads/stories/backgroundImage/joseon-exorcist-background.jpeg",
     marketingTitle: "어둠이 내리면 사냥이 시작된다",
     marketingDescription: "한국적인 요괴와 액션이 어우러진 퓨전 사극.",
     isOfficial: false,
@@ -1834,7 +1898,7 @@ const main = async () => {
     characters: {
       create: [
         {
-          id: "kang-doha-joseon-exorcist-char",
+          id: "999bbdde-cbb7-5937-a5d9-ae09dd60082d",
           name: "강도하",
           role: "주인공",
           description:
@@ -1845,10 +1909,11 @@ const main = async () => {
           imageColor: "bg-stone-400",
           backgroundColor: "bg-stone-900",
           profileImage: "/uploads/characters/profileImage/kang-doha-joseon-exorcist-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/joseon-exorcist-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/kang-doha-joseon-exorcist-background.jpeg",
         },
         {
-          id: "yeonha-joseon-exorcist-char",
+          id: "22512762-c685-5b46-81c8-af7892f09d0c",
           name: "연하",
           role: "주인공",
           description:
@@ -1860,10 +1925,11 @@ const main = async () => {
           imageColor: "bg-stone-400",
           backgroundColor: "bg-stone-900",
           profileImage: "/uploads/characters/profileImage/yeonha-joseon-exorcist-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/joseon-exorcist-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/yeonha-joseon-exorcist-background.jpeg",
         },
         {
-          id: "jo-gwanwoong-joseon-exorcist-char",
+          id: "a1c3c94a-0667-5b0a-9e71-b3b487a8aa42",
           name: "조관웅",
           role: "조연",
           description:
@@ -1876,7 +1942,8 @@ const main = async () => {
           backgroundColor: "bg-stone-900",
           profileImage:
             "/uploads/characters/profileImage/jo-gwanwoong-joseon-exorcist-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/joseon-exorcist-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/jo-gwanwoong-joseon-exorcist-background.jpeg",
         },
       ],
     },
@@ -1884,7 +1951,7 @@ const main = async () => {
 
   // 3-7. 고양이 탐정 사무소
   await upsertStory(prisma, {
-    id: "cat-detective",
+    id: "38f05fc1-7e2a-51b3-976a-357f27fd3f52",
     title: "고양이 탐정 사무소",
     authorName: "냥냥 펀치",
     description:
@@ -1892,6 +1959,7 @@ const main = async () => {
     summary: Creative_Summary.catDetective,
     coverColor: "bg-orange-900",
     coverImage: "/uploads/stories/coverImage/cat-detective-cover.jpeg",
+    backgroundImage: "/uploads/stories/backgroundImage/cat-detective-background.jpeg",
     marketingTitle: "범인은 바로 저 생선 가게 주인이다냥!",
     marketingDescription: "귀여움과 미스터리의 완벽한 조화.",
     isOfficial: false,
@@ -1899,7 +1967,7 @@ const main = async () => {
     characters: {
       create: [
         {
-          id: "kim-minjoon-cat-detective-char",
+          id: "c3643e08-e5c8-5406-b116-13ec866a4eac",
           name: "김민준",
           role: "주인공",
           description:
@@ -1910,10 +1978,11 @@ const main = async () => {
           imageColor: "bg-orange-300",
           backgroundColor: "bg-orange-900",
           profileImage: "/uploads/characters/profileImage/kim-minjoon-cat-detective-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/cat-detective-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/kim-minjoon-cat-detective-background.jpeg",
         },
         {
-          id: "manggae-cat-detective-char",
+          id: "dc450ec7-68d6-54ac-940c-377d43ea8ae2",
           name: "망개",
           role: "주인공",
           description:
@@ -1924,10 +1993,11 @@ const main = async () => {
           imageColor: "bg-orange-300",
           backgroundColor: "bg-orange-900",
           profileImage: "/uploads/characters/profileImage/mangae-cat-detective-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/cat-detective-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/mangae-cat-detective-background.jpeg",
         },
         {
-          id: "owner-park-cat-detective-char",
+          id: "4eb03661-01cd-5ec3-810b-d8d52b6a55cc",
           name: "박 사장",
           role: "조연",
           description:
@@ -1938,10 +2008,11 @@ const main = async () => {
           imageColor: "bg-orange-300",
           backgroundColor: "bg-orange-900",
           profileImage: "/uploads/characters/profileImage/owner-park-cat-detective-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/cat-detective-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/owner-park-cat-detective-background.jpeg",
         },
         {
-          id: "cheolsoo-cat-detective-char",
+          id: "7320196e-cbf4-57b4-bdf4-c210adee884b",
           name: "철수",
           role: "조연",
           description:
@@ -1952,7 +2023,8 @@ const main = async () => {
           imageColor: "bg-orange-300",
           backgroundColor: "bg-orange-900",
           profileImage: "/uploads/characters/profileImage/cheolsoo-cat-detective-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/cat-detective-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/cheolsoo-cat-detective-background.jpeg",
         },
       ],
     },
@@ -1960,7 +2032,7 @@ const main = async () => {
 
   // 3-8. 사이버 펑크: 코드 네임 제로
   await upsertStory(prisma, {
-    id: "cyber-punk-zero",
+    id: "0c9c96c2-3ac1-5af5-856a-bf9aa34a7302",
     title: "코드 네임 제로",
     authorName: "네온 시티",
     description:
@@ -1968,6 +2040,7 @@ const main = async () => {
     summary: Creative_Summary.codeNameZero,
     coverColor: "bg-cyan-950",
     coverImage: "/uploads/stories/coverImage/cyber-punk-zero-cover.jpeg",
+    backgroundImage: "/uploads/stories/backgroundImage/cyber-punk-zero-background.jpeg",
     marketingTitle: "나의 기억은 조작되었다",
     marketingDescription: "디스토피아 미래 도시에서 펼쳐지는 하드보일드 액션.",
     isOfficial: false,
@@ -1975,7 +2048,7 @@ const main = async () => {
     characters: {
       create: [
         {
-          id: "zero-cyber-punk-zero-char",
+          id: "4b3e5994-4719-5f18-87f7-5bb25fd7fe63",
           name: "제로",
           role: "주인공",
           description:
@@ -1986,10 +2059,11 @@ const main = async () => {
           imageColor: "bg-cyan-400",
           backgroundColor: "bg-cyan-950",
           profileImage: "/uploads/characters/profileImage/zero-cyber-funk-zero-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/cyber-punk-zero-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/zero-cyber-punk-zero-background.jpeg",
         },
         {
-          id: "lina-cyber-punk-zero-char",
+          id: "8b677fbb-5b9a-5d64-89bd-46616a287dd4",
           name: "리나",
           role: "주인공",
           description:
@@ -2000,10 +2074,11 @@ const main = async () => {
           imageColor: "bg-cyan-400",
           backgroundColor: "bg-cyan-950",
           profileImage: "/uploads/characters/profileImage/lina-cyber-punk-zero-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/cyber-punk-zero-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/lina-cyber-punk-zero-background.jpeg",
         },
         {
-          id: "doctor-k-cyber-punk-zero-char",
+          id: "e70fa64e-e996-5c27-9a1a-ad431fc46cb9",
           name: "닥터 K",
           role: "조연",
           description:
@@ -2015,10 +2090,11 @@ const main = async () => {
           imageColor: "bg-cyan-400",
           backgroundColor: "bg-cyan-950",
           profileImage: "/uploads/characters/profileImage/doctor-k-cyber-punk-zero-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/cyber-punk-zero-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/doctor-k-cyber-punk-zero-background.jpeg",
         },
         {
-          id: "omega-cyber-punk-zero-char",
+          id: "7fd69d36-b52b-5d71-8883-c462045e395b",
           name: "오메가",
           role: "조연",
           description:
@@ -2029,7 +2105,8 @@ const main = async () => {
           imageColor: "bg-cyan-400",
           backgroundColor: "bg-cyan-950",
           profileImage: "/uploads/characters/profileImage/omega-cyber-funk-zero-profile.jpeg",
-          backgroundImage: "/uploads/characters/backgroundImage/cyber-punk-zero-background.jpeg",
+          backgroundImage:
+            "/uploads/characters/backgroundImage/omega-cyber-punk-zero-background.jpeg",
         },
       ],
     },

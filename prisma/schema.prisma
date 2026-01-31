@@ -49,13 +49,14 @@
   model Story {
     id          String   @id @default(uuid())
     title       String
-    seriesTitle String?  // 시리즈명 (장편 소설의 경우)
+    seriesTitle String?  // 시리즈명
     authorName  String   // 원작 작가명
     description String   @db.VarChar(1000)   // 한 줄 소개
     summary     String   @db.VarChar(4000)  // 줄거리
     coverColor  String   @default("bg-stone-800")
-    coverImage  String?  @db.VarChar(2048) // [NEW] 커버 이미지 URL (Optional)
-    isOfficial  Boolean  @default(false)  // 공식 vs 창작
+    coverImage      String?  @db.VarChar(2048)
+    backgroundImage String?  @db.VarChar(2048)
+    isOfficial      Boolean  @default(false)
     marketingTitle       String? // 홍보용 제목 (Hero Slide용)
     marketingDescription String? // 홍보용 문구 (Hero Slide용)
     createdAt   DateTime @default(now())
@@ -64,7 +65,7 @@
     categoryId  Int
     category    Category @relation(fields: [categoryId], references: [id])
 
-    creatorId   String?  // 창작 스토리인 경우 작성자
+    creatorId   String?  // 창작 스토리인 경우 작성자 ID
     creator     User?    @relation(fields: [creatorId], references: [id])
 
     characters  Character[]
@@ -80,14 +81,14 @@
   model Character {
     id           String   @id @default(uuid())
     name         String
-    role         String   // 주인공, 조연 등
+    role         String   // 주인공, 조연
     description  String   @db.VarChar(1000)
-    personality  String?  @db.Text  // AI 프롬프트용 성격 설정
+    personality  String?  @db.Text
     firstMessage String?  // 첫 인사말
-    profileImage    String?  @db.VarChar(2048) // [NEW] 프로필 이미지 URL (Optional)
-    backgroundImage String?  @db.VarChar(2048) // [NEW] 배경 이미지 URL (Optional)
+    profileImage    String?  @db.VarChar(2048)
+    backgroundImage String?  @db.VarChar(2048)
     imageColor      String   @default("bg-stone-400")
-    backgroundColor String   @default("bg-stone-900") // [NEW] 배경 이미지 Fallback Color
+    backgroundColor String   @default("bg-stone-900")
     voiceId      String?  // ElevenLabs voice ID
     createdAt    DateTime @default(now())
 
@@ -124,7 +125,7 @@
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    userId    String   @unique  // 사용자당 1개
+    userId    String   @unique
     user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
     characters ChatRoomCharacter[]
