@@ -10,6 +10,7 @@ import { AuthModule } from "./auth/auth.module";
 import { JwtAuthGuard } from "./auth/guards/jwt-auth.guard";
 import { CategoriesModule } from "./categories/categories.module";
 import { CharactersModule } from "./characters/characters.module";
+import { ChatModule } from "./chat/chat.module";
 import { GlobalExceptionFilter } from "./common/filters/http-exception.filter";
 import { FileStorageModule } from "./common/services/file-storage.module";
 import { PrismaModule } from "./prisma/prisma.module";
@@ -39,6 +40,7 @@ import { StoriesModule } from "./stories/stories.module";
     AuthModule,
     CategoriesModule,
     CharactersModule,
+    ChatModule,
     StoriesModule,
   ],
   controllers: [AppController],

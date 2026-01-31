@@ -4,8 +4,9 @@ import { type Request } from "express";
 import { type AuthenticatedUser } from "../../auth/types/auth.types";
 
 export const CurrentUser = createParamDecorator(
-  (_data: unknown, ctx: ExecutionContext): AuthenticatedUser => {
+  (data: keyof AuthenticatedUser | undefined, ctx: ExecutionContext) => {
     const request = ctx.switchToHttp().getRequest<Request>();
-    return request.user as AuthenticatedUser;
+    const user = request.user as AuthenticatedUser;
+    return data ? user?.[data] : user;
   },
 );
