@@ -60,14 +60,77 @@ export class GenerateCharactersResponse {
 export class GenerateProfileImageDto {
   @IsNotEmpty()
   @IsString()
-  @MaxLength(100)
-  name: string;
+  @MaxLength(1000)
+  description: string;
 
   @IsNotEmpty()
   @IsString()
-  @MaxLength(50)
-  role: string;
+  @MaxLength(500)
+  personality: string;
+}
 
+export class GenerateProfileImageResponse {
+  imageBase64: string;
+  promptUsed: string;
+}
+
+// ========================
+// 커버 이미지 생성
+// ========================
+
+export class GenerateCoverImageDto {
+  @IsNotEmpty()
+  @IsString()
+  @MaxLength(200)
+  title: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @MaxLength(500)
+  description: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @MaxLength(4000)
+  summary: string;
+}
+
+export class GenerateCoverImageResponse {
+  imageBase64: string;
+  promptUsed: string;
+}
+
+// ========================
+// 배경 이미지 생성
+// ========================
+
+export class GenerateBackgroundImageDto {
+  @IsNotEmpty()
+  @IsString()
+  @MaxLength(200)
+  title: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @MaxLength(500)
+  description: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @MaxLength(4000)
+  summary: string;
+}
+
+export class GenerateBackgroundImageResponse {
+  imageBase64: string;
+  promptUsed: string;
+}
+
+// ========================
+// 캐릭터 배경 이미지 생성
+// ========================
+
+export class GenerateCharacterBackgroundImageDto {
   @IsNotEmpty()
   @IsString()
   @MaxLength(1000)
@@ -79,7 +142,7 @@ export class GenerateProfileImageDto {
   personality: string;
 }
 
-export class GenerateProfileImageResponse {
+export class GenerateCharacterBackgroundImageResponse {
   imageBase64: string;
   promptUsed: string;
 }
