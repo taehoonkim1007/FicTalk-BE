@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { type Prisma } from "@prisma/client";
 
 import { type CreateCharacterDto } from "../../characters/dto/create-character.dto";
+import { generateSearchVariations } from "../../common/utils/korean-search.util";
 import { PrismaService } from "../../prisma/prisma.service";
 import { type CreateStoryDto } from "../dto/create-story.dto";
 import { type GetStoriesDto } from "../dto/get-stories.dto";
@@ -379,10 +380,11 @@ export class StoriesRepository {
     }
 
     if (dto.search) {
-      where.OR = [
-        { title: { contains: dto.search, mode: "insensitive" } },
-        { authorName: { contains: dto.search, mode: "insensitive" } },
-      ];
+      const variations = generateSearchVariations(dto.search);
+      where.OR = variations.flatMap((v) => [
+        { title: { contains: v, mode: "insensitive" } },
+        { authorName: { contains: v, mode: "insensitive" } },
+      ]);
     }
 
     return where;

@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { type Prisma } from "@prisma/client";
 
+import { generateSearchVariations } from "../../common/utils/korean-search.util";
 import { PrismaService } from "../../prisma/prisma.service";
 import { type CharacterDetailResponse } from "../../stories/dto/story-response.dto";
 import { type CharacterWithStoryResponse } from "../dto/character-response.dto";
@@ -76,7 +77,10 @@ export class CharactersRepository {
     }
 
     if (dto.search) {
-      where.name = { contains: dto.search, mode: "insensitive" };
+      const variations = generateSearchVariations(dto.search);
+      where.OR = variations.map((v) => ({
+        name: { contains: v, mode: "insensitive" as const },
+      }));
     }
 
     if (dto.role) {
