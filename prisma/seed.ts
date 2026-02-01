@@ -143,6 +143,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/little-prince-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/little-prince-little-prince-background.jpeg",
+          voiceId: "zrHiDhphv9ZnVXBqCLjz",
+          voiceSettings: { stability: 0.5, similarityBoost: 0.75, style: 0.5, speed: 1.0 },
         },
         {
           id: "f0c9d574-1894-5436-addd-185541ff831f",
@@ -157,6 +159,8 @@ const main = async () => {
           backgroundColor: "bg-sky-900",
           profileImage: "/uploads/characters/profileImage/me-little-prince-profile.jpeg",
           backgroundImage: "/uploads/characters/backgroundImage/me-little-prince-background.jpeg",
+          voiceId: "TxGEqnHWrfWFTfGW9XjX",
+          voiceSettings: { stability: 0.7, similarityBoost: 0.8, style: 0.2, speed: 1.0 },
         },
         {
           id: "b31c2adb-654a-5a8b-8d15-2c412d1de7c6",
@@ -170,6 +174,8 @@ const main = async () => {
           backgroundColor: "bg-sky-900",
           profileImage: "/uploads/characters/profileImage/rose-little-prince-profile.jpeg",
           backgroundImage: "/uploads/characters/backgroundImage/rose-little-prince-background.jpeg",
+          voiceId: "EXAVITQu4vr4xnSDxMaL",
+          voiceSettings: { stability: 0.55, similarityBoost: 0.75, style: 0.65, speed: 1.0 },
         },
         {
           id: "99f1ddb5-4c91-513b-98b3-fbd1437fa664",
@@ -184,6 +190,8 @@ const main = async () => {
           backgroundColor: "bg-sky-900",
           profileImage: "/uploads/characters/profileImage/fox-little-prince-profile.jpeg",
           backgroundImage: "/uploads/characters/backgroundImage/fox-little-prince-background.jpeg",
+          voiceId: "yoZ06aMxZJJ28mfd3POQ",
+          voiceSettings: { stability: 0.6, similarityBoost: 0.8, style: 0.3, speed: 0.95 },
         },
         {
           id: "328486d7-4f9e-5bb3-b595-cd23ef18defe",
@@ -199,6 +207,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/snake-little-prince-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/snake-little-prince-background.jpeg",
+          voiceId: "2EiwWnXFnvU5JabPnv8n",
+          voiceSettings: { stability: 0.85, similarityBoost: 0.9, style: 0.1, speed: 0.85 },
         },
       ],
     },
@@ -235,6 +245,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/jay-gatsby-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/jay-gatsby-the-greatest-gatsby-background.jpeg",
+          voiceId: "pNInz6obpgDQGcFmaJgB",
+          voiceSettings: { stability: 0.6, similarityBoost: 0.75, style: 0.5, speed: 1.0 },
         },
         {
           id: "cdcc6343-feee-59b0-b3b7-e2ca69705058",
@@ -251,6 +263,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/nick-gatsby-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/nick-gatsby-the-greatest-gatsby-background.jpeg",
+          voiceId: "TxGEqnHWrfWFTfGW9XjX",
+          voiceSettings: { stability: 0.7, similarityBoost: 0.75, style: 0.2, speed: 1.0 },
         },
         {
           id: "b2521eb3-d01b-58d3-8984-ea3dd378b9c6",
@@ -267,6 +281,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/daisy-gatsby-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/daisy-gatsby-the-greatest-gatsby-background.jpeg",
+          voiceId: "21m00Tcm4TlvDq8ikWAM",
+          voiceSettings: { stability: 0.55, similarityBoost: 0.75, style: 0.6, speed: 1.05 },
         },
         {
           id: "f9eea917-fb5a-5756-8d0d-a77dfa71bf6e",
@@ -282,6 +298,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/tom-gatsby-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/tom-gatsby-the-greatest-gatsby-background.jpeg",
+          voiceId: "VR6AewGX3KQ92AmB6Ckr",
+          voiceSettings: { stability: 0.8, similarityBoost: 0.8, style: 0.4, speed: 1.0 },
         },
         {
           id: "5323fdeb-1fb3-5bba-824a-63f00caa902a",
@@ -297,6 +315,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/jordan-gatsby-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/jordan-gatsby-the-greatest-gatsby-background.jpeg",
+          voiceId: "piTKgcLEGmPE4e6mEKli",
+          voiceSettings: { stability: 0.7, similarityBoost: 0.75, style: 0.3, speed: 1.0 },
         },
         {
           id: "2f1078e2-3bcf-51c4-917d-ed9695f062b3",
@@ -312,6 +332,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/myrtle-gatsby-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/myrtle-gatsby-the-greatest-gatsby-background.jpeg",
+          voiceId: "AZnzlk1XvdvUeBnXmlld",
+          voiceSettings: { stability: 0.5, similarityBoost: 0.8, style: 0.7, speed: 1.05 },
         },
         {
           id: "38ac84fe-63f0-5871-a0d3-87aa3e0d3b3c",
@@ -326,6 +348,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/george-gatsby-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/george-gatsby-the-greatest-gatsby-background.jpeg",
+          voiceId: "pqHfZKP75CvOlQylNhV4",
+          voiceSettings: { stability: 0.6, similarityBoost: 0.6, style: 0.2, speed: 0.95 },
         },
       ],
     },
@@ -362,6 +386,8 @@ const main = async () => {
           backgroundColor: "bg-slate-900",
           profileImage: "/uploads/characters/profileImage/winston-smith-profile.jpeg",
           backgroundImage: "/uploads/characters/backgroundImage/winston-smith-1984-background.jpeg",
+          voiceId: "TxGEqnHWrfWFTfGW9XjX",
+          voiceSettings: { stability: 0.6, similarityBoost: 0.75, style: 0.2, speed: 0.95 },
         },
         {
           id: "248dc841-ce47-51bd-b445-ce3306bc6494",
@@ -376,6 +402,8 @@ const main = async () => {
           backgroundColor: "bg-slate-900",
           profileImage: "/uploads/characters/profileImage/julia-1984-profile.jpeg",
           backgroundImage: "/uploads/characters/backgroundImage/julia-1984-background.jpeg",
+          voiceId: "AZnzlk1XvdvUeBnXmlld",
+          voiceSettings: { stability: 0.5, similarityBoost: 0.75, style: 0.6, speed: 1.05 },
         },
         {
           id: "08a0783f-eab2-54d5-8d15-0b6440c87e98",
@@ -390,6 +418,8 @@ const main = async () => {
           backgroundColor: "bg-slate-900",
           profileImage: "/uploads/characters/profileImage/obrien-1984-profile.jpeg",
           backgroundImage: "/uploads/characters/backgroundImage/obrien-1984-background.jpeg",
+          voiceId: "pNInz6obpgDQGcFmaJgB",
+          voiceSettings: { stability: 0.9, similarityBoost: 0.85, style: 0.1, speed: 0.9 },
         },
         {
           id: "5aacfb73-2be2-51bb-ba50-46fbf507dad5",
@@ -404,6 +434,8 @@ const main = async () => {
           backgroundColor: "bg-slate-900",
           profileImage: "/uploads/characters/profileImage/charrington-1984-profile.jpeg",
           backgroundImage: "/uploads/characters/backgroundImage/charrington-1984-background.jpeg",
+          voiceId: "pqHfZKP75CvOlQylNhV4",
+          voiceSettings: { stability: 0.55, similarityBoost: 0.65, style: 0.4, speed: 0.9 },
         },
         {
           id: "a93cd632-46a0-5625-b787-e30eb61f9f46",
@@ -419,6 +451,8 @@ const main = async () => {
           backgroundColor: "bg-slate-900",
           profileImage: "/uploads/characters/profileImage/parsons-1984-profile.jpeg",
           backgroundImage: "/uploads/characters/backgroundImage/parsons-1984-background.jpeg",
+          voiceId: "ODq5zmih8GrVes37Dizd",
+          voiceSettings: { stability: 0.4, similarityBoost: 0.7, style: 0.8, speed: 1.1 },
         },
       ],
     },
@@ -456,6 +490,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/emil-sinclair-demian-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/emil-sinclair-demian-background.jpeg",
+          voiceId: "SOYHLrjzK2X1ezoPC6cr",
+          voiceSettings: { stability: 0.4, similarityBoost: 0.6, style: 0.45, speed: 1.0 },
         },
         {
           id: "74c41165-f491-5dfa-a08d-01443f308956",
@@ -471,6 +507,8 @@ const main = async () => {
           backgroundColor: "bg-stone-800",
           profileImage: "/uploads/characters/profileImage/max-demian-deamian-profile.jpeg",
           backgroundImage: "/uploads/characters/backgroundImage/max-demian-demian-background.jpeg",
+          voiceId: "ErXwobaYiN0qurTGV4KK",
+          voiceSettings: { stability: 0.85, similarityBoost: 0.75, style: 0.1, speed: 0.95 },
         },
         {
           id: "daae84ef-f219-5370-bd25-a287baf6b07a",
@@ -486,6 +524,8 @@ const main = async () => {
           backgroundColor: "bg-stone-800",
           profileImage: "/uploads/characters/profileImage/miss-eva-demina-profile.jpeg",
           backgroundImage: "/uploads/characters/backgroundImage/miss-eva-demian-background.jpeg",
+          voiceId: "EXAVITQu4vr4xnSDxMaL",
+          voiceSettings: { stability: 0.6, similarityBoost: 0.8, style: 0.5, speed: 0.95 },
         },
         {
           id: "808903f9-e4c5-5d23-bfbe-7fbb6bf26e32",
@@ -501,6 +541,8 @@ const main = async () => {
           backgroundColor: "bg-stone-800",
           profileImage: "/uploads/characters/profileImage/pistorius-demian-profile.jpeg",
           backgroundImage: "/uploads/characters/backgroundImage/pistorius-demian-background.jpeg",
+          voiceId: "N2lVS1w4EtoT3dr4eOWO",
+          voiceSettings: { stability: 0.55, similarityBoost: 0.75, style: 0.6, speed: 1.05 },
         },
         {
           id: "c04d8eb5-a62a-57cb-afe5-53445dc1dd1b",
@@ -517,6 +559,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/franz-kromer-demian-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/franz-kromer-demian-background.jpeg",
+          voiceId: "pqHfZKP75CvOlQylNhV4",
+          voiceSettings: { stability: 0.5, similarityBoost: 0.8, style: 0.8, speed: 1.0 },
         },
       ],
     },
@@ -554,6 +598,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/gregor-samsa-metamorphosis-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/gregor-samsa-metamorphosis-background.jpeg",
+          voiceId: "TxGEqnHWrfWFTfGW9XjX",
+          voiceSettings: { stability: 0.6, similarityBoost: 0.7, style: 0.3, speed: 0.95 },
         },
         {
           id: "832e1adf-aff4-579b-9254-fefd6b24e04b",
@@ -569,6 +615,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/grete-samsa-metamorphosis-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/grete-samsa-metamorphosis-background.jpeg",
+          voiceId: "MF3mGyEYCl7XYWbV9V6O",
+          voiceSettings: { stability: 0.5, similarityBoost: 0.75, style: 0.5, speed: 1.0 },
         },
         {
           id: "4898284b-3ea3-544d-afd8-caef65157826",
@@ -584,6 +632,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/mr-samsa-metamorphosis-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/mr-samsa-metamorphosis-background.jpeg",
+          voiceId: "pqHfZKP75CvOlQylNhV4",
+          voiceSettings: { stability: 0.85, similarityBoost: 0.8, style: 0.6, speed: 1.0 },
         },
         {
           id: "91b5cc4a-2658-5c64-9144-79b36aafa9ee",
@@ -599,6 +649,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/mrs-samsa-metamorphosis-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/mrs-samsa-metamorphosis-background.jpeg",
+          voiceId: "EXAVITQu4vr4xnSDxMaL",
+          voiceSettings: { stability: 0.55, similarityBoost: 0.9, style: 0.4, speed: 0.95 },
         },
         {
           id: "3618b915-243c-5915-b2b8-a633bba50c67",
@@ -614,6 +666,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/maid-grandma-metamorphosis-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/maid-grandma-metamorphosis-background.jpeg",
+          voiceId: "AZnzlk1XvdvUeBnXmlld",
+          voiceSettings: { stability: 0.7, similarityBoost: 0.8, style: 0.8, speed: 1.05 },
         },
       ],
     },
@@ -652,6 +706,8 @@ const main = async () => {
             "/uploads/characters/profileImage/elizabeth-bennet-pride-and-prejudice-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/elizabeth-bennet-pride-and-prejudice-background.jpeg",
+          voiceId: "21m00Tcm4TlvDq8ikWAM",
+          voiceSettings: { stability: 0.55, similarityBoost: 0.75, style: 0.6, speed: 1.05 },
         },
         {
           id: "12726d64-bc0a-577f-a116-8d8f270c8176",
@@ -668,6 +724,8 @@ const main = async () => {
             "/uploads/characters/profileImage/fitzwilliam-darcy-pride-and-prejudice-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/fitzwilliam-darcy-pride-and-prejudice-background.jpeg",
+          voiceId: "pNInz6obpgDQGcFmaJgB",
+          voiceSettings: { stability: 0.8, similarityBoost: 0.8, style: 0.3, speed: 0.95 },
         },
         {
           id: "f51f6b6f-ad29-5367-96b0-9ba64990e05a",
@@ -683,6 +741,8 @@ const main = async () => {
             "/uploads/characters/profileImage/jane-bennet-pride-and-prejudice-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/jane-bennet-pride-and-prejudice-background.jpeg",
+          voiceId: "EXAVITQu4vr4xnSDxMaL",
+          voiceSettings: { stability: 0.7, similarityBoost: 0.9, style: 0.5, speed: 1.0 },
         },
         {
           id: "2db915c8-e751-585d-a02f-bc1802ff0fa9",
@@ -699,6 +759,8 @@ const main = async () => {
             "/uploads/characters/profileImage/charles-binglee-pride-and-prejudice-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/charles-binglee-pride-and-prejudice-background.jpeg",
+          voiceId: "SOYHLrjzK2X1ezoPC6cr",
+          voiceSettings: { stability: 0.45, similarityBoost: 0.6, style: 0.4, speed: 1.05 },
         },
         {
           id: "4cfc89d0-21f6-5749-b817-c44e383ffd62",
@@ -716,6 +778,8 @@ const main = async () => {
             "/uploads/characters/profileImage/mr-bennet-pride-and-prejudice-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/mr-bennet-pride-and-prejudice-background.jpeg",
+          voiceId: "pqHfZKP75CvOlQylNhV4",
+          voiceSettings: { stability: 0.6, similarityBoost: 0.65, style: 0.5, speed: 0.9 },
         },
         {
           id: "9e9ee0e7-1227-5d1f-97c8-c3792d8df4ae",
@@ -732,6 +796,8 @@ const main = async () => {
             "/uploads/characters/profileImage/mrs-bennet-pride-and-prejudice-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/mrs-bennet-pride-and-prejudice-background.jpeg",
+          voiceId: "jsCqWAovK2LkecY7zXl4",
+          voiceSettings: { stability: 0.4, similarityBoost: 0.8, style: 0.8, speed: 1.1 },
         },
         {
           id: "7603f328-97e0-52aa-ade1-8b1a1b11cfbc",
@@ -748,6 +814,8 @@ const main = async () => {
             "/uploads/characters/profileImage/george-wickham-pride-and-prejudice-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/george-wickham-pride-and-prejudice-background.jpeg",
+          voiceId: "ErXwobaYiN0qurTGV4KK",
+          voiceSettings: { stability: 0.6, similarityBoost: 0.75, style: 0.6, speed: 1.0 },
         },
         {
           id: "a3536569-d3d0-5983-b548-626e20a2ae33",
@@ -764,6 +832,8 @@ const main = async () => {
             "/uploads/characters/profileImage/william-collins-pride-and-prejudice-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/william-collins-pride-and-prejudice-background.jpeg",
+          voiceId: "ODq5zmih8GrVes37Dizd",
+          voiceSettings: { stability: 0.8, similarityBoost: 0.7, style: 0.7, speed: 0.9 },
         },
       ],
     },
@@ -802,6 +872,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/sherlock-homes-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/sherlock-homes-sherlock-holmes-background.jpeg",
+          voiceId: "onwK4e9ZLuTAKqWW03F9",
+          voiceSettings: { stability: 0.5, similarityBoost: 0.8, style: 0.3, speed: 1.1 },
         },
         {
           id: "65f15bd5-ca23-571a-8ae5-5d6e42eec074",
@@ -818,6 +890,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/irene-adler-sherlock-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/irene-adler-sherlock-holmes-background.jpeg",
+          voiceId: "EXAVITQu4vr4xnSDxMaL",
+          voiceSettings: { stability: 0.6, similarityBoost: 0.9, style: 0.7, speed: 1.0 },
         },
         {
           id: "bf90344f-2534-5bab-8156-85feaee29141",
@@ -834,6 +908,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/john-watson-sherlock-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/john-watson-sherlock-holmes-background.jpeg",
+          voiceId: "JBFqnCBsd6RMkjVDRZzb",
+          voiceSettings: { stability: 0.7, similarityBoost: 0.8, style: 0.2, speed: 1.0 },
         },
         {
           id: "6ba57ae1-6ec3-50e7-9455-d60352176fa9",
@@ -849,6 +925,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/king-bohemia-sherlock-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/king-bohemia-sherlock-holmes-background.jpeg",
+          voiceId: "VR6AewGX3KQ92AmB6Ckr",
+          voiceSettings: { stability: 0.85, similarityBoost: 0.8, style: 0.5, speed: 0.9 },
         },
       ],
     },
@@ -886,6 +964,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/santiago-old-and-the-sea-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/santiago-old-man-sea-background.jpeg",
+          voiceId: "2EiwWnXFnvU5JabPnv8n",
+          voiceSettings: { stability: 0.85, similarityBoost: 0.7, style: 0.4, speed: 0.9 },
         },
         {
           id: "6e960ac6-8876-5845-aeff-21a1a86ffcb3",
@@ -901,6 +981,8 @@ const main = async () => {
           backgroundColor: "bg-blue-900",
           profileImage: "/uploads/characters/profileImage/marlin-old-and-the-sea-profile.jpeg",
           backgroundImage: "/uploads/characters/backgroundImage/marlin-old-man-sea-background.jpeg",
+          voiceId: "SOYHLrjzK2X1ezoPC6cr",
+          voiceSettings: { stability: 0.5, similarityBoost: 0.8, style: 0.6, speed: 1.05 },
         },
       ],
     },
@@ -941,11 +1023,13 @@ const main = async () => {
           backgroundColor: "bg-violet-900",
           profileImage: "/uploads/characters/profileImage/boy-shower-profile.jpeg",
           backgroundImage: "/uploads/characters/backgroundImage/boy-shower-background.jpeg",
+          voiceId: "SOYHLrjzK2X1ezoPC6cr",
+          voiceSettings: { stability: 0.4, similarityBoost: 0.6, style: 0.3, speed: 0.95 },
         },
         {
           id: "08adee45-07a2-58b6-9b10-9706174e91e2",
           name: "소녀",
-          role: "히로인",
+          role: "조연",
           description:
             "서울에서 온 윤 초시네 증손녀. 병약하고 창백한 얼굴에 단발머리를 했다. 시골 생활을 신기해하며 소년에게 먼저 다가간다.",
           personality:
@@ -955,6 +1039,8 @@ const main = async () => {
           backgroundColor: "bg-pink-900",
           profileImage: "/uploads/characters/profileImage/girl-shower-profile.jpeg",
           backgroundImage: "/uploads/characters/backgroundImage/girl-shower-background.jpeg",
+          voiceId: "MF3mGyEYCl7XYWbV9V6O",
+          voiceSettings: { stability: 0.6, similarityBoost: 0.8, style: 0.5, speed: 1.0 },
         },
       ],
     },
@@ -992,6 +1078,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/kim-chumji-luckyday-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/kim-chumji-lucky-day-background.jpeg",
+          voiceId: "pqHfZKP75CvOlQylNhV4",
+          voiceSettings: { stability: 0.4, similarityBoost: 0.6, style: 0.7, speed: 1.0 },
         },
         {
           id: "50812680-4c50-568d-98e3-904d8ceb15ef",
@@ -1007,6 +1095,8 @@ const main = async () => {
           backgroundColor: "bg-gray-800",
           profileImage: "/uploads/characters/profileImage/wife-luckday-profile.jpeg",
           backgroundImage: "/uploads/characters/backgroundImage/wife-lucky-day-background.jpeg",
+          voiceId: "EXAVITQu4vr4xnSDxMaL",
+          voiceSettings: { stability: 0.9, similarityBoost: 0.9, style: 0.1, speed: 0.85 },
         },
         {
           id: "09ebde3d-5b3e-51df-9f71-7d78201d4876",
@@ -1021,6 +1111,8 @@ const main = async () => {
           backgroundColor: "bg-gray-800",
           profileImage: "/uploads/characters/profileImage/chi-sam-luckyday-profile.jpeg",
           backgroundImage: "/uploads/characters/backgroundImage/chi-sam-lucky-day-background.jpeg",
+          voiceId: "ODq5zmih8GrVes37Dizd",
+          voiceSettings: { stability: 0.6, similarityBoost: 0.75, style: 0.5, speed: 1.05 },
         },
         {
           id: "ae15a415-442b-53b8-a88d-91dfb4bcbe70",
@@ -1035,6 +1127,8 @@ const main = async () => {
           backgroundColor: "bg-gray-800",
           profileImage: "/uploads/characters/profileImage/student-luckyday-profile.jpeg",
           backgroundImage: "/uploads/characters/backgroundImage/student-lucky-day-background.jpeg",
+          voiceId: "SOYHLrjzK2X1ezoPC6cr",
+          voiceSettings: { stability: 0.5, similarityBoost: 0.7, style: 0.4, speed: 1.15 },
         },
       ],
     },
@@ -1071,6 +1165,8 @@ const main = async () => {
           backgroundColor: "bg-lime-900",
           profileImage: "/uploads/characters/profileImage/me-spring-profile.jpeg",
           backgroundImage: "/uploads/characters/backgroundImage/me-spring-spring-background.jpeg",
+          voiceId: "SOYHLrjzK2X1ezoPC6cr",
+          voiceSettings: { stability: 0.4, similarityBoost: 0.6, style: 0.4, speed: 0.95 },
         },
         {
           id: "0cf4576d-6dd8-5553-bd6a-83653b5bfac6",
@@ -1086,6 +1182,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/bong-pil-spring-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/bong-pil-spring-spring-background.jpeg",
+          voiceId: "pqHfZKP75CvOlQylNhV4",
+          voiceSettings: { stability: 0.5, similarityBoost: 0.8, style: 0.8, speed: 1.1 },
         },
         {
           id: "67d92992-58e4-5826-8a43-270578629060",
@@ -1101,6 +1199,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/jeomsun-spring-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/jeomsun-spring-spring-background.jpeg",
+          voiceId: "MF3mGyEYCl7XYWbV9V6O",
+          voiceSettings: { stability: 0.6, similarityBoost: 0.75, style: 0.6, speed: 1.0 },
         },
         {
           id: "d06cee44-ee41-59c5-9fd1-994f75fea10d",
@@ -1115,6 +1215,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/gujang-spring-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/gujang-spring-spring-background.jpeg",
+          voiceId: "onwK4e9ZLuTAKqWW03F9",
+          voiceSettings: { stability: 0.85, similarityBoost: 0.7, style: 0.3, speed: 0.9 },
         },
         {
           id: "59d4b2f7-d9a9-5f57-9703-f601ecda43e1",
@@ -1127,6 +1229,8 @@ const main = async () => {
           imageColor: "bg-orange-200",
           backgroundColor: "bg-orange-900",
           profileImage: "/uploads/characters/profileImage/moong-tae-spring-profile.jpeg",
+          voiceId: "ODq5zmih8GrVes37Dizd",
+          voiceSettings: { stability: 0.5, similarityBoost: 0.7, style: 0.7, speed: 1.15 },
           backgroundImage:
             "/uploads/characters/backgroundImage/moong-tae-spring-spring-background.jpeg",
         },
@@ -1165,6 +1269,8 @@ const main = async () => {
           backgroundColor: "bg-zinc-800",
           profileImage: "/uploads/characters/profileImage/wings-me-profile.jpeg",
           backgroundImage: "/uploads/characters/backgroundImage/wings-me-wings-background.jpeg",
+          voiceId: "TxGEqnHWrfWFTfGW9XjX",
+          voiceSettings: { stability: 0.4, similarityBoost: 0.8, style: 0.2, speed: 0.9 },
         },
         {
           id: "0e66c84a-9ac1-568a-908a-6ba8e427d158",
@@ -1180,6 +1286,8 @@ const main = async () => {
           backgroundColor: "bg-zinc-800",
           profileImage: "/uploads/characters/profileImage/wife-wings-profile.jpeg",
           backgroundImage: "/uploads/characters/backgroundImage/wife-wings-background.jpeg",
+          voiceId: "piTKgcLEGmPE4e6mEKli",
+          voiceSettings: { stability: 0.7, similarityBoost: 0.75, style: 0.4, speed: 1.0 },
         },
       ],
     },
@@ -1217,6 +1325,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/heo-saengwon-buckwheat-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/heo-saengwon-buckwheat-background.jpeg",
+          voiceId: "2EiwWnXFnvU5JabPnv8n",
+          voiceSettings: { stability: 0.6, similarityBoost: 0.7, style: 0.5, speed: 0.9 },
         },
         {
           id: "fbaf07f3-e594-55a3-a986-ff9d91cc10d7",
@@ -1232,6 +1342,8 @@ const main = async () => {
           backgroundColor: "bg-indigo-900",
           profileImage: "/uploads/characters/profileImage/dong-buckwheat-profile.jpeg",
           backgroundImage: "/uploads/characters/backgroundImage/dong-buckwheat-background.jpeg",
+          voiceId: "SOYHLrjzK2X1ezoPC6cr",
+          voiceSettings: { stability: 0.5, similarityBoost: 0.65, style: 0.4, speed: 1.0 },
         },
         {
           id: "578abc05-2da0-5887-8c7c-7948647add1c",
@@ -1248,6 +1360,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/cho-sundal-buckwheat-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/cho-sundal-buckwheat-background.jpeg",
+          voiceId: "ODq5zmih8GrVes37Dizd",
+          voiceSettings: { stability: 0.65, similarityBoost: 0.75, style: 0.6, speed: 1.05 },
         },
       ],
     },
@@ -1283,6 +1397,8 @@ const main = async () => {
           backgroundColor: "bg-yellow-900",
           profileImage: "/uploads/characters/profileImage/me-camellia-profile.jpeg",
           backgroundImage: "/uploads/characters/backgroundImage/me-camellia-background.jpeg",
+          voiceId: "SOYHLrjzK2X1ezoPC6cr",
+          voiceSettings: { stability: 0.35, similarityBoost: 0.6, style: 0.4, speed: 0.95 },
         },
         {
           id: "d83e6b7a-c6e1-573c-8aa4-38372293da31",
@@ -1297,6 +1413,8 @@ const main = async () => {
           backgroundColor: "bg-red-900",
           profileImage: "/uploads/characters/profileImage/jeomsun-camellia-profile.jpeg",
           backgroundImage: "/uploads/characters/backgroundImage/jeomsun-camellia-background.jpeg",
+          voiceId: "MF3mGyEYCl7XYWbV9V6O",
+          voiceSettings: { stability: 0.6, similarityBoost: 0.8, style: 0.7, speed: 1.05 },
         },
         {
           id: "17590721-f788-52ae-9a2b-b55039a5e240",
@@ -1310,6 +1428,8 @@ const main = async () => {
           backgroundColor: "bg-red-900",
           profileImage: "/uploads/characters/profileImage/mother-camellia-profile.jpeg",
           backgroundImage: "/uploads/characters/backgroundImage/mother-camellia-background.jpeg",
+          voiceId: "EXAVITQu4vr4xnSDxMaL",
+          voiceSettings: { stability: 0.8, similarityBoost: 0.75, style: 0.3, speed: 0.9 },
         },
       ],
     },
@@ -1347,6 +1467,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/hong-gil-dong-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/hong-gil-dong-hong-gildong-background.jpeg",
+          voiceId: "TxGEqnHWrfWFTfGW9XjX",
+          voiceSettings: { stability: 0.6, similarityBoost: 0.75, style: 0.3, speed: 1.0 },
         },
         {
           id: "9c502c6d-aa8e-5efc-bd89-47668eed8694",
@@ -1362,6 +1484,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/hong-panseo-honggildong-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/hong-panseo-hong-gildong-background.jpeg",
+          voiceId: "2EiwWnXFnvU5JabPnv8n",
+          voiceSettings: { stability: 0.85, similarityBoost: 0.7, style: 0.5, speed: 0.85 },
         },
         {
           id: "df48bfb0-9cd2-555d-89c2-70de4d05b7e9",
@@ -1378,6 +1502,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/choran-honggildong-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/choran-hong-gildong-background.jpeg",
+          voiceId: "jsCqWAovK2LkecY7zXl4",
+          voiceSettings: { stability: 0.45, similarityBoost: 0.8, style: 0.8, speed: 1.1 },
         },
         {
           id: "abe0f4eb-945e-5cce-989a-49fa6f44aee9",
@@ -1393,6 +1519,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/hong-inhyeong-honggildong-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/hong-inhyeong-hong-gildong-background.jpeg",
+          voiceId: "ErXwobaYiN0qurTGV4KK",
+          voiceSettings: { stability: 0.8, similarityBoost: 0.8, style: 0.2, speed: 0.95 },
         },
         {
           id: "42fdcbb8-3662-500d-9b8d-78297823657a",
@@ -1408,6 +1536,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/chun-sum-honggildong-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/chun-sum-hong-gildong-background.jpeg",
+          voiceId: "EXAVITQu4vr4xnSDxMaL",
+          voiceSettings: { stability: 0.5, similarityBoost: 0.9, style: 0.3, speed: 0.9 },
         },
         {
           id: "e95f1e43-381d-5c7e-9804-144a1ae9d476",
@@ -1423,6 +1553,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/chosun-king-honggildong-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/chosun-king-hong-gildong-background.jpeg",
+          voiceId: "VR6AewGX3KQ92AmB6Ckr",
+          voiceSettings: { stability: 0.8, similarityBoost: 0.8, style: 0.6, speed: 1.0 },
         },
       ],
     },
@@ -1459,6 +1591,8 @@ const main = async () => {
           backgroundColor: "bg-purple-900",
           profileImage: "/uploads/characters/profileImage/seongjin-guunmong-profile.jpeg",
           backgroundImage: "/uploads/characters/backgroundImage/seongjin-guunmong-background.jpeg",
+          voiceId: "ErXwobaYiN0qurTGV4KK",
+          voiceSettings: { stability: 0.6, similarityBoost: 0.75, style: 0.3, speed: 1.0 },
         },
         {
           id: "7665c633-fd3e-5ba7-b042-c1a1b3ec9445",
@@ -1474,6 +1608,8 @@ const main = async () => {
           backgroundColor: "bg-purple-900",
           profileImage: "/uploads/characters/profileImage/yookgwan-guunmong-profile.jpeg",
           backgroundImage: "/uploads/characters/backgroundImage/yookgwan-guunmong-background.jpeg",
+          voiceId: "2EiwWnXFnvU5JabPnv8n",
+          voiceSettings: { stability: 0.9, similarityBoost: 0.7, style: 0.4, speed: 0.85 },
         },
       ],
     },
@@ -1515,6 +1651,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/lee-junwoo-midnight-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/lee-junwoo-midnight-store-background.jpeg",
+          voiceId: "SOYHLrjzK2X1ezoPC6cr",
+          voiceSettings: { stability: 0.35, similarityBoost: 0.6, style: 0.4, speed: 1.0 },
         },
         {
           id: "3e57cb09-c424-5fc7-815d-ffe0a29c6274",
@@ -1530,6 +1668,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/ahjeossi-midnight-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/ahjeossi-midnight-store-background.jpeg",
+          voiceId: "pqHfZKP75CvOlQylNhV4",
+          voiceSettings: { stability: 0.6, similarityBoost: 0.7, style: 0.5, speed: 0.9 },
         },
         {
           id: "03582ec4-d74d-5e2d-9fff-3e939d7fcf30",
@@ -1545,6 +1685,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/escapee-midnight-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/escapee-midnight-store-background.jpeg",
+          voiceId: "ODq5zmih8GrVes37Dizd",
+          voiceSettings: { stability: 0.4, similarityBoost: 0.8, style: 0.8, speed: 1.1 },
         },
         {
           id: "b2d3d398-1f58-500f-b15e-9686181a2b84",
@@ -1561,6 +1703,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/store-owner-midnight-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/store-owner-midnight-store-background.jpeg",
+          voiceId: "ErXwobaYiN0qurTGV4KK",
+          voiceSettings: { stability: 0.85, similarityBoost: 0.75, style: 0.2, speed: 0.95 },
         },
       ],
     },
@@ -1597,6 +1741,8 @@ const main = async () => {
           backgroundColor: "bg-slate-900",
           profileImage: "/uploads/characters/profileImage/rosetti-fake-lover-profile.jpeg",
           backgroundImage: "/uploads/characters/backgroundImage/rosetti-fake-lover-background.jpeg",
+          voiceId: "21m00Tcm4TlvDq8ikWAM",
+          voiceSettings: { stability: 0.55, similarityBoost: 0.75, style: 0.65, speed: 1.05 },
         },
         {
           id: "7a78653d-aee3-5e24-93c9-a30ac36c79fb",
@@ -1612,6 +1758,8 @@ const main = async () => {
           backgroundColor: "bg-slate-900",
           profileImage: "/uploads/characters/profileImage/kallian-fake-lover-profile.jpeg",
           backgroundImage: "/uploads/characters/backgroundImage/kallian-fake-lover-background.jpeg",
+          voiceId: "pNInz6obpgDQGcFmaJgB",
+          voiceSettings: { stability: 0.85, similarityBoost: 0.8, style: 0.3, speed: 0.9 },
         },
         {
           id: "a4d193cb-8e7b-5082-b875-78d3556f83c6",
@@ -1626,6 +1774,8 @@ const main = async () => {
           backgroundColor: "bg-slate-900",
           profileImage: "/uploads/characters/profileImage/vivian-fake-lover-profile.jpeg",
           backgroundImage: "/uploads/characters/backgroundImage/vivian-fake-lover-background.jpeg",
+          voiceId: "jsCqWAovK2LkecY7zXl4",
+          voiceSettings: { stability: 0.4, similarityBoost: 0.8, style: 0.9, speed: 1.1 },
         },
         {
           id: "9bc71f6e-c00f-5324-ae92-86b4d9a48afb",
@@ -1640,6 +1790,8 @@ const main = async () => {
           backgroundColor: "bg-slate-900",
           profileImage: "/uploads/characters/profileImage/alfred-fake-lover-profile.jpeg",
           backgroundImage: "/uploads/characters/backgroundImage/alfred-fake-lover-background.jpeg",
+          voiceId: "JBFqnCBsd6RMkjVDRZzb",
+          voiceSettings: { stability: 0.75, similarityBoost: 0.85, style: 0.4, speed: 0.95 },
         },
       ],
     },
@@ -1677,6 +1829,8 @@ const main = async () => {
             "/uploads/characters/profileImage/kang-jiwoo-zombie-highschool-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/kang-jiwoo-zombie-high-background.jpeg",
+          voiceId: "SOYHLrjzK2X1ezoPC6cr",
+          voiceSettings: { stability: 0.45, similarityBoost: 0.6, style: 0.5, speed: 1.05 },
         },
         {
           id: "0c27b2a8-5894-502e-9b1a-907e1e8414ab",
@@ -1694,6 +1848,8 @@ const main = async () => {
             "/uploads/characters/profileImage/kim-minseok-zombie-highschool-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/kim-minseok-zombie-high-background.jpeg",
+          voiceId: "N2lVS1w4EtoT3dr4eOWO",
+          voiceSettings: { stability: 0.7, similarityBoost: 0.8, style: 0.4, speed: 1.1 },
         },
         {
           id: "42dac5d5-7cd7-52ad-bec6-cea246fb029d",
@@ -1710,6 +1866,8 @@ const main = async () => {
             "/uploads/characters/profileImage/lee-soyeon-zombie-highschool-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/lee-soyeon-zombie-high-background.jpeg",
+          voiceId: "MF3mGyEYCl7XYWbV9V6O",
+          voiceSettings: { stability: 0.5, similarityBoost: 0.75, style: 0.6, speed: 1.0 },
         },
       ],
     },
@@ -1746,6 +1904,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/kang-jinhyeok-sssClass-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/kang-jinhyeok-return-hunter-background.jpeg",
+          voiceId: "ErXwobaYiN0qurTGV4KK",
+          voiceSettings: { stability: 0.6, similarityBoost: 0.75, style: 0.3, speed: 1.0 },
         },
         {
           id: "065101b8-920e-5ce8-b7b4-a72157c1e606",
@@ -1761,6 +1921,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/yoo-jimin-sssClass-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/yoo-jimin-return-hunter-background.jpeg",
+          voiceId: "21m00Tcm4TlvDq8ikWAM",
+          voiceSettings: { stability: 0.55, similarityBoost: 0.8, style: 0.6, speed: 1.1 },
         },
         {
           id: "29e59dbd-d238-5b48-b4f1-e13a713afc00",
@@ -1776,6 +1938,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/park-taesu-sssClass-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/park-taesu-return-hunter-background.jpeg",
+          voiceId: "pqHfZKP75CvOlQylNhV4",
+          voiceSettings: { stability: 0.8, similarityBoost: 0.7, style: 0.7, speed: 1.0 },
         },
         {
           id: "bee826a3-51e0-5c18-b69d-f2c646b804a8",
@@ -1791,6 +1955,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/ballock-sssClass-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/ballock-return-hunter-background.jpeg",
+          voiceId: "2EiwWnXFnvU5JabPnv8n",
+          voiceSettings: { stability: 0.9, similarityBoost: 0.8, style: 0.5, speed: 0.85 },
         },
       ],
     },
@@ -1827,6 +1993,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/han-taejoo-space-station-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/han-taejoo-space-station-background.jpeg",
+          voiceId: "SOYHLrjzK2X1ezoPC6cr",
+          voiceSettings: { stability: 0.5, similarityBoost: 0.7, style: 0.5, speed: 1.05 },
         },
         {
           id: "03dab2da-a0ec-58a7-a350-3d058f766e54",
@@ -1843,6 +2011,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/gururuk-space-station-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/gururuk-space-station-background.jpeg",
+          voiceId: "2EiwWnXFnvU5JabPnv8n",
+          voiceSettings: { stability: 0.7, similarityBoost: 0.6, style: 0.4, speed: 0.9 },
         },
         {
           id: "59aef9d1-06a7-57fb-870c-d3c452ecab04",
@@ -1859,6 +2029,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/Gerard-space-station-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/Gerard-space-station-background.jpeg",
+          voiceId: "JBFqnCBsd6RMkjVDRZzb",
+          voiceSettings: { stability: 0.8, similarityBoost: 0.9, style: 0.2, speed: 1.0 },
         },
         {
           id: "b1c226ca-4555-5a75-9385-d226fe12e556",
@@ -1875,6 +2047,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/alpha-three-space-station-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/alpha-three-space-station-background.jpeg",
+          voiceId: "pNInz6obpgDQGcFmaJgB",
+          voiceSettings: { stability: 0.95, similarityBoost: 0.9, style: 0.0, speed: 1.0 },
         },
       ],
     },
@@ -1911,6 +2085,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/kang-doha-joseon-exorcist-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/kang-doha-joseon-exorcist-background.jpeg",
+          voiceId: "2EiwWnXFnvU5JabPnv8n",
+          voiceSettings: { stability: 0.85, similarityBoost: 0.7, style: 0.3, speed: 0.95 },
         },
         {
           id: "22512762-c685-5b46-81c8-af7892f09d0c",
@@ -1927,6 +2103,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/yeonha-joseon-exorcist-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/yeonha-joseon-exorcist-background.jpeg",
+          voiceId: "EXAVITQu4vr4xnSDxMaL",
+          voiceSettings: { stability: 0.6, similarityBoost: 0.8, style: 0.4, speed: 0.9 },
         },
         {
           id: "a1c3c94a-0667-5b0a-9e71-b3b487a8aa42",
@@ -1944,6 +2122,8 @@ const main = async () => {
             "/uploads/characters/profileImage/jo-gwanwoong-joseon-exorcist-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/jo-gwanwoong-joseon-exorcist-background.jpeg",
+          voiceId: "VR6AewGX3KQ92AmB6Ckr",
+          voiceSettings: { stability: 0.8, similarityBoost: 0.9, style: 0.6, speed: 1.0 },
         },
       ],
     },
@@ -1980,6 +2160,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/kim-minjoon-cat-detective-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/kim-minjoon-cat-detective-background.jpeg",
+          voiceId: "SOYHLrjzK2X1ezoPC6cr",
+          voiceSettings: { stability: 0.45, similarityBoost: 0.6, style: 0.5, speed: 1.05 },
         },
         {
           id: "dc450ec7-68d6-54ac-940c-377d43ea8ae2",
@@ -1995,6 +2177,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/mangae-cat-detective-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/mangae-cat-detective-background.jpeg",
+          voiceId: "pqHfZKP75CvOlQylNhV4",
+          voiceSettings: { stability: 0.8, similarityBoost: 0.7, style: 0.6, speed: 0.9 },
         },
         {
           id: "4eb03661-01cd-5ec3-810b-d8d52b6a55cc",
@@ -2010,6 +2194,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/owner-park-cat-detective-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/owner-park-cat-detective-background.jpeg",
+          voiceId: "ODq5zmih8GrVes37Dizd",
+          voiceSettings: { stability: 0.5, similarityBoost: 0.75, style: 0.8, speed: 1.1 },
         },
         {
           id: "7320196e-cbf4-57b4-bdf4-c210adee884b",
@@ -2025,6 +2211,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/cheolsoo-cat-detective-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/cheolsoo-cat-detective-background.jpeg",
+          voiceId: "N2lVS1w4EtoT3dr4eOWO",
+          voiceSettings: { stability: 0.55, similarityBoost: 0.65, style: 0.5, speed: 1.0 },
         },
       ],
     },
@@ -2061,6 +2249,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/zero-cyber-funk-zero-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/zero-cyber-punk-zero-background.jpeg",
+          voiceId: "2EiwWnXFnvU5JabPnv8n",
+          voiceSettings: { stability: 0.7, similarityBoost: 0.7, style: 0.3, speed: 0.9 },
         },
         {
           id: "8b677fbb-5b9a-5d64-89bd-46616a287dd4",
@@ -2076,6 +2266,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/lina-cyber-punk-zero-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/lina-cyber-punk-zero-background.jpeg",
+          voiceId: "jsCqWAovK2LkecY7zXl4",
+          voiceSettings: { stability: 0.5, similarityBoost: 0.8, style: 0.7, speed: 1.1 },
         },
         {
           id: "e70fa64e-e996-5c27-9a1a-ad431fc46cb9",
@@ -2092,6 +2284,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/doctor-k-cyber-punk-zero-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/doctor-k-cyber-punk-zero-background.jpeg",
+          voiceId: "onwK4e9ZLuTAKqWW03F9",
+          voiceSettings: { stability: 0.85, similarityBoost: 0.8, style: 0.2, speed: 0.95 },
         },
         {
           id: "7fd69d36-b52b-5d71-8883-c462045e395b",
@@ -2107,6 +2301,8 @@ const main = async () => {
           profileImage: "/uploads/characters/profileImage/omega-cyber-funk-zero-profile.jpeg",
           backgroundImage:
             "/uploads/characters/backgroundImage/omega-cyber-punk-zero-background.jpeg",
+          voiceId: "pNInz6obpgDQGcFmaJgB",
+          voiceSettings: { stability: 0.95, similarityBoost: 0.9, style: 0.0, speed: 1.0 },
         },
       ],
     },

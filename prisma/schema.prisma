@@ -89,8 +89,9 @@
     backgroundImage String?  @db.VarChar(2048)
     imageColor      String   @default("bg-stone-400")
     backgroundColor String   @default("bg-stone-900")
-    voiceId      String?  // ElevenLabs voice ID
-    createdAt    DateTime @default(now())
+    voiceId       String?  // ElevenLabs voice ID
+    voiceSettings Json?    // { stability, similarityBoost, style, speed }
+    createdAt     DateTime @default(now())
 
     storyId     String
     story       Story    @relation(fields: [storyId], references: [id], onDelete: Cascade)
@@ -142,7 +143,7 @@
     chatRoom    ChatRoom  @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
 
     characterId String
-    character   Character @relation(fields: [characterId], references: [id])
+    character   Character @relation(fields: [characterId], references: [id], onDelete: Cascade)
 
     messages    ChatMessage[]
 
