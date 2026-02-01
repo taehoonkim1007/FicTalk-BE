@@ -6,7 +6,8 @@ import { BadRequestException, Injectable, Logger } from "@nestjs/common";
 export type ImageDirectory =
   | "characters/profileImage"
   | "characters/backgroundImage"
-  | "stories/coverImage";
+  | "stories/coverImage"
+  | "stories/backgroundImage";
 
 @Injectable()
 export class FileStorageService {

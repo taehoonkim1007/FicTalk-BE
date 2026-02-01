@@ -20,6 +20,12 @@ import {
   type GenerateSummaryDto,
   type GenerateSummaryResponse,
 } from "../ai/dto/story-generation.dto";
+import {
+  type GetVoiceIdDto,
+  type GetVoiceIdResponse,
+  type TTSSampleDto,
+  type TTSSampleResponse,
+} from "../ai/dto/tts.dto";
 import { ERROR_MESSAGES } from "../common/constants/error-messages";
 import { FileStorageService } from "../common/services/file-storage.service";
 import { type CreateStoryDto } from "./dto/create-story.dto";
@@ -88,6 +94,10 @@ export class StoriesService {
       dto.coverImage,
       "stories/coverImage",
     );
+    const processedBackgroundImage = await this.fileStorageService.processImage(
+      dto.backgroundImage,
+      "stories/backgroundImage",
+    );
 
     // 캐릭터 이미지 처리
     const processedCharacters = dto.characters
@@ -109,6 +119,7 @@ export class StoriesService {
     const processedDto = {
       ...dto,
       coverImage: processedCoverImage,
+      backgroundImage: processedBackgroundImage,
       characters: processedCharacters,
     };
 
@@ -130,6 +141,10 @@ export class StoriesService {
     const processedDto = {
       ...dto,
       coverImage: await this.fileStorageService.processImage(dto.coverImage, "stories/coverImage"),
+      backgroundImage: await this.fileStorageService.processImage(
+        dto.backgroundImage,
+        "stories/backgroundImage",
+      ),
     };
 
     return this.storiesRepository.update(id, processedDto);
@@ -151,6 +166,7 @@ export class StoriesService {
 
     // AI 생성 이미지 파일 삭제
     await this.fileStorageService.deleteImage(story.coverImage);
+    await this.fileStorageService.deleteImage(story.backgroundImage);
 
     // Cascade 삭제된 캐릭터들의 이미지도 삭제
     for (const character of story.characters) {
@@ -211,5 +227,13 @@ export class StoriesService {
     dto: GenerateCharacterBackgroundImageDto,
   ): Promise<GenerateCharacterBackgroundImageResponse> {
     return this.aiService.generateCharacterBackgroundImage(dto);
+  }
+
+  getVoiceId(dto: GetVoiceIdDto): Promise<GetVoiceIdResponse> {
+    return this.aiService.getVoiceId(dto);
+  }
+
+  generateTTSSample(dto: TTSSampleDto): Promise<TTSSampleResponse> {
+    return this.aiService.generateTTSSample(dto);
   }
 }

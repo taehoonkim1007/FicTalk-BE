@@ -13,6 +13,7 @@ import {
   type StoryDetailResponse,
   type StoryResponse,
   type UpdatedStoryResponse,
+  type VoiceSettingsResponse,
 } from "../dto/story-response.dto";
 import { type UpdateStoryDto } from "../dto/update-story.dto";
 
@@ -37,6 +38,7 @@ export class StoriesRepository {
           description: true,
           coverColor: true,
           coverImage: true,
+          backgroundImage: true,
           isOfficial: true,
           createdAt: true,
           category: {
@@ -69,6 +71,7 @@ export class StoriesRepository {
         description: true,
         coverColor: true,
         coverImage: true,
+        backgroundImage: true,
         isOfficial: true,
         createdAt: true,
         category: {
@@ -96,6 +99,7 @@ export class StoriesRepository {
         summary: true,
         coverColor: true,
         coverImage: true,
+        backgroundImage: true,
         isOfficial: true,
         createdAt: true,
         creator: {
@@ -121,16 +125,24 @@ export class StoriesRepository {
             profileImage: true,
             backgroundImage: true,
             backgroundColor: true,
+            voiceId: true,
+            voiceSettings: true,
           },
         },
       },
     });
 
-    if (story) {
-      this.sortCharactersByRole(story.characters);
-    }
+    if (!story) return null;
 
-    return story;
+    this.sortCharactersByRole(story.characters);
+
+    return {
+      ...story,
+      characters: story.characters.map((char) => ({
+        ...char,
+        voiceSettings: char.voiceSettings as VoiceSettingsResponse | null,
+      })),
+    };
   }
 
   async findByIdWithCreator(id: string): Promise<{ id: string; creatorId: string | null } | null> {
@@ -167,6 +179,8 @@ export class StoriesRepository {
         profileImage: char.profileImage,
         backgroundImage: char.backgroundImage,
         backgroundColor: char.backgroundColor ?? "bg-stone-900",
+        voiceId: char.voiceId,
+        voiceSettings: char.voiceSettings,
       })) ?? [];
 
     const story = (await this.prisma.story.create({
@@ -221,6 +235,8 @@ export class StoriesRepository {
             profileImage: true,
             backgroundImage: true,
             backgroundColor: true,
+            voiceId: true,
+            voiceSettings: true,
           },
         },
       },
@@ -282,11 +298,12 @@ export class StoriesRepository {
             description: true,
             personality: true,
             firstMessage: true,
-
             imageColor: true,
             profileImage: true,
             backgroundImage: true,
             backgroundColor: true,
+            voiceId: true,
+            voiceSettings: true,
           },
         },
       },
@@ -299,7 +316,10 @@ export class StoriesRepository {
     return {
       storyId: story.id,
       storyTitle: story.title,
-      characters: story.characters,
+      characters: story.characters.map((char) => ({
+        ...char,
+        voiceSettings: char.voiceSettings as VoiceSettingsResponse | null,
+      })),
     };
   }
 

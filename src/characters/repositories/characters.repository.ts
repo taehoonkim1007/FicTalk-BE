@@ -3,7 +3,10 @@ import { type Prisma } from "@prisma/client";
 
 import { generateSearchVariations } from "../../common/utils/korean-search.util";
 import { PrismaService } from "../../prisma/prisma.service";
-import { type CharacterDetailResponse } from "../../stories/dto/story-response.dto";
+import {
+  type CharacterDetailResponse,
+  type VoiceSettingsResponse,
+} from "../../stories/dto/story-response.dto";
 import { type CharacterWithStoryResponse } from "../dto/character-response.dto";
 import { type CreateCharacterDto } from "../dto/create-character.dto";
 import { type GetCharactersDto } from "../dto/get-characters.dto";
@@ -50,6 +53,8 @@ export class CharactersRepository {
         profileImage: true,
         backgroundImage: true,
         backgroundColor: true,
+        voiceId: true,
+        voiceSettings: true,
         createdAt: true,
         story: {
           select: {
@@ -102,6 +107,8 @@ export class CharactersRepository {
           profileImage: true,
           backgroundImage: true,
           backgroundColor: true,
+          voiceId: true,
+          voiceSettings: true,
           story: {
             select: {
               id: true,
@@ -137,6 +144,8 @@ export class CharactersRepository {
         profileImage: dto.profileImage,
         backgroundImage: dto.backgroundImage,
         backgroundColor: dto.backgroundColor ?? "bg-stone-900",
+        voiceId: dto.voiceId,
+        voiceSettings: dto.voiceSettings,
       },
       select: {
         id: true,
@@ -149,11 +158,16 @@ export class CharactersRepository {
         profileImage: true,
         backgroundImage: true,
         backgroundColor: true,
+        voiceId: true,
+        voiceSettings: true,
         createdAt: true,
       },
     });
 
-    return character;
+    return {
+      ...character,
+      voiceSettings: character.voiceSettings as VoiceSettingsResponse | null,
+    };
   }
 
   async update(id: string, dto: UpdateCharacterDto): Promise<CharacterDetailResponse> {
@@ -169,6 +183,8 @@ export class CharactersRepository {
         profileImage: dto.profileImage,
         backgroundImage: dto.backgroundImage,
         backgroundColor: dto.backgroundColor,
+        voiceId: dto.voiceId,
+        voiceSettings: dto.voiceSettings,
       },
       select: {
         id: true,
@@ -181,11 +197,16 @@ export class CharactersRepository {
         profileImage: true,
         backgroundImage: true,
         backgroundColor: true,
+        voiceId: true,
+        voiceSettings: true,
         createdAt: true,
       },
     });
 
-    return character;
+    return {
+      ...character,
+      voiceSettings: character.voiceSettings as VoiceSettingsResponse | null,
+    };
   }
 
   async delete(id: string): Promise<void> {

@@ -7,6 +7,12 @@ import {
   type GenerateChatResponseResponse,
 } from "./dto/chat-generation.dto";
 import {
+  type GetVoiceIdDto,
+  type GetVoiceIdResponse,
+  type TTSSampleDto,
+  type TTSSampleResponse,
+} from "./dto/tts.dto";
+import {
   type GenerateBackgroundImageDto,
   type GenerateBackgroundImageResponse,
   type GenerateCharacterBackgroundImageDto,
@@ -131,5 +137,76 @@ export class AiService {
     );
 
     return response.data.response;
+  }
+
+  async getVoiceId(dto: GetVoiceIdDto): Promise<GetVoiceIdResponse> {
+    this.logger.log("Getting voice ID for character");
+
+    const response = await firstValueFrom(
+      this.httpService.post<{
+        voice_id: string;
+        voice_name: string;
+        attributes: {
+          gender: string;
+          age: string;
+          accent: string;
+          tone: string[];
+          keywords: string[];
+        };
+        voice_settings: {
+          stability: number;
+          similarity_boost: number;
+          style: number;
+          speed: number;
+        };
+      }>("/api/tts/voice-id", dto),
+    );
+
+    return {
+      voiceId: response.data.voice_id,
+      voiceName: response.data.voice_name,
+      attributes: response.data.attributes,
+      voiceSettings: {
+        stability: response.data.voice_settings.stability,
+        similarityBoost: response.data.voice_settings.similarity_boost,
+        style: response.data.voice_settings.style,
+        speed: response.data.voice_settings.speed,
+      },
+    };
+  }
+
+  async generateTTSSample(dto: TTSSampleDto): Promise<TTSSampleResponse> {
+    this.logger.log(`Generating TTS sample for voice: ${dto.voiceId}`);
+
+    const requestBody: {
+      voice_id: string;
+      text: string;
+      voice_settings?: {
+        stability: number;
+        similarity_boost: number;
+        style: number;
+        speed: number;
+      };
+    } = {
+      voice_id: dto.voiceId,
+      text: dto.text,
+    };
+
+    if (dto.voiceSettings) {
+      requestBody.voice_settings = {
+        stability: dto.voiceSettings.stability,
+        similarity_boost: dto.voiceSettings.similarityBoost,
+        style: dto.voiceSettings.style,
+        speed: dto.voiceSettings.speed,
+      };
+    }
+
+    const response = await firstValueFrom(
+      this.httpService.post<{ audio_base64: string }>("/api/tts/sample", requestBody),
+    );
+
+    return {
+      audioBase64: response.data.audio_base64,
+    };
   }
 }

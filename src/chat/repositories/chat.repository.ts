@@ -65,6 +65,13 @@ export class ChatRepository {
       imageColor: crc.character.imageColor,
       personality: crc.character.personality,
       firstMessage: crc.character.firstMessage,
+      voiceId: crc.character.voiceId,
+      voiceSettings: crc.character.voiceSettings as {
+        stability: number;
+        similarityBoost: number;
+        style: number;
+        speed: number;
+      } | null,
       story: crc.character.story,
     }));
   }
@@ -139,6 +146,8 @@ export class ChatRepository {
       imageColor: string;
       personality: string | null;
       firstMessage: string | null;
+      voiceId: string | null;
+      voiceSettings: unknown;
       story: { id: string; title: string; backgroundImage: string | null };
     };
   }): ChatCharacterResponse {
@@ -152,6 +161,13 @@ export class ChatRepository {
       imageColor: chatRoomCharacter.character.imageColor,
       personality: chatRoomCharacter.character.personality,
       firstMessage: chatRoomCharacter.character.firstMessage,
+      voiceId: chatRoomCharacter.character.voiceId,
+      voiceSettings: chatRoomCharacter.character.voiceSettings as {
+        stability: number;
+        similarityBoost: number;
+        style: number;
+        speed: number;
+      } | null,
       story: chatRoomCharacter.character.story,
     };
   }

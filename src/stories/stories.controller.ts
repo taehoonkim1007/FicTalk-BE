@@ -14,6 +14,12 @@ import {
   type GenerateProfileImageResponse,
   type GenerateSummaryResponse,
 } from "../ai/dto/story-generation.dto";
+import {
+  GetVoiceIdDto,
+  TTSSampleDto,
+  type GetVoiceIdResponse,
+  type TTSSampleResponse,
+} from "../ai/dto/tts.dto";
 import { type AuthenticatedUser } from "../auth/types/auth.types";
 import { CharactersService } from "../characters/characters.service";
 import { CreateCharacterDto } from "../characters/dto/create-character.dto";
@@ -137,6 +143,18 @@ export class StoriesController {
     @Body() dto: GenerateCharacterBackgroundImageDto,
   ): Promise<GenerateCharacterBackgroundImageResponse> {
     return this.storiesService.generateCharacterBackgroundImage(dto);
+  }
+
+  @Public()
+  @Post("generate/voice-id")
+  async getVoiceId(@Body() dto: GetVoiceIdDto): Promise<GetVoiceIdResponse> {
+    return this.storiesService.getVoiceId(dto);
+  }
+
+  @Public()
+  @Post("generate/tts-sample")
+  async generateTTSSample(@Body() dto: TTSSampleDto): Promise<TTSSampleResponse> {
+    return this.storiesService.generateTTSSample(dto);
   }
 
   // ========================

@@ -24,6 +24,7 @@ export class StoryResponse {
   description: string;
   coverColor: string;
   coverImage: string | null;
+  backgroundImage: string | null;
   isOfficial: boolean;
   createdAt: Date;
   category: StoryCategoryResponse;
@@ -32,6 +33,13 @@ export class StoryResponse {
 export class StoriesListResponse {
   stories: StoryResponse[];
   pagination: PaginationResponse;
+}
+
+export interface VoiceSettingsResponse {
+  stability: number;
+  similarityBoost: number;
+  style: number;
+  speed: number;
 }
 
 export class CharacterResponse {
@@ -43,6 +51,8 @@ export class CharacterResponse {
   profileImage: string | null;
   backgroundImage: string | null;
   backgroundColor: string;
+  voiceId: string | null;
+  voiceSettings: VoiceSettingsResponse | null;
 }
 
 export class StoryDetailResponse extends StoryResponse {
@@ -93,6 +103,8 @@ export class CharacterDetailResponse {
   profileImage: string | null;
   backgroundImage: string | null;
   backgroundColor: string;
+  voiceId: string | null;
+  voiceSettings: VoiceSettingsResponse | null;
   createdAt?: Date;
 }
 

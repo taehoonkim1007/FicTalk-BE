@@ -65,6 +65,13 @@ export class ChatService {
         imageColor: character.imageColor,
         personality: character.personality,
         firstMessage: character.firstMessage,
+        voiceId: character.voiceId,
+        voiceSettings: character.voiceSettings as {
+          stability: number;
+          similarityBoost: number;
+          style: number;
+          speed: number;
+        } | null,
         story: {
           id: character.story.id,
           title: character.story.title,

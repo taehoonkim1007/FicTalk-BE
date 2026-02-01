@@ -4,6 +4,14 @@ export class ChatRoomResponse {
   createdAt: Date;
 }
 
+// Voice 설정
+export interface VoiceSettingsResponse {
+  stability: number;
+  similarityBoost: number;
+  style: number;
+  speed: number;
+}
+
 // 채팅방 캐릭터 응답
 export class ChatCharacterResponse {
   id: string;
@@ -15,6 +23,8 @@ export class ChatCharacterResponse {
   imageColor: string;
   personality: string | null;
   firstMessage: string | null;
+  voiceId: string | null;
+  voiceSettings: VoiceSettingsResponse | null;
   story: {
     id: string;
     title: string;

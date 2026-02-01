@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional, IsString, MaxLength } from "class-validator";
+import { IsNotEmpty, IsObject, IsOptional, IsString, MaxLength } from "class-validator";
 
 export class UpdateCharacterDto {
   @IsOptional()
@@ -46,4 +46,17 @@ export class UpdateCharacterDto {
   @IsString()
   @MaxLength(500)
   backgroundColor?: string;
+
+  @IsOptional()
+  @IsString()
+  voiceId?: string;
+
+  @IsOptional()
+  @IsObject()
+  voiceSettings?: {
+    stability: number;
+    similarityBoost: number;
+    style: number;
+    speed: number;
+  };
 }
