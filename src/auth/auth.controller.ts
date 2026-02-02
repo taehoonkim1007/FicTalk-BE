@@ -1,6 +1,17 @@
-import { Body, Controller, Get, Ip, Logger, Post, Req, Res, UseGuards } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Get,
+  Ip,
+  Logger,
+  Post,
+  Req,
+  Res,
+  UnauthorizedException,
+  UseGuards,
+} from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { type Response } from "express";
+import { type Request, type Response } from "express";
 
 import { CurrentUser } from "../common/decorators/current-user.decorator";
 import { Public } from "../common/decorators/public.decorator";
@@ -8,7 +19,6 @@ import { AuthService } from "./auth.service";
 import { REFRESH_TOKEN_TTL } from "./constants";
 import { ExchangeCodeDto } from "./dto/exchange-code.dto";
 import { GuestTokenDto, type GuestTokenResponse } from "./dto/guest-token.dto";
-import { RefreshTokenDto } from "./dto/refresh-token.dto";
 import { GoogleAuthGuard } from "./guards/google-auth.guard";
 import { type AuthenticatedUser, type GoogleAuthRequest } from "./types/auth.types";
 
@@ -70,9 +80,15 @@ export class AuthController {
 
   @Public()
   @Post("refresh")
-  async refresh(@Body() dto: RefreshTokenDto, @Res({ passthrough: true }) res: Response) {
+  async refresh(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
     this.logger.debug("Token Refresh Requested");
-    const tokens = await this.authService.refreshTokens(dto.refreshToken);
+
+    const refreshToken = req.cookies?.refreshToken;
+    if (!refreshToken) {
+      throw new UnauthorizedException("Refresh token not found");
+    }
+
+    const tokens = await this.authService.refreshTokens(refreshToken);
 
     const isProduction = process.env.NODE_ENV === "production";
 
@@ -83,7 +99,7 @@ export class AuthController {
       maxAge: REFRESH_TOKEN_TTL,
     });
 
-    return tokens;
+    return { accessToken: tokens.accessToken };
   }
 
   @Post("logout")

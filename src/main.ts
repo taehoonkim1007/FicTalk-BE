@@ -3,6 +3,7 @@ import { ValidationPipe } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { NestFactory } from "@nestjs/core";
 import { type NestExpressApplication } from "@nestjs/platform-express";
+import cookieParser from "cookie-parser";
 import * as express from "express";
 
 import { AppModule } from "./app.module";
@@ -11,6 +12,9 @@ import { GlobalExceptionFilter } from "./common/filters/http-exception.filter";
 const bootstrap = async () => {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   const configService = app.get(ConfigService);
+
+  // Cookie Parser
+  app.use(cookieParser());
 
   // JSON body 크기 제한 증가 (이미지 base64 처리용)
   app.use(express.json({ limit: "10mb" }));
