@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional, IsString, MaxLength } from "class-validator";
+import { IsNotEmpty, IsOptional, IsString, MaxLength, ValidateIf } from "class-validator";
 
 export class UpdateStoryDto {
   @IsOptional()
@@ -36,11 +36,13 @@ export class UpdateStoryDto {
   @MaxLength(500)
   coverColor?: string;
 
+  @ValidateIf((o) => o.coverImage !== null)
   @IsOptional()
   @IsString()
-  coverImage?: string;
+  coverImage?: string | null;
 
+  @ValidateIf((o) => o.backgroundImage !== null)
   @IsOptional()
   @IsString()
-  backgroundImage?: string;
+  backgroundImage?: string | null;
 }

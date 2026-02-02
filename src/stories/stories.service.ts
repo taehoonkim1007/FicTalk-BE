@@ -137,14 +137,38 @@ export class StoriesService {
       throw new ForbiddenException(ERROR_MESSAGES.STORY_NOT_OWNER);
     }
 
-    // base64 이미지를 파일로 저장
-    const processedDto = {
-      ...dto,
-      coverImage: await this.fileStorageService.processImage(dto.coverImage, "stories/coverImage"),
-      backgroundImage: await this.fileStorageService.processImage(
+    // 이미지 처리: null = 삭제, string = 새 이미지, undefined = 변경 안 함
+    let processedCoverImage: string | null | undefined;
+    let processedBackgroundImage: string | null | undefined;
+
+    if (dto.coverImage === null) {
+      // 기존 이미지 삭제
+      await this.fileStorageService.deleteImage(story.coverImage);
+      processedCoverImage = null;
+    } else if (dto.coverImage !== undefined) {
+      // 새 이미지 처리
+      processedCoverImage = await this.fileStorageService.processImage(
+        dto.coverImage,
+        "stories/coverImage",
+      );
+    }
+
+    if (dto.backgroundImage === null) {
+      // 기존 이미지 삭제
+      await this.fileStorageService.deleteImage(story.backgroundImage);
+      processedBackgroundImage = null;
+    } else if (dto.backgroundImage !== undefined) {
+      // 새 이미지 처리
+      processedBackgroundImage = await this.fileStorageService.processImage(
         dto.backgroundImage,
         "stories/backgroundImage",
-      ),
+      );
+    }
+
+    const processedDto = {
+      ...dto,
+      coverImage: processedCoverImage,
+      backgroundImage: processedBackgroundImage,
     };
 
     return this.storiesRepository.update(id, processedDto);

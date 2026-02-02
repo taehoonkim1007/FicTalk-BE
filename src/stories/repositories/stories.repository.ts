@@ -145,12 +145,21 @@ export class StoriesRepository {
     };
   }
 
-  async findByIdWithCreator(id: string): Promise<{ id: string; creatorId: string | null } | null> {
+  async findByIdWithCreator(
+    id: string,
+  ): Promise<{
+    id: string;
+    creatorId: string | null;
+    coverImage: string | null;
+    backgroundImage: string | null;
+  } | null> {
     return this.prisma.story.findUnique({
       where: { id },
       select: {
         id: true,
         creatorId: true,
+        coverImage: true,
+        backgroundImage: true,
       },
     });
   }
