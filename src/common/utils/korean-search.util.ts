@@ -204,7 +204,7 @@ const TRANSLITERATION_MAP: Record<string, string> = {
   emil: "에밀",
   sinclair: "싱클레어",
   "max demian": "막스 데미안",
-  "eva": "에바",
+  eva: "에바",
   pistorius: "피스토리우스",
   kromer: "크로머",
 
@@ -241,28 +241,28 @@ const TRANSLITERATION_MAP: Record<string, string> = {
 /**
  * 영어 키보드 입력을 한글 자모로 변환
  */
-function toJamo(text: string): string[] {
+const toJamo = (text: string): string[] => {
   return text.split("").map((char) => EN_TO_KO[char] || char);
-}
+};
 
 /**
  * 자모가 초성인지 확인
  */
-function isChosung(char: string): boolean {
+const isChosung = (char: string): boolean => {
   return CHOSUNG.includes(char);
-}
+};
 
 /**
  * 자모가 중성인지 확인
  */
-function isJungsung(char: string): boolean {
+const isJungsung = (char: string): boolean => {
   return JUNGSUNG.includes(char);
-}
+};
 
 /**
  * 자모를 완성형 한글로 조합
  */
-function composeHangul(jamos: string[]): string {
+const composeHangul = (jamos: string[]): string => {
   let result = "";
   let i = 0;
 
@@ -313,13 +313,13 @@ function composeHangul(jamos: string[]): string {
           const combined = nextChar + afterNext;
           const afterCombined = jamos[nextIdx + 2];
 
-          if (
-            COMPLEX_JONGSUNG[combined] &&
-            (!afterCombined || !isJungsung(afterCombined))
-          ) {
+          if (COMPLEX_JONGSUNG[combined] && (!afterCombined || !isJungsung(afterCombined))) {
+            // 복합 종성이고, 다음에 중성이 없으면 복합 종성 사용
             jong = COMPLEX_JONGSUNG[combined];
             jongLen = 2;
-          } else if (!afterCombined || !isJungsung(afterCombined)) {
+          } else {
+            // 복합 종성이 아니거나, 다음 자음 뒤에 중성이 있으면
+            // 현재 자음만 종성으로 사용 (다음 자음은 다음 음절의 초성)
             jong = nextChar;
             jongLen = 1;
           }
@@ -346,38 +346,63 @@ function composeHangul(jamos: string[]): string {
   }
 
   return result;
-}
+};
 
 /**
  * 영어 키보드 입력을 한글로 변환
  * 예: "rocmql" → "개츠비"
  */
-export function englishToKorean(text: string): string {
+export const englishToKorean = (text: string): string => {
   if (!/^[a-zA-Z]+$/.test(text)) {
     return text;
   }
   const jamos = toJamo(text);
   return composeHangul(jamos);
-}
+};
 
 /**
  * 띄어쓰기 제거
  */
-export function removeSpaces(text: string): string {
+export const removeSpaces = (text: string): string => {
   return text.replace(/\s+/g, "");
-}
+};
 
 /**
- * 영어 음역 사전에서 한글 검색
+ * 영어 음역 사전에서 한글 검색 (완전 일치)
  */
-export function transliterate(text: string): string | null {
+export const transliterate = (text: string): string | null => {
   return TRANSLITERATION_MAP[text.toLowerCase()] || null;
-}
+};
+
+/**
+ * 영어 음역 사전에서 prefix 매칭으로 한글 검색
+ * 예: "l" → ["어린 왕자"], "ga" → ["개츠비", "위대한 개츠비"]
+ */
+export const transliterateByPrefix = (text: string): string[] => {
+  const lowerText = text.toLowerCase();
+  const results = new Set<string>();
+
+  for (const [english, korean] of Object.entries(TRANSLITERATION_MAP)) {
+    // 영어 키워드가 검색어로 시작하는지 확인
+    if (english.startsWith(lowerText)) {
+      results.add(korean);
+    }
+    // 영어 키워드의 각 단어가 검색어로 시작하는지 확인 (예: "great gatsby"에서 "g"로 검색)
+    const words = english.split(" ");
+    for (const word of words) {
+      if (word.startsWith(lowerText)) {
+        results.add(korean);
+      }
+    }
+  }
+
+  return Array.from(results);
+};
 
 /**
  * 검색어에서 모든 변환 버전 생성 (중복 제거)
  */
-export function generateSearchVariations(query: string): string[] {
+export const generateSearchVariations = (query: string): string[] => {
   const variations = new Set<string>();
   const trimmed = query.trim();
 
@@ -400,11 +425,17 @@ export function generateSearchVariations(query: string): string[] {
     variations.add(korean);
   }
 
-  // 4. 영어 음역 사전
+  // 4. 영어 음역 사전 (완전 일치)
   const transliterated = transliterate(trimmed);
   if (transliterated) {
     variations.add(transliterated);
   }
 
+  // 5. 영어 음역 사전 (prefix 매칭)
+  const prefixMatches = transliterateByPrefix(trimmed);
+  for (const match of prefixMatches) {
+    variations.add(match);
+  }
+
   return Array.from(variations);
-}
+};
