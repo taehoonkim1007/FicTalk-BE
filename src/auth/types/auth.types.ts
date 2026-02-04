@@ -59,3 +59,12 @@ export interface GoogleProfile {
 export interface GoogleAuthRequest extends Request {
   user: GoogleProfile;
 }
+
+// ========================
+// 쿠키 포함 Request 타입
+// ========================
+export interface RequestWithRefreshToken extends Request {
+  cookies: {
+    refreshToken?: string;
+  };
+}

@@ -33,6 +33,8 @@ export const REDIS_KEY_PREFIX = {
   GUEST: {
     USAGE: "guest:usage:",
     IP_LIMIT: "guest:ip_limit:",
+    CHAT: "guest:chat:",
+    CHAT_CHARACTERS: "guest:chat:characters:",
   },
   AUTH_CODE: "auth_code:",
 } as const;

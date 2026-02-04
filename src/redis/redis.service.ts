@@ -85,6 +85,47 @@ export class RedisService implements OnModuleDestroy {
     await this.client.pexpire(key, ttlMs);
   }
 
+  // ========================
+  // List 메서드 (Guest 채팅용)
+  // ========================
+
+  async rpush(key: string, value: string): Promise<number> {
+    return this.client.rpush(key, value);
+  }
+
+  async lrange(key: string, start: number, stop: number): Promise<string[]> {
+    return this.client.lrange(key, start, stop);
+  }
+
+  async llen(key: string): Promise<number> {
+    return this.client.llen(key);
+  }
+
+  // ========================
+  // Set 메서드 (Guest 캐릭터 목록용)
+  // ========================
+
+  async sadd(key: string, member: string): Promise<number> {
+    return this.client.sadd(key, member);
+  }
+
+  async smembers(key: string): Promise<string[]> {
+    return this.client.smembers(key);
+  }
+
+  async srem(key: string, member: string): Promise<number> {
+    return this.client.srem(key, member);
+  }
+
+  async sismember(key: string, member: string): Promise<boolean> {
+    const result = await this.client.sismember(key, member);
+    return result === 1;
+  }
+
+  async scard(key: string): Promise<number> {
+    return this.client.scard(key);
+  }
+
   async onModuleDestroy() {
     await this.client.quit();
   }

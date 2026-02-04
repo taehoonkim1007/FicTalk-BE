@@ -20,7 +20,11 @@ import { REFRESH_TOKEN_TTL } from "./constants";
 import { ExchangeCodeDto } from "./dto/exchange-code.dto";
 import { GuestTokenDto, type GuestTokenResponse } from "./dto/guest-token.dto";
 import { GoogleAuthGuard } from "./guards/google-auth.guard";
-import { type AuthenticatedUser, type GoogleAuthRequest } from "./types/auth.types";
+import {
+  type AuthenticatedUser,
+  type GoogleAuthRequest,
+  type RequestWithRefreshToken,
+} from "./types/auth.types";
 
 @Controller("auth")
 export class AuthController {
@@ -80,10 +84,10 @@ export class AuthController {
 
   @Public()
   @Post("refresh")
-  async refresh(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
+  async refresh(@Req() req: RequestWithRefreshToken, @Res({ passthrough: true }) res: Response) {
     this.logger.debug("Token Refresh Requested");
 
-    const refreshToken = req.cookies?.refreshToken;
+    const refreshToken = req.cookies.refreshToken;
     if (!refreshToken) {
       throw new UnauthorizedException("Refresh token not found");
     }
