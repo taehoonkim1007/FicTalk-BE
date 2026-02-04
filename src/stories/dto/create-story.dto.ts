@@ -14,22 +14,22 @@ import { CreateCharacterDto } from "../../characters/dto/create-character.dto";
 export class CreateStoryDto {
   @IsNotEmpty()
   @IsString()
-  @MaxLength(200)
+  @MaxLength(100)
   title: string;
 
   @IsOptional()
   @IsString()
-  @MaxLength(200)
+  @MaxLength(100)
   seriesTitle?: string;
 
   @IsNotEmpty()
   @IsString()
-  @MaxLength(100)
+  @MaxLength(50)
   authorName: string;
 
   @IsNotEmpty()
   @IsString()
-  @MaxLength(500)
+  @MaxLength(400)
   description: string;
 
   @IsNotEmpty()

@@ -96,16 +96,14 @@ export class StoriesController {
   }
 
   // ========================
-  // AI Generation
+  // AI Generation (인증 필요 - 게스트는 스토리 생성 불가)
   // ========================
 
-  @Public()
   @Post("generate/summary")
   async generateSummary(@Body() dto: GenerateSummaryDto): Promise<GenerateSummaryResponse> {
     return this.storiesService.generateSummary(dto);
   }
 
-  @Public()
   @Post("generate/characters")
   async generateCharacters(
     @Body() dto: GenerateCharactersDto,
@@ -113,7 +111,6 @@ export class StoriesController {
     return this.storiesService.generateCharacters(dto);
   }
 
-  @Public()
   @Post("generate/profile-image")
   async generateProfileImage(
     @Body() dto: GenerateProfileImageDto,
@@ -121,7 +118,6 @@ export class StoriesController {
     return this.storiesService.generateProfileImage(dto);
   }
 
-  @Public()
   @Post("generate/cover-image")
   async generateCoverImage(
     @Body() dto: GenerateCoverImageDto,
@@ -129,7 +125,6 @@ export class StoriesController {
     return this.storiesService.generateCoverImage(dto);
   }
 
-  @Public()
   @Post("generate/background-image")
   async generateBackgroundImage(
     @Body() dto: GenerateBackgroundImageDto,
@@ -137,7 +132,6 @@ export class StoriesController {
     return this.storiesService.generateBackgroundImage(dto);
   }
 
-  @Public()
   @Post("generate/character-background-image")
   async generateCharacterBackgroundImage(
     @Body() dto: GenerateCharacterBackgroundImageDto,
@@ -145,13 +139,11 @@ export class StoriesController {
     return this.storiesService.generateCharacterBackgroundImage(dto);
   }
 
-  @Public()
   @Post("generate/voice-id")
   async getVoiceId(@Body() dto: GetVoiceIdDto): Promise<GetVoiceIdResponse> {
     return this.storiesService.getVoiceId(dto);
   }
 
-  @Public()
   @Post("generate/tts-sample")
   async generateTTSSample(@Body() dto: TTSSampleDto): Promise<TTSSampleResponse> {
     return this.storiesService.generateTTSSample(dto);

@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { type Prisma } from "@prisma/client";
+import { CharacterRole, type Prisma } from "@prisma/client";
 
 import { type CreateCharacterDto } from "../../characters/dto/create-character.dto";
 import { generateSearchVariations } from "../../common/utils/korean-search.util";
@@ -145,9 +145,7 @@ export class StoriesRepository {
     };
   }
 
-  async findByIdWithCreator(
-    id: string,
-  ): Promise<{
+  async findByIdWithCreator(id: string): Promise<{
     id: string;
     creatorId: string | null;
     coverImage: string | null;
@@ -422,7 +420,7 @@ export class StoriesRepository {
   /**
    * 캐릭터 목록을 주인공 우선으로 정렬
    */
-  private sortCharactersByRole(characters: { role: string }[]): void {
+  private sortCharactersByRole(characters: { role: CharacterRole }[]): void {
     characters.sort((a, b) => {
       if (a.role === "주인공" && b.role !== "주인공") return -1;
       if (a.role !== "주인공" && b.role === "주인공") return 1;

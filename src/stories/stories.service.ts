@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ForbiddenException,
   Injectable,
+  Logger,
   NotFoundException,
 } from "@nestjs/common";
 
@@ -44,6 +45,8 @@ import { StoriesRepository } from "./repositories/stories.repository";
 
 @Injectable()
 export class StoriesService {
+  private readonly logger = new Logger(StoriesService.name);
+
   constructor(
     private readonly storiesRepository: StoriesRepository,
     private readonly aiService: AiService,
@@ -123,7 +126,12 @@ export class StoriesService {
       characters: processedCharacters,
     };
 
-    return this.storiesRepository.create(processedDto, creatorId, category.id);
+    const createdStory = await this.storiesRepository.create(processedDto, creatorId, category.id);
+
+    // RAG 임베딩 생성 (비동기, 응답 차단 안 함)
+    this.processEmbeddingAsync(createdStory.id, dto.summary);
+
+    return createdStory;
   }
 
   async update(id: string, dto: UpdateStoryDto, userId: string): Promise<UpdatedStoryResponse> {
@@ -171,7 +179,14 @@ export class StoriesService {
       backgroundImage: processedBackgroundImage,
     };
 
-    return this.storiesRepository.update(id, processedDto);
+    const updatedStory = await this.storiesRepository.update(id, processedDto);
+
+    // RAG 임베딩 갱신 (summary가 변경된 경우만)
+    if (dto.summary) {
+      this.processEmbeddingAsync(id, dto.summary);
+    }
+
+    return updatedStory;
   }
 
   async delete(id: string, userId: string): Promise<void> {
@@ -225,39 +240,58 @@ export class StoriesService {
   // AI Generation
   // ========================
 
-  generateSummary(dto: GenerateSummaryDto): Promise<GenerateSummaryResponse> {
-    return this.aiService.generateSummary(dto);
+  async generateSummary(dto: GenerateSummaryDto): Promise<GenerateSummaryResponse> {
+    return await this.aiService.generateSummary(dto);
   }
 
-  generateCharacters(dto: GenerateCharactersDto): Promise<GenerateCharactersResponse> {
-    return this.aiService.generateCharacters(dto);
+  async generateCharacters(dto: GenerateCharactersDto): Promise<GenerateCharactersResponse> {
+    return await this.aiService.generateCharacters(dto);
   }
 
-  generateProfileImage(dto: GenerateProfileImageDto): Promise<GenerateProfileImageResponse> {
-    return this.aiService.generateProfileImage(dto);
+  async generateProfileImage(dto: GenerateProfileImageDto): Promise<GenerateProfileImageResponse> {
+    return await this.aiService.generateProfileImage(dto);
   }
 
-  generateCoverImage(dto: GenerateCoverImageDto): Promise<GenerateCoverImageResponse> {
-    return this.aiService.generateCoverImage(dto);
+  async generateCoverImage(dto: GenerateCoverImageDto): Promise<GenerateCoverImageResponse> {
+    return await this.aiService.generateCoverImage(dto);
   }
 
-  generateBackgroundImage(
+  async generateBackgroundImage(
     dto: GenerateBackgroundImageDto,
   ): Promise<GenerateBackgroundImageResponse> {
-    return this.aiService.generateBackgroundImage(dto);
+    return await this.aiService.generateBackgroundImage(dto);
   }
 
-  generateCharacterBackgroundImage(
+  async generateCharacterBackgroundImage(
     dto: GenerateCharacterBackgroundImageDto,
   ): Promise<GenerateCharacterBackgroundImageResponse> {
-    return this.aiService.generateCharacterBackgroundImage(dto);
+    return await this.aiService.generateCharacterBackgroundImage(dto);
   }
 
-  getVoiceId(dto: GetVoiceIdDto): Promise<GetVoiceIdResponse> {
-    return this.aiService.getVoiceId(dto);
+  async getVoiceId(dto: GetVoiceIdDto): Promise<GetVoiceIdResponse> {
+    return await this.aiService.getVoiceId(dto);
   }
 
-  generateTTSSample(dto: TTSSampleDto): Promise<TTSSampleResponse> {
-    return this.aiService.generateTTSSample(dto);
+  async generateTTSSample(dto: TTSSampleDto): Promise<TTSSampleResponse> {
+    return await this.aiService.generateTTSSample(dto);
+  }
+
+  // ========================
+  // RAG Embedding
+  // ========================
+
+  /**
+   * 스토리 임베딩 비동기 처리
+   * 사용자 응답을 차단하지 않고 백그라운드에서 처리
+   */
+  private processEmbeddingAsync(storyId: string, summary: string): void {
+    this.aiService
+      .processStoryEmbedding(storyId, summary)
+      .then((chunkCount) => {
+        this.logger.log(`Story ${storyId}: ${chunkCount} embedding chunks created`);
+      })
+      .catch((error: Error) => {
+        this.logger.error(`Story ${storyId}: Failed to create embeddings - ${error.message}`);
+      });
   }
 }

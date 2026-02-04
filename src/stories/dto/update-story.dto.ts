@@ -4,30 +4,30 @@ export class UpdateStoryDto {
   @IsOptional()
   @IsString()
   @IsNotEmpty()
-  @MaxLength(200)
+  @MaxLength(100)
   title?: string;
 
   @IsOptional()
   @IsString()
-  @MaxLength(200)
+  @MaxLength(100)
   seriesTitle?: string;
 
   @IsOptional()
   @IsString()
   @IsNotEmpty()
-  @MaxLength(100)
+  @MaxLength(50)
   authorName?: string;
 
   @IsOptional()
   @IsString()
   @IsNotEmpty()
-  @MaxLength(300)
+  @MaxLength(400)
   description?: string;
 
   @IsOptional()
   @IsString()
   @IsNotEmpty()
-  @MaxLength(3000)
+  @MaxLength(4000)
   summary?: string;
 
   @IsOptional()
@@ -36,12 +36,12 @@ export class UpdateStoryDto {
   @MaxLength(500)
   coverColor?: string;
 
-  @ValidateIf((o) => o.coverImage !== null)
+  @ValidateIf((o: UpdateStoryDto) => o.coverImage !== null)
   @IsOptional()
   @IsString()
   coverImage?: string | null;
 
-  @ValidateIf((o) => o.backgroundImage !== null)
+  @ValidateIf((o: UpdateStoryDto) => o.backgroundImage !== null)
   @IsOptional()
   @IsString()
   backgroundImage?: string | null;

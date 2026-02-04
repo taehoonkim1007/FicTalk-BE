@@ -1,5 +1,6 @@
+import { CharacterRole } from "@prisma/client";
 import { Transform } from "class-transformer";
-import { IsInt, IsOptional, IsString, Max, Min } from "class-validator";
+import { IsEnum, IsInt, IsOptional, IsString, Max, Min } from "class-validator";
 
 export class GetCharactersDto {
   @IsOptional()
@@ -11,8 +12,8 @@ export class GetCharactersDto {
   search?: string;
 
   @IsOptional()
-  @IsString()
-  role?: string;
+  @IsEnum(CharacterRole)
+  role?: CharacterRole;
 
   @IsOptional()
   @Transform(({ value }) => parseInt(value as string, 10))

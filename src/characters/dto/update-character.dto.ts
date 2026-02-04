@@ -1,26 +1,25 @@
-import { IsNotEmpty, IsObject, IsOptional, IsString, MaxLength } from "class-validator";
+import { CharacterRole } from "@prisma/client";
+import { IsEnum, IsNotEmpty, IsObject, IsOptional, IsString, MaxLength } from "class-validator";
 
 export class UpdateCharacterDto {
   @IsOptional()
   @IsString()
   @IsNotEmpty()
-  @MaxLength(100)
+  @MaxLength(50)
   name?: string;
 
   @IsOptional()
-  @IsString()
-  @IsNotEmpty()
-  @MaxLength(50)
-  role?: string;
+  @IsEnum(CharacterRole)
+  role?: CharacterRole;
 
   @IsOptional()
   @IsString()
-  @MaxLength(500)
+  @MaxLength(400)
   description?: string;
 
   @IsOptional()
   @IsString()
-  @MaxLength(500)
+  @MaxLength(400)
   personality?: string;
 
   @IsOptional()

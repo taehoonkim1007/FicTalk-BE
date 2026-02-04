@@ -23,8 +23,16 @@ export class CharactersService {
     const { characters, total } = await this.charactersRepository.findMany(dto);
     const limit = dto.limit ?? 20;
 
+    // 역할별 정렬: 주인공 → 조연 → 기타
+    const roleOrder: Record<string, number> = { 주인공: 0, 조연: 1 };
+    const sortedCharacters = [...characters].sort((a, b) => {
+      const orderA = roleOrder[a.role] ?? 2;
+      const orderB = roleOrder[b.role] ?? 2;
+      return orderA - orderB;
+    });
+
     return {
-      characters,
+      characters: sortedCharacters,
       pagination: {
         page: dto.page ?? 1,
         limit,

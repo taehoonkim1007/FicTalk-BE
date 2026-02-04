@@ -1,3 +1,5 @@
+import { type CharacterRole } from "@prisma/client";
+
 export class StoryCategoryResponse {
   id: number;
   name: string;
@@ -45,7 +47,7 @@ export interface VoiceSettingsResponse {
 export class CharacterResponse {
   id: string;
   name: string;
-  role: string;
+  role: CharacterRole;
   description: string;
   imageColor: string;
   profileImage: string | null;
@@ -95,7 +97,7 @@ export class UpdatedStoryResponse {
 export class CharacterDetailResponse {
   id: string;
   name: string;
-  role: string;
+  role: CharacterRole;
   description: string;
   personality: string | null;
   firstMessage: string | null;

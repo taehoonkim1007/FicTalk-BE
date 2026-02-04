@@ -1,3 +1,5 @@
+import type { CharacterRole } from "@prisma/client";
+
 export class CharacterStorySnippet {
   id: string;
   title: string;
@@ -10,7 +12,7 @@ export class CharacterStorySnippet {
 export class CharacterWithStoryResponse {
   id: string;
   name: string;
-  role: string;
+  role: CharacterRole;
   description: string;
   imageColor: string;
   profileImage: string | null;
