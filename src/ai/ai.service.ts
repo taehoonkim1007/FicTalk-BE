@@ -7,12 +7,6 @@ import {
   type GenerateChatResponseResponse,
 } from "./dto/chat-generation.dto";
 import {
-  type GetVoiceIdDto,
-  type GetVoiceIdResponse,
-  type TTSSampleDto,
-  type TTSSampleResponse,
-} from "./dto/tts.dto";
-import {
   type GenerateBackgroundImageDto,
   type GenerateBackgroundImageResponse,
   type GenerateCharacterBackgroundImageDto,
@@ -26,6 +20,12 @@ import {
   type GenerateSummaryDto,
   type GenerateSummaryResponse,
 } from "./dto/story-generation.dto";
+import {
+  type GetVoiceIdDto,
+  type GetVoiceIdResponse,
+  type TTSSampleDto,
+  type TTSSampleResponse,
+} from "./dto/tts.dto";
 
 @Injectable()
 export class AiService {
@@ -129,6 +129,7 @@ export class AiService {
         character_name: dto.characterName,
         character_role: dto.characterRole,
         character_personality: dto.characterPersonality,
+        story_id: dto.storyId,
         story_title: dto.storyTitle,
         story_summary: dto.storySummary,
         messages: dto.messages,
@@ -137,6 +138,23 @@ export class AiService {
     );
 
     return response.data.response;
+  }
+
+  async processStoryEmbedding(storyId: string, summary: string): Promise<number> {
+    this.logger.log(`Processing embeddings for story: ${storyId}`);
+
+    const response = await firstValueFrom(
+      this.httpService.post<{ story_id: string; chunk_count: number; message: string }>(
+        "/api/embeddings/story",
+        {
+          story_id: storyId,
+          summary,
+        },
+      ),
+    );
+
+    this.logger.log(`Embeddings created: ${response.data.chunk_count} chunks`);
+    return response.data.chunk_count;
   }
 
   async getVoiceId(dto: GetVoiceIdDto): Promise<GetVoiceIdResponse> {

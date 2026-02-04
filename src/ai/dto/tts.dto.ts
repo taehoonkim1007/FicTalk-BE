@@ -1,5 +1,5 @@
-import { IsNotEmpty, IsNumber, IsOptional, IsString, Max, MaxLength, Min } from "class-validator";
 import { Type } from "class-transformer";
+import { IsNotEmpty, IsNumber, IsOptional, IsString, Max, MaxLength, Min } from "class-validator";
 
 // ========================
 // Voice Settings

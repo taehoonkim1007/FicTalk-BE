@@ -7,12 +7,12 @@ import { IsNotEmpty, IsString, MaxLength } from "class-validator";
 export class GenerateSummaryDto {
   @IsNotEmpty()
   @IsString()
-  @MaxLength(200)
+  @MaxLength(100)
   title: string;
 
   @IsNotEmpty()
   @IsString()
-  @MaxLength(500)
+  @MaxLength(400)
   description: string;
 }
 
@@ -27,12 +27,12 @@ export class GenerateSummaryResponse {
 export class GenerateCharactersDto {
   @IsNotEmpty()
   @IsString()
-  @MaxLength(200)
+  @MaxLength(100)
   title: string;
 
   @IsNotEmpty()
   @IsString()
-  @MaxLength(500)
+  @MaxLength(400)
   description: string;
 
   @IsNotEmpty()
@@ -60,12 +60,12 @@ export class GenerateCharactersResponse {
 export class GenerateProfileImageDto {
   @IsNotEmpty()
   @IsString()
-  @MaxLength(1000)
+  @MaxLength(400)
   description: string;
 
   @IsNotEmpty()
   @IsString()
-  @MaxLength(500)
+  @MaxLength(400)
   personality: string;
 }
 
@@ -81,12 +81,12 @@ export class GenerateProfileImageResponse {
 export class GenerateCoverImageDto {
   @IsNotEmpty()
   @IsString()
-  @MaxLength(200)
+  @MaxLength(100)
   title: string;
 
   @IsNotEmpty()
   @IsString()
-  @MaxLength(500)
+  @MaxLength(400)
   description: string;
 
   @IsNotEmpty()
@@ -107,12 +107,12 @@ export class GenerateCoverImageResponse {
 export class GenerateBackgroundImageDto {
   @IsNotEmpty()
   @IsString()
-  @MaxLength(200)
+  @MaxLength(100)
   title: string;
 
   @IsNotEmpty()
   @IsString()
-  @MaxLength(500)
+  @MaxLength(400)
   description: string;
 
   @IsNotEmpty()
@@ -133,12 +133,12 @@ export class GenerateBackgroundImageResponse {
 export class GenerateCharacterBackgroundImageDto {
   @IsNotEmpty()
   @IsString()
-  @MaxLength(1000)
+  @MaxLength(400)
   description: string;
 
   @IsNotEmpty()
   @IsString()
-  @MaxLength(500)
+  @MaxLength(400)
   personality: string;
 }
 
