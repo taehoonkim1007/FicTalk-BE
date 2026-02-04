@@ -1,5 +1,7 @@
-import { Body, Controller, Delete, Get, Param, Post, Query } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Query, UseGuards } from "@nestjs/common";
 
+import { GuestUsageGuard } from "../auth/guards/guest-usage.guard";
+import type { AuthenticatedUser } from "../auth/types/auth.types";
 import { CurrentUser } from "../common/decorators/current-user.decorator";
 import { ChatService } from "./chat.service";
 import {
@@ -18,7 +20,7 @@ export class ChatController {
   constructor(private readonly chatService: ChatService) {}
 
   /**
-   * 채팅방 조회/생성
+   * 채팅방 조회/생성 (일반 유저만)
    */
   @Get()
   async getOrCreateChatRoom(@CurrentUser("id") userId: string): Promise<ChatRoomResponse> {
@@ -29,8 +31,8 @@ export class ChatController {
    * 채팅방 캐릭터 목록 조회
    */
   @Get("characters")
-  async getChatCharacters(@CurrentUser("id") userId: string): Promise<ChatCharactersResponse> {
-    return this.chatService.getChatCharacters(userId);
+  async getChatCharacters(@CurrentUser() user: AuthenticatedUser): Promise<ChatCharactersResponse> {
+    return this.chatService.getChatCharacters(user);
   }
 
   /**
@@ -38,10 +40,10 @@ export class ChatController {
    */
   @Post("characters")
   async addCharacter(
-    @CurrentUser("id") userId: string,
+    @CurrentUser() user: AuthenticatedUser,
     @Body() dto: AddCharacterDto,
   ): Promise<ChatCharacterResponse> {
-    return this.chatService.addCharacter(userId, dto.characterId);
+    return this.chatService.addCharacter(user, dto.characterId);
   }
 
   /**
@@ -49,10 +51,10 @@ export class ChatController {
    */
   @Delete("characters/:characterId")
   async removeCharacter(
-    @CurrentUser("id") userId: string,
+    @CurrentUser() user: AuthenticatedUser,
     @Param("characterId") characterId: string,
   ): Promise<{ message: string }> {
-    await this.chatService.removeCharacter(userId, characterId);
+    await this.chatService.removeCharacter(user, characterId);
     return { message: "캐릭터가 제거되었습니다." };
   }
 
@@ -61,23 +63,24 @@ export class ChatController {
    */
   @Get("characters/:characterId/messages")
   async getMessages(
-    @CurrentUser("id") userId: string,
+    @CurrentUser() user: AuthenticatedUser,
     @Param("characterId") characterId: string,
     @Query() dto: GetMessagesDto,
   ): Promise<ChatMessagesResponse> {
-    return this.chatService.getMessages(userId, characterId, dto.cursor, dto.limit);
+    return this.chatService.getMessages(user, characterId, dto.cursor, dto.limit);
   }
 
   /**
    * 메시지 전송 + AI 응답
    */
   @Post("characters/:characterId/messages")
+  @UseGuards(GuestUsageGuard)
   async sendMessage(
-    @CurrentUser("id") userId: string,
+    @CurrentUser() user: AuthenticatedUser,
     @Param("characterId") characterId: string,
     @Body() dto: SendMessageDto,
   ): Promise<SendMessageResponse> {
-    return this.chatService.sendMessage(userId, characterId, dto.content);
+    return this.chatService.sendMessage(user, characterId, dto.content);
   }
 
   /**
@@ -85,10 +88,10 @@ export class ChatController {
    */
   @Delete("characters/:characterId/messages")
   async resetMessages(
-    @CurrentUser("id") userId: string,
+    @CurrentUser() user: AuthenticatedUser,
     @Param("characterId") characterId: string,
   ): Promise<{ message: string }> {
-    await this.chatService.resetMessages(userId, characterId);
+    await this.chatService.resetMessages(user, characterId);
     return { message: "대화가 초기화되었습니다." };
   }
 }

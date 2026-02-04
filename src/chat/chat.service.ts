@@ -1,6 +1,15 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
 
 import { AiService } from "../ai/ai.service";
+import { AuthService } from "../auth/auth.service";
+import type { AuthenticatedUser } from "../auth/types/auth.types";
+import { ERROR_CODES } from "../common/constants/error-codes";
+import { ERROR_MESSAGES } from "../common/constants/error-messages";
+import {
+  DEFAULT_MESSAGE_LIMIT,
+  GUEST_MAX_CHARACTERS,
+  RECENT_MESSAGES_FOR_AI,
+} from "./constants/chat.constants";
 import {
   ChatCharacterResponse,
   ChatCharactersResponse,
@@ -9,16 +18,19 @@ import {
   SendMessageResponse,
 } from "./dto";
 import { ChatRepository } from "./repositories/chat.repository";
+import { GuestChatRepository } from "./repositories/guest-chat.repository";
 
 @Injectable()
 export class ChatService {
   constructor(
     private readonly chatRepository: ChatRepository,
+    private readonly guestChatRepository: GuestChatRepository,
     private readonly aiService: AiService,
+    private readonly authService: AuthService,
   ) {}
 
   /**
-   * 채팅방 조회/생성
+   * 채팅방 조회/생성 (일반 유저만)
    */
   async getOrCreateChatRoom(userId: string): Promise<ChatRoomResponse> {
     return this.chatRepository.findOrCreateChatRoom(userId);
@@ -27,7 +39,14 @@ export class ChatService {
   /**
    * 채팅방 캐릭터 목록 조회
    */
-  async getChatCharacters(userId: string): Promise<ChatCharactersResponse> {
+  async getChatCharacters(user: AuthenticatedUser): Promise<ChatCharactersResponse> {
+    if (user.role === "guest") {
+      return this.getGuestChatCharacters(user.id);
+    }
+    return this.getUserChatCharacters(user.id);
+  }
+
+  private async getUserChatCharacters(userId: string): Promise<ChatCharactersResponse> {
     const chatRoom = await this.chatRepository.findChatRoomByUserId(userId);
 
     if (!chatRoom) {
@@ -38,65 +57,117 @@ export class ChatService {
     return { characters };
   }
 
+  private async getGuestChatCharacters(guestId: string): Promise<ChatCharactersResponse> {
+    const characterIds = await this.guestChatRepository.getCharacterIds(guestId);
+
+    if (characterIds.length === 0) {
+      return { characters: [] };
+    }
+
+    const charactersData = await this.chatRepository.findCharactersByIds(characterIds);
+
+    const characters: ChatCharacterResponse[] = charactersData.map((character) => ({
+      id: character.id,
+      name: character.name,
+      role: character.role,
+      description: character.description,
+      profileImage: character.profileImage,
+      backgroundImage: character.backgroundImage,
+      imageColor: character.imageColor,
+      personality: character.personality,
+      firstMessage: character.firstMessage,
+      voiceId: character.voiceId,
+      voiceSettings: character.voiceSettings as {
+        stability: number;
+        similarityBoost: number;
+        style: number;
+        speed: number;
+      } | null,
+      story: {
+        id: character.story.id,
+        title: character.story.title,
+        backgroundImage: character.story.backgroundImage,
+      },
+    }));
+
+    return { characters };
+  }
+
   /**
    * 캐릭터 추가 (이미 존재하면 해당 캐릭터 반환)
    */
-  async addCharacter(userId: string, characterId: string): Promise<ChatCharacterResponse> {
+  async addCharacter(user: AuthenticatedUser, characterId: string): Promise<ChatCharacterResponse> {
     // 캐릭터 존재 확인
     const character = await this.chatRepository.findCharacterById(characterId);
     if (!character) {
-      throw new NotFoundException("캐릭터를 찾을 수 없습니다.");
+      throw new NotFoundException(ERROR_MESSAGES.CHARACTER_NOT_FOUND);
     }
 
-    // 채팅방 조회/생성
-    const chatRoom = await this.chatRepository.findOrCreateChatRoom(userId);
-
-    // 이미 추가되어 있는지 확인 - 있으면 기존 캐릭터 반환
-    const existing = await this.chatRepository.findChatRoomCharacter(chatRoom.id, characterId);
-    if (existing) {
-      // 이미 추가된 캐릭터 정보 반환
-      return {
-        id: character.id,
-        name: character.name,
-        role: character.role,
-        description: character.description,
-        profileImage: character.profileImage,
-        backgroundImage: character.backgroundImage,
-        imageColor: character.imageColor,
-        personality: character.personality,
-        firstMessage: character.firstMessage,
-        voiceId: character.voiceId,
-        voiceSettings: character.voiceSettings as {
-          stability: number;
-          similarityBoost: number;
-          style: number;
-          speed: number;
-        } | null,
-        story: {
-          id: character.story.id,
-          title: character.story.title,
-          backgroundImage: character.story.backgroundImage,
-        },
-      };
+    if (user.role === "guest") {
+      // 게스트는 이미 해당 캐릭터가 있으면 그대로 반환
+      const hasCharacter = await this.guestChatRepository.hasCharacter(user.id, characterId);
+      if (hasCharacter) {
+        // 이미 추가된 캐릭터 - 정상 반환
+      } else {
+        // 새 캐릭터 추가 시 1개 제한 확인
+        const characterCount = await this.guestChatRepository.getCharacterCount(user.id);
+        if (characterCount >= GUEST_MAX_CHARACTERS) {
+          throw new ForbiddenException(ERROR_CODES.GUEST_CHARACTER_LIMIT);
+        }
+        await this.guestChatRepository.addCharacter(user.id, characterId);
+      }
+    } else {
+      // 채팅방 조회/생성
+      const chatRoom = await this.chatRepository.findOrCreateChatRoom(user.id);
+      await this.chatRepository.addCharacter(chatRoom.id, characterId);
     }
 
-    // 캐릭터 추가
-    return this.chatRepository.addCharacter(chatRoom.id, characterId);
+    return {
+      id: character.id,
+      name: character.name,
+      role: character.role,
+      description: character.description,
+      profileImage: character.profileImage,
+      backgroundImage: character.backgroundImage,
+      imageColor: character.imageColor,
+      personality: character.personality,
+      firstMessage: character.firstMessage,
+      voiceId: character.voiceId,
+      voiceSettings: character.voiceSettings as {
+        stability: number;
+        similarityBoost: number;
+        style: number;
+        speed: number;
+      } | null,
+      story: {
+        id: character.story.id,
+        title: character.story.title,
+        backgroundImage: character.story.backgroundImage,
+      },
+    };
   }
 
   /**
    * 캐릭터 제거
    */
-  async removeCharacter(userId: string, characterId: string): Promise<void> {
-    const chatRoom = await this.chatRepository.findChatRoomByUserId(userId);
+  async removeCharacter(user: AuthenticatedUser, characterId: string): Promise<void> {
+    if (user.role === "guest") {
+      const hasCharacter = await this.guestChatRepository.hasCharacter(user.id, characterId);
+      if (!hasCharacter) {
+        throw new NotFoundException(ERROR_MESSAGES.CHAT_CHARACTER_NOT_FOUND);
+      }
+      await this.guestChatRepository.removeCharacter(user.id, characterId);
+      return;
+    }
 
+    const chatRoom = await this.chatRepository.findChatRoomByUserId(user.id);
     if (!chatRoom) {
-      throw new NotFoundException("채팅방을 찾을 수 없습니다.");
+      throw new NotFoundException(ERROR_MESSAGES.CHAT_ROOM_NOT_FOUND);
     }
 
     const existing = await this.chatRepository.findChatRoomCharacter(chatRoom.id, characterId);
     if (!existing) {
-      throw new NotFoundException("해당 캐릭터와의 대화를 찾을 수 없습니다.");
+      throw new NotFoundException(ERROR_MESSAGES.CHAT_CHARACTER_NOT_FOUND);
     }
 
     await this.chatRepository.removeCharacter(chatRoom.id, characterId);
@@ -106,13 +177,16 @@ export class ChatService {
    * 메시지 목록 조회
    */
   async getMessages(
-    userId: string,
+    user: AuthenticatedUser,
     characterId: string,
     cursor?: string,
-    limit: number = 50,
+    limit: number = DEFAULT_MESSAGE_LIMIT,
   ): Promise<ChatMessagesResponse> {
-    const chatRoom = await this.chatRepository.findChatRoomByUserId(userId);
+    if (user.role === "guest") {
+      return this.guestChatRepository.getMessages(user.id, characterId, limit);
+    }
 
+    const chatRoom = await this.chatRepository.findChatRoomByUserId(user.id);
     if (!chatRoom) {
       return { messages: [], nextCursor: null, hasMore: false };
     }
@@ -124,14 +198,80 @@ export class ChatService {
    * 메시지 전송 + AI 응답 생성
    */
   async sendMessage(
-    userId: string,
+    user: AuthenticatedUser,
     characterId: string,
     content: string,
   ): Promise<SendMessageResponse> {
-    const chatRoom = await this.chatRepository.findChatRoomByUserId(userId);
+    if (user.role === "guest") {
+      return this.sendGuestMessage(user, characterId, content);
+    }
+    return this.sendUserMessage(user, characterId, content);
+  }
+
+  private async sendGuestMessage(
+    user: AuthenticatedUser,
+    characterId: string,
+    content: string,
+  ): Promise<SendMessageResponse> {
+    // 캐릭터 정보 조회
+    const character = await this.chatRepository.findCharacterById(characterId);
+    if (!character) {
+      throw new NotFoundException(ERROR_MESSAGES.CHARACTER_NOT_FOUND);
+    }
+
+    // 캐릭터가 추가되어 있는지 확인
+    const hasCharacter = await this.guestChatRepository.hasCharacter(user.id, characterId);
+    if (!hasCharacter) {
+      // 새 캐릭터 추가 시 1개 제한 확인
+      const characterCount = await this.guestChatRepository.getCharacterCount(user.id);
+      if (characterCount >= GUEST_MAX_CHARACTERS) {
+        throw new ForbiddenException(ERROR_CODES.GUEST_CHARACTER_LIMIT);
+      }
+      await this.guestChatRepository.addCharacter(user.id, characterId);
+    }
+
+    // 최근 대화 내역 조회
+    const recentMessages = await this.guestChatRepository.getRecentMessages(
+      user.id,
+      characterId,
+      RECENT_MESSAGES_FOR_AI,
+    );
+
+    // AI 응답 생성 (RAG 적용) - 먼저 응답을 받은 후 저장
+    const aiResponse = await this.aiService.generateChatResponse({
+      characterName: character.name,
+      characterRole: character.role,
+      characterPersonality: character.personality || "",
+      storyId: character.story.id,
+      storyTitle: character.story.title,
+      storySummary: character.story.summary,
+      messages: recentMessages,
+      userMessage: content,
+    });
+
+    // AI 응답 성공 후 사용자 메시지와 AI 응답을 함께 저장 (원자적)
+    const { userMessage, aiMessage } = await this.guestChatRepository.saveMessagesAtomic(
+      user.id,
+      characterId,
+      content,
+      aiResponse,
+    );
+
+    // 게스트 사용량 증가
+    await this.authService.incrementGuestUsage(user.id);
+
+    return { userMessage, aiMessage };
+  }
+
+  private async sendUserMessage(
+    user: AuthenticatedUser,
+    characterId: string,
+    content: string,
+  ): Promise<SendMessageResponse> {
+    const chatRoom = await this.chatRepository.findChatRoomByUserId(user.id);
 
     if (!chatRoom) {
-      throw new NotFoundException("채팅방을 찾을 수 없습니다.");
+      throw new NotFoundException(ERROR_MESSAGES.CHAT_ROOM_NOT_FOUND);
     }
 
     const chatRoomCharacterId = await this.chatRepository.findChatRoomCharacterId(
@@ -140,62 +280,64 @@ export class ChatService {
     );
 
     if (!chatRoomCharacterId) {
-      throw new NotFoundException("해당 캐릭터와의 대화를 찾을 수 없습니다.");
+      throw new NotFoundException(ERROR_MESSAGES.CHAT_CHARACTER_NOT_FOUND);
     }
 
     // 캐릭터 정보 조회
     const character = await this.chatRepository.findCharacterById(characterId);
     if (!character) {
-      throw new NotFoundException("캐릭터를 찾을 수 없습니다.");
+      throw new NotFoundException(ERROR_MESSAGES.CHARACTER_NOT_FOUND);
     }
 
-    // 최근 대화 내역 조회 (사용자 메시지 저장 전에 조회해야 중복 방지)
-    const recentMessages = await this.chatRepository.findRecentMessages(chatRoomCharacterId, 20);
-
-    // 사용자 메시지 저장
-    const userMessage = await this.chatRepository.createMessage(
+    // 최근 대화 내역 조회
+    const recentMessages = await this.chatRepository.findRecentMessages(
       chatRoomCharacterId,
-      "user",
-      content,
+      RECENT_MESSAGES_FOR_AI,
     );
 
-    // AI 응답 생성
+    // AI 응답 생성 (RAG 적용) - 먼저 응답을 받은 후 저장
     const aiResponse = await this.aiService.generateChatResponse({
       characterName: character.name,
       characterRole: character.role,
       characterPersonality: character.personality || "",
+      storyId: character.story.id,
       storyTitle: character.story.title,
       storySummary: character.story.summary,
       messages: recentMessages,
       userMessage: content,
     });
 
-    // AI 응답 메시지 저장
-    const aiMessage = await this.chatRepository.createMessage(
+    // AI 응답 성공 후 사용자 메시지와 AI 응답을 트랜잭션으로 저장
+    const { userMessage, aiMessage } = await this.chatRepository.createMessagesInTransaction(
       chatRoomCharacterId,
-      "assistant",
+      content,
       aiResponse,
     );
 
-    return {
-      userMessage,
-      aiMessage,
-    };
+    return { userMessage, aiMessage };
   }
 
   /**
    * 대화 초기화
    */
-  async resetMessages(userId: string, characterId: string): Promise<void> {
-    const chatRoom = await this.chatRepository.findChatRoomByUserId(userId);
+  async resetMessages(user: AuthenticatedUser, characterId: string): Promise<void> {
+    if (user.role === "guest") {
+      const hasCharacter = await this.guestChatRepository.hasCharacter(user.id, characterId);
+      if (!hasCharacter) {
+        throw new NotFoundException(ERROR_MESSAGES.CHAT_CHARACTER_NOT_FOUND);
+      }
+      await this.guestChatRepository.deleteMessages(user.id, characterId);
+      return;
+    }
 
+    const chatRoom = await this.chatRepository.findChatRoomByUserId(user.id);
     if (!chatRoom) {
-      throw new NotFoundException("채팅방을 찾을 수 없습니다.");
+      throw new NotFoundException(ERROR_MESSAGES.CHAT_ROOM_NOT_FOUND);
     }
 
     const existing = await this.chatRepository.findChatRoomCharacter(chatRoom.id, characterId);
     if (!existing) {
-      throw new NotFoundException("해당 캐릭터와의 대화를 찾을 수 없습니다.");
+      throw new NotFoundException(ERROR_MESSAGES.CHAT_CHARACTER_NOT_FOUND);
     }
 
     await this.chatRepository.deleteMessages(chatRoom.id, characterId);

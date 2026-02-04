@@ -220,6 +220,25 @@ export class ChatRepository {
   }
 
   /**
+   * 여러 캐릭터 조회 (N+1 문제 해결)
+   */
+  async findCharactersByIds(characterIds: string[]) {
+    return this.prisma.character.findMany({
+      where: { id: { in: characterIds } },
+      include: {
+        story: {
+          select: {
+            id: true,
+            title: true,
+            summary: true,
+            backgroundImage: true,
+          },
+        },
+      },
+    });
+  }
+
+  /**
    * 메시지 목록 조회 (커서 기반 페이지네이션)
    */
   async findMessages(
@@ -352,5 +371,50 @@ export class ChatRepository {
         where: { chatRoomCharacterId: chatRoomCharacter.id },
       });
     }
+  }
+
+  /**
+   * 사용자 메시지와 AI 응답을 트랜잭션으로 함께 저장
+   * AI 응답 생성 실패 시 사용자 메시지도 저장되지 않음
+   */
+  async createMessagesInTransaction(
+    chatRoomCharacterId: string,
+    userContent: string,
+    aiContent: string,
+  ): Promise<{ userMessage: ChatMessageResponse; aiMessage: ChatMessageResponse }> {
+    const [userMessage, aiMessage] = await this.prisma.$transaction(async (tx) => {
+      const user = await tx.chatMessage.create({
+        data: {
+          chatRoomCharacterId,
+          role: "user",
+          content: userContent,
+        },
+      });
+
+      const ai = await tx.chatMessage.create({
+        data: {
+          chatRoomCharacterId,
+          role: "assistant",
+          content: aiContent,
+        },
+      });
+
+      return [user, ai];
+    });
+
+    return {
+      userMessage: {
+        id: userMessage.id,
+        role: userMessage.role,
+        content: userMessage.content,
+        createdAt: userMessage.createdAt,
+      },
+      aiMessage: {
+        id: aiMessage.id,
+        role: aiMessage.role,
+        content: aiMessage.content,
+        createdAt: aiMessage.createdAt,
+      },
+    };
   }
 }
