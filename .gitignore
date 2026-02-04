@@ -7,4 +7,5 @@ prisma/migrations/
 docs
 /generated/prisma
 .agent/
+.claude/
 public

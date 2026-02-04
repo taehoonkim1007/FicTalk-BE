@@ -22,7 +22,6 @@ type StorySeedData = Prisma.StoryUncheckedCreateInput & {
 const upsertStory = async (tx: PrismaClient, data: StorySeedData) => {
   const { characters, ...story } = data;
 
-  // [Fix] Trim summary to remove extra whitespace
   if (story.summary) {
     story.summary = story.summary.trim();
     if (story.summary.length > 4000) {
@@ -48,6 +47,7 @@ const upsertStory = async (tx: PrismaClient, data: StorySeedData) => {
       }
     }
   }
+
   return result;
 };
 
@@ -104,7 +104,7 @@ const main = async () => {
     categoryIds[cat.slug] = result.id;
   }
 
-  // 기존 코드와의 호환성을 위한 참조 변수 (mock object with id)
+  // 기존 코드와의 호환성을 위한 참조 변수
   const worldLit = { id: categoryIds["world-lit"] };
   const koreanLit = { id: categoryIds["korean-lit"] };
   const creative = { id: categoryIds["creative"] };
@@ -496,7 +496,7 @@ const main = async () => {
         {
           id: "74c41165-f491-5dfa-a08d-01443f308956",
           name: "막스 데미안",
-          role: "멘토",
+          role: "조연",
           description:
             "싱클레어의 친구이자 영적 스승. 나이를 가늠할 수 없는 어른스러운 외모와 '카인의 표적'을 지녔다. 싱클레어가 기존의 세계를 깨고 나오도록 돕는다.",
           personality:

@@ -18,8 +18,11 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "dotenv -e .env.test -- jest --config ./test/jest-e2e.json --runInBand",
-    "test:e2e:setup": "dotenv -e .env.test -- npx prisma db push",
-    "prepare": "husky"
+    "test:e2e:setup": "dotenv -e .env.test -- pnpm prisma db push",
+    "prepare": "husky",
+    "db:migrate:deploy": "pnpm prisma migrate deploy",
+    "db:seed": "pnpm prisma db seed",
+    "embedding:generate": "pnpm ts-node scripts/generate-embeddings.ts"
   },
   "dependencies": {
     "@nestjs/axios": "^4.0.1",
@@ -82,7 +85,7 @@
     "typescript-eslint": "^8.20.0"
   },
   "prisma": {
-    "seed": "ts-node prisma/seed.ts"
+    "seed": "pnpm ts-node prisma/seed.ts"
   },
   "jest": {
     "moduleFileExtensions": [
