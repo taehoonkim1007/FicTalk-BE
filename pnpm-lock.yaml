@@ -84,6 +84,9 @@ importers:
       '@eslint/js':
         specifier: ^9.18.0
         version: 9.39.2
+      '@golevelup/ts-jest':
+        specifier: ^1.2.1
+        version: 1.2.1
       '@ianvs/prettier-plugin-sort-imports':
         specifier: ^4.7.0
         version: 4.7.0(prettier@3.8.1)
@@ -684,6 +687,9 @@ packages:
   '@eslint/plugin-kit@0.4.1':
     resolution: {integrity: sha512-43/qtrDUokr7LJqoF2c3+RInu/t4zfrpYdoSDfYyhg52rwLV6TnOvdG4fXm7IkSB3wErkcmJS9iEhjVtOSEjjA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
+  '@golevelup/ts-jest@1.2.1':
+    resolution: {integrity: sha512-1LQ6iDkKJve1AifgVNN0C27hUfd6zZ2qiAbK8x9Mvur+sB1YGc8Z70uEJPtyHL/akA8e4IEKZWC8lkKe/WuTlw==}
 
   '@hapi/address@5.1.1':
     resolution: {integrity: sha512-A+po2d/dVoY7cYajycYI43ZbYMXukuopIsqCjh5QzsBCipDtdofHntljDlpccMjIfTy6UOkg+5KPriwYch2bXA==}
@@ -4665,6 +4671,8 @@ snapshots:
     dependencies:
       '@eslint/core': 0.17.0
       levn: 0.4.1
+
+  '@golevelup/ts-jest@1.2.1': {}
 
   '@hapi/address@5.1.1':
     dependencies:

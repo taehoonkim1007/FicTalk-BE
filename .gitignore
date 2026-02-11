@@ -9,3 +9,4 @@ docs
 .agent/
 .claude/
 public
+coverage
