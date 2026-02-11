@@ -1,3 +1,4 @@
+import { createHash } from "crypto";
 import { ForbiddenException, UnauthorizedException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
@@ -178,6 +179,192 @@ describe("AuthService", () => {
 
       expect(result).toEqual(mockUser);
       expect(mockAuthRepository.deleteAuthCode).toHaveBeenCalledWith(code);
+    });
+
+    it("유저가 존재하지 않으면 UnauthorizedException을 던져야 합니다", async () => {
+      mockAuthRepository.getAuthCode.mockResolvedValue("user-123");
+      mockAuthRepository.findUserById.mockResolvedValue(null);
+
+      await expect(service.exchangeCodeForTokens(code)).rejects.toThrow(UnauthorizedException);
+    });
+  });
+
+  describe("generateTokens", () => {
+    const mockUserWithId = {
+      id: "user-123",
+      email: "test@example.com",
+      name: "Test User",
+      profileImage: "image.jpg",
+      googleId: "google-123",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    it("액세스 토큰과 리프레시 토큰을 생성해야 합니다", async () => {
+      mockJwtService.signAsync
+        .mockResolvedValueOnce("access-token")
+        .mockResolvedValueOnce("refresh-token");
+
+      const result = await service.generateTokens(mockUserWithId);
+
+      expect(result).toEqual({
+        accessToken: "access-token",
+        refreshToken: "refresh-token",
+      });
+      expect(mockJwtService.signAsync).toHaveBeenCalledTimes(2);
+      expect(mockAuthRepository.setRefreshToken).toHaveBeenCalledWith("user-123", "refresh-token");
+    });
+  });
+
+  describe("logout", () => {
+    it("리프레시 토큰을 삭제해야 합니다", async () => {
+      await service.logout("user-123");
+
+      expect(mockAuthRepository.deleteRefreshToken).toHaveBeenCalledWith("user-123");
+    });
+  });
+
+  describe("createAuthCode", () => {
+    it("인증 코드를 생성하고 저장해야 합니다", async () => {
+      const result = await service.createAuthCode("user-123");
+
+      expect(result).toBeDefined();
+      expect(typeof result).toBe("string");
+      expect(mockAuthRepository.saveAuthCode).toHaveBeenCalledWith(result, "user-123");
+    });
+  });
+
+  describe("refreshGuestToken", () => {
+    const guestId = "guest-123";
+    const clientIp = "127.0.0.1";
+
+    it("게스트 세션이 없으면 UnauthorizedException을 던져야 합니다", async () => {
+      mockAuthRepository.getGuestSession.mockResolvedValue(null);
+
+      await expect(service.refreshGuestToken(guestId, clientIp)).rejects.toThrow(
+        UnauthorizedException,
+      );
+    });
+
+    it("IP가 일치하지 않으면 ForbiddenException을 던져야 합니다", async () => {
+      mockAuthRepository.getGuestSession.mockResolvedValue({
+        ipHash: "different-ip-hash",
+        usageCount: 0,
+        maxUsage: 10,
+      });
+
+      await expect(service.refreshGuestToken(guestId, clientIp)).rejects.toThrow(
+        ForbiddenException,
+      );
+    });
+
+    it("사용량 제한을 초과하면 ForbiddenException을 던져야 합니다", async () => {
+      const ipHash = createHash("sha256").update(clientIp).digest("hex").substring(0, 32);
+
+      mockAuthRepository.getGuestSession.mockResolvedValue({
+        ipHash,
+        usageCount: 10,
+        maxUsage: 10,
+      });
+
+      await expect(service.refreshGuestToken(guestId, clientIp)).rejects.toThrow(
+        ForbiddenException,
+      );
+    });
+
+    it("유효한 게스트 세션이면 새 토큰을 반환해야 합니다", async () => {
+      const ipHash = createHash("sha256").update(clientIp).digest("hex").substring(0, 32);
+
+      mockAuthRepository.getGuestSession.mockResolvedValue({
+        ipHash,
+        usageCount: 5,
+        maxUsage: 10,
+      });
+      mockJwtService.signAsync.mockResolvedValue("new-guest-token");
+
+      const result = await service.refreshGuestToken(guestId, clientIp);
+
+      expect(result).toHaveProperty("accessToken", "new-guest-token");
+      expect(result).toHaveProperty("guestId", guestId);
+      expect(result).toHaveProperty("usageCount", 5);
+      expect(result).toHaveProperty("maxUsage", 10);
+    });
+  });
+
+  describe("incrementGuestUsage", () => {
+    const guestId = "guest-123";
+
+    it("게스트 세션이 없으면 UnauthorizedException을 던져야 합니다", async () => {
+      mockAuthRepository.guestSessionExists.mockResolvedValue(false);
+
+      await expect(service.incrementGuestUsage(guestId)).rejects.toThrow(UnauthorizedException);
+    });
+
+    it("사용량을 증가시키고 반환해야 합니다", async () => {
+      mockAuthRepository.guestSessionExists.mockResolvedValue(true);
+      mockAuthRepository.incrementGuestUsage.mockResolvedValue(6);
+      mockAuthRepository.getGuestSession.mockResolvedValue({
+        usageCount: 6,
+        maxUsage: 10,
+      });
+
+      const result = await service.incrementGuestUsage(guestId);
+
+      expect(result).toEqual({ usageCount: 6, maxUsage: 10 });
+      expect(mockAuthRepository.incrementGuestUsage).toHaveBeenCalledWith(guestId);
+    });
+
+    it("게스트 세션이 없으면 기본 maxUsage를 사용해야 합니다", async () => {
+      mockAuthRepository.guestSessionExists.mockResolvedValue(true);
+      mockAuthRepository.incrementGuestUsage.mockResolvedValue(1);
+      mockAuthRepository.getGuestSession.mockResolvedValue(null);
+
+      const result = await service.incrementGuestUsage(guestId);
+
+      expect(result.usageCount).toBe(1);
+      expect(result.maxUsage).toBeDefined();
+    });
+  });
+
+  describe("getGuestInfo", () => {
+    const guestId = "guest-123";
+
+    it("게스트 세션이 없으면 null을 반환해야 합니다", async () => {
+      mockAuthRepository.getGuestSession.mockResolvedValue(null);
+
+      const result = await service.getGuestInfo(guestId);
+
+      expect(result).toBeNull();
+    });
+
+    it("게스트 정보를 반환해야 합니다", async () => {
+      mockAuthRepository.getGuestSession.mockResolvedValue({
+        usageCount: 3,
+        maxUsage: 10,
+      });
+
+      const result = await service.getGuestInfo(guestId);
+
+      expect(result).toEqual({ usageCount: 3, maxUsage: 10 });
+    });
+  });
+
+  describe("Refresh Token - Edge Cases", () => {
+    it("유저를 찾을 수 없으면 UnauthorizedException을 던져야 합니다", async () => {
+      const refreshToken = "valid-refresh-token";
+      const payload = { sub: "user-123", role: "user", email: "test@example.com" };
+
+      mockJwtService.verifyAsync.mockResolvedValue(payload);
+      mockAuthRepository.getRefreshToken.mockResolvedValue(refreshToken);
+      mockAuthRepository.findUserById.mockResolvedValue(null);
+
+      await expect(service.refreshTokens(refreshToken)).rejects.toThrow(UnauthorizedException);
+    });
+
+    it("JWT 검증 실패 시 UnauthorizedException을 던져야 합니다", async () => {
+      mockJwtService.verifyAsync.mockRejectedValue(new Error("jwt malformed"));
+
+      await expect(service.refreshTokens("invalid-token")).rejects.toThrow(UnauthorizedException);
     });
   });
 });
