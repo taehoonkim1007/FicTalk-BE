@@ -105,12 +105,41 @@ describe("CharactersController (E2E)", () => {
   });
 
   // ==========================================
+  // 0. 캐릭터 목록 조회 (GET /characters)
+  // ==========================================
+  it("캐릭터 목록을 조회할 수 있어야 한다 (Public)", async () => {
+    const response = await request(app.getHttpServer() as Server)
+      .get("/characters")
+      .expect(200);
+
+    const body = response.body as {
+      characters: { id: string; name: string }[];
+      pagination: { page: number; limit: number; total: number };
+    };
+    expect(body).toHaveProperty("characters");
+    expect(body).toHaveProperty("pagination");
+    expect(Array.isArray(body.characters)).toBe(true);
+  });
+
+  it("캐릭터 목록을 페이지네이션과 함께 조회할 수 있어야 한다", async () => {
+    const response = await request(app.getHttpServer() as Server)
+      .get("/characters?page=1&limit=5")
+      .expect(200);
+
+    const body = response.body as {
+      pagination: { page: number; limit: number };
+    };
+    expect(body.pagination.page).toBe(1);
+    expect(body.pagination.limit).toBe(5);
+  });
+
+  // ==========================================
   // 1. 캐릭터 생성 (POST /stories/:id/characters)
   // ==========================================
   it("스토리에 새로운 캐릭터를 추가하면 201 상태코드와 생성된 정보를 반환해야 한다", async () => {
     const createDto = {
       name: "New Character",
-      role: "Villain",
+      role: "조연",
       description: "Evil genius",
       personality: "Smart but cruel",
       firstMessage: "I expect you to die.",
@@ -130,10 +159,35 @@ describe("CharactersController (E2E)", () => {
   });
 
   // ==========================================
+  // 1-1. 캐릭터 상세 조회 (GET /characters/:id)
+  // ==========================================
+  it("캐릭터 상세 정보를 조회할 수 있어야 한다 (Public)", async () => {
+    const response = await request(app.getHttpServer() as Server)
+      .get(`/characters/${createdCharacterId}`)
+      .expect(200);
+
+    const body = response.body as {
+      id: string;
+      name: string;
+      story: { id: string; title: string };
+    };
+    expect(body.id).toBe(createdCharacterId);
+    expect(body).toHaveProperty("name");
+    expect(body).toHaveProperty("story");
+    expect(body.story).toHaveProperty("id", storyId);
+  });
+
+  it("존재하지 않는 캐릭터 조회 시 404를 반환해야 한다", async () => {
+    await request(app.getHttpServer() as Server)
+      .get("/characters/non-existent-id")
+      .expect(404);
+  });
+
+  // ==========================================
   // 2. 캐릭터 수정 (PATCH /characters/:id)
   // ==========================================
   it("캐릭터 정보를 수정하면 변경된 내용이 반영되어야 한다", async () => {
-    const updateDto = { name: "Redeemed Character", role: "Hero" };
+    const updateDto = { name: "Redeemed Character", role: "주인공" };
 
     const response = await request(app.getHttpServer() as Server)
       .patch(`/characters/${createdCharacterId}`)

@@ -112,7 +112,7 @@ describe("StoriesController (E2E)", () => {
       characters: [
         {
           name: "주인공",
-          role: "Role",
+          role: "주인공",
           description: "Desc",
           personality: "Personality",
           firstMessage: "Hi",
@@ -182,7 +182,49 @@ describe("StoriesController (E2E)", () => {
   });
 
   // ==========================================
-  // 6. 스토리 삭제 (DELETE /stories/:id)
+  // 5. 스토리 상세 조회 (GET /stories/:id)
+  // ==========================================
+  it("스토리 상세 조회 시 캐릭터 정보를 포함해야 한다", async () => {
+    const response = await request(app.getHttpServer() as Server)
+      .get(`/stories/${createdStoryId}`)
+      .expect(200);
+
+    const body = response.body as {
+      id: string;
+      title: string;
+      characters: { name: string }[];
+    };
+    expect(body.id).toBe(createdStoryId);
+    expect(body).toHaveProperty("characters");
+    expect(Array.isArray(body.characters)).toBe(true);
+  });
+
+  // ==========================================
+  // 6. 히어로 슬라이드 조회 (GET /stories/hero-slides)
+  // ==========================================
+  it("히어로 슬라이드를 조회할 수 있어야 한다 (Public)", async () => {
+    const response = await request(app.getHttpServer() as Server)
+      .get("/stories/hero-slides")
+      .expect(200);
+
+    expect(Array.isArray(response.body)).toBe(true);
+  });
+
+  // ==========================================
+  // 7. 스토리 캐릭터 목록 조회 (GET /stories/:storyId/characters)
+  // ==========================================
+  it("스토리의 캐릭터 목록을 조회할 수 있어야 한다 (Public)", async () => {
+    const response = await request(app.getHttpServer() as Server)
+      .get(`/stories/${createdStoryId}/characters`)
+      .expect(200);
+
+    const body = response.body as { characters: { name: string }[] };
+    expect(body).toHaveProperty("characters");
+    expect(Array.isArray(body.characters)).toBe(true);
+  });
+
+  // ==========================================
+  // 8. 스토리 삭제 (DELETE /stories/:id)
   // ==========================================
   it("스토리를 삭제하면 200 상태코드를 반환하고, 다시 조회 시 404가 되어야 한다", async () => {
     // 1. 삭제 요청
