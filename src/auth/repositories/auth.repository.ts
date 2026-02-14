@@ -106,22 +106,94 @@ export class AuthRepository {
     };
   }
 
-  async incrementGuestUsage(guestId: string): Promise<number> {
+  /**
+   * 게스트 사용량 원자적 증가 및 제한 확인 (TOCTOU 방지)
+   * @returns { success: true, newCount, maxUsage } 또는 { success: false, reason: "not_found" | "limit_exceeded" }
+   */
+  async incrementGuestUsageAtomic(
+    guestId: string,
+  ): Promise<
+    | { success: true; newCount: number; maxUsage: number }
+    | { success: false; reason: "not_found" | "limit_exceeded" }
+  > {
     const key = `${REDIS_KEY_PREFIX.GUEST.USAGE}${guestId}`;
-    return this.redisService.hincrby(key, "usageCount", 1);
-  }
 
-  async guestSessionExists(guestId: string): Promise<boolean> {
-    const key = `${REDIS_KEY_PREFIX.GUEST.USAGE}${guestId}`;
-    return this.redisService.exists(key);
+    const script = `
+      local key = KEYS[1]
+
+      -- 세션 존재 확인
+      if redis.call('EXISTS', key) == 0 then
+        return {'not_found', 0, 0}
+      end
+
+      local currentCount = tonumber(redis.call('HGET', key, 'usageCount')) or 0
+      local maxUsage = tonumber(redis.call('HGET', key, 'maxUsage')) or 0
+
+      -- 제한 확인 (증가 전)
+      if currentCount >= maxUsage then
+        return {'limit_exceeded', currentCount, maxUsage}
+      end
+
+      -- 증가
+      local newCount = redis.call('HINCRBY', key, 'usageCount', 1)
+      return {'ok', newCount, maxUsage}
+    `;
+
+    const result = (await this.redisService.eval(script, [key], [])) as [string, number, number];
+
+    if (result[0] === "not_found") {
+      return { success: false, reason: "not_found" };
+    }
+    if (result[0] === "limit_exceeded") {
+      return { success: false, reason: "limit_exceeded" };
+    }
+    return { success: true, newCount: result[1], maxUsage: result[2] };
   }
 
   // ========================
   // Guest IP 제한 관리
   // ========================
 
-  async incrementIpCount(ipHash: string): Promise<number> {
+  /**
+   * IP 카운트 원자적 증가 및 제한 확인 (Race Condition 방지)
+   * @returns { allowed: true, count } 또는 { allowed: false, count }
+   */
+  async incrementIpCountAtomic(
+    ipHash: string,
+    limit: number,
+  ): Promise<{ allowed: boolean; count: number }> {
     const key = `${REDIS_KEY_PREFIX.GUEST.IP_LIMIT}${ipHash}`;
-    return this.redisService.incrementWithTtl(key, GUEST_CONFIG.TTL_MS);
+    const ttlMs = GUEST_CONFIG.TTL_MS;
+
+    const script = `
+      local key = KEYS[1]
+      local limit = tonumber(ARGV[1])
+      local ttlMs = tonumber(ARGV[2])
+
+      -- 현재 카운트 확인
+      local currentCount = tonumber(redis.call('GET', key)) or 0
+
+      -- 제한 초과 확인 (증가 전)
+      if currentCount >= limit then
+        return {0, currentCount}
+      end
+
+      -- 증가
+      local newCount = redis.call('INCR', key)
+
+      -- 첫 번째 증가 시 TTL 설정
+      if newCount == 1 then
+        redis.call('PEXPIRE', key, ttlMs)
+      end
+
+      return {1, newCount}
+    `;
+
+    const result = (await this.redisService.eval(script, [key], [limit, ttlMs])) as [
+      number,
+      number,
+    ];
+
+    return { allowed: result[0] === 1, count: result[1] };
   }
 }

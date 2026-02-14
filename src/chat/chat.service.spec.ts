@@ -72,8 +72,8 @@ describe("ChatService", () => {
   const mockGuestChatRepository = {
     getCharacterIds: jest.fn(),
     hasCharacter: jest.fn(),
-    getCharacterCount: jest.fn(),
     addCharacter: jest.fn(),
+    addCharacterAtomic: jest.fn(),
     removeCharacter: jest.fn(),
     getMessages: jest.fn(),
     getRecentMessages: jest.fn(),
@@ -181,18 +181,21 @@ describe("ChatService", () => {
 
     it("게스트가 이미 가진 캐릭터를 추가하면 그대로 반환해야 합니다", async () => {
       mockChatRepository.findCharacterById.mockResolvedValue(mockCharacter);
-      mockGuestChatRepository.hasCharacter.mockResolvedValue(true);
+      mockGuestChatRepository.addCharacterAtomic.mockResolvedValue("exists");
 
       const result = await service.addCharacter(mockGuestUser, "char-123");
 
       expect(result.id).toBe("char-123");
-      expect(mockGuestChatRepository.addCharacter).not.toHaveBeenCalled();
+      expect(mockGuestChatRepository.addCharacterAtomic).toHaveBeenCalledWith(
+        "guest-123",
+        "char-123",
+        GUEST_MAX_CHARACTERS,
+      );
     });
 
     it("게스트가 캐릭터 제한을 초과하면 ForbiddenException을 던져야 합니다", async () => {
       mockChatRepository.findCharacterById.mockResolvedValue(mockCharacter);
-      mockGuestChatRepository.hasCharacter.mockResolvedValue(false);
-      mockGuestChatRepository.getCharacterCount.mockResolvedValue(GUEST_MAX_CHARACTERS);
+      mockGuestChatRepository.addCharacterAtomic.mockResolvedValue("limit");
 
       await expect(service.addCharacter(mockGuestUser, "char-123")).rejects.toThrow(
         ForbiddenException,
@@ -201,13 +204,16 @@ describe("ChatService", () => {
 
     it("게스트가 새 캐릭터를 추가할 수 있어야 합니다", async () => {
       mockChatRepository.findCharacterById.mockResolvedValue(mockCharacter);
-      mockGuestChatRepository.hasCharacter.mockResolvedValue(false);
-      mockGuestChatRepository.getCharacterCount.mockResolvedValue(0);
+      mockGuestChatRepository.addCharacterAtomic.mockResolvedValue("added");
 
       const result = await service.addCharacter(mockGuestUser, "char-123");
 
       expect(result.id).toBe("char-123");
-      expect(mockGuestChatRepository.addCharacter).toHaveBeenCalledWith("guest-123", "char-123");
+      expect(mockGuestChatRepository.addCharacterAtomic).toHaveBeenCalledWith(
+        "guest-123",
+        "char-123",
+        GUEST_MAX_CHARACTERS,
+      );
     });
   });
 
@@ -305,29 +311,55 @@ describe("ChatService", () => {
 
       it("게스트가 캐릭터 제한을 초과하면 ForbiddenException을 던져야 합니다", async () => {
         mockChatRepository.findCharacterById.mockResolvedValue(mockCharacter);
-        mockGuestChatRepository.hasCharacter.mockResolvedValue(false);
-        mockGuestChatRepository.getCharacterCount.mockResolvedValue(GUEST_MAX_CHARACTERS);
+        mockGuestChatRepository.addCharacterAtomic.mockResolvedValue("limit");
 
         await expect(service.sendMessage(mockGuestUser, "char-123", "Hello")).rejects.toThrow(
           ForbiddenException,
         );
       });
 
-      it("게스트가 메시지를 보낼 수 있어야 합니다", async () => {
+      it("게스트가 메시지를 보낼 수 있어야 합니다 (기존 캐릭터)", async () => {
         mockChatRepository.findCharacterById.mockResolvedValue(mockCharacter);
-        mockGuestChatRepository.hasCharacter.mockResolvedValue(true);
+        mockGuestChatRepository.addCharacterAtomic.mockResolvedValue("exists");
         mockGuestChatRepository.getRecentMessages.mockResolvedValue([]);
         mockAiService.generateChatResponse.mockResolvedValue(aiResponse);
         mockGuestChatRepository.saveMessagesAtomic.mockResolvedValue({
           userMessage: { id: "msg-1", content: "Hello", role: "user" },
           aiMessage: { id: "msg-2", content: aiResponse, role: "assistant" },
         });
+        mockAuthService.incrementGuestUsage.mockResolvedValue({ usageCount: 1, maxUsage: 3 });
 
         const result = await service.sendMessage(mockGuestUser, "char-123", "Hello");
 
         expect(result.userMessage.content).toBe("Hello");
         expect(result.aiMessage.content).toBe(aiResponse);
+        expect(result.usageCount).toBe(1);
+        expect(result.maxUsage).toBe(3);
         expect(mockAuthService.incrementGuestUsage).toHaveBeenCalledWith("guest-123");
+      });
+
+      it("게스트가 메시지를 보낼 수 있어야 합니다 (새 캐릭터 추가)", async () => {
+        mockChatRepository.findCharacterById.mockResolvedValue(mockCharacter);
+        mockGuestChatRepository.addCharacterAtomic.mockResolvedValue("added");
+        mockGuestChatRepository.getRecentMessages.mockResolvedValue([]);
+        mockAiService.generateChatResponse.mockResolvedValue(aiResponse);
+        mockGuestChatRepository.saveMessagesAtomic.mockResolvedValue({
+          userMessage: { id: "msg-1", content: "Hello", role: "user" },
+          aiMessage: { id: "msg-2", content: aiResponse, role: "assistant" },
+        });
+        mockAuthService.incrementGuestUsage.mockResolvedValue({ usageCount: 1, maxUsage: 3 });
+
+        const result = await service.sendMessage(mockGuestUser, "char-123", "Hello");
+
+        expect(result.userMessage.content).toBe("Hello");
+        expect(result.aiMessage.content).toBe(aiResponse);
+        expect(result.usageCount).toBe(1);
+        expect(result.maxUsage).toBe(3);
+        expect(mockGuestChatRepository.addCharacterAtomic).toHaveBeenCalledWith(
+          "guest-123",
+          "char-123",
+          GUEST_MAX_CHARACTERS,
+        );
       });
     });
 

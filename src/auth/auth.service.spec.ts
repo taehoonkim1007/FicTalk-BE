@@ -30,11 +30,10 @@ describe("AuthService", () => {
     saveAuthCode: jest.fn(),
     getAuthCode: jest.fn(),
     deleteAuthCode: jest.fn(),
-    incrementIpCount: jest.fn(),
+    incrementIpCountAtomic: jest.fn(),
     createGuestSession: jest.fn(),
-    incrementGuestUsage: jest.fn(),
+    incrementGuestUsageAtomic: jest.fn(),
     getGuestSession: jest.fn(),
-    guestSessionExists: jest.fn(),
   };
 
   const mockJwtService = {
@@ -145,13 +144,16 @@ describe("AuthService", () => {
     const clientIp = "127.0.0.1";
 
     it("IP 제한을 초과하면 ForbiddenException을 던져야 합니다", async () => {
-      mockAuthRepository.incrementIpCount.mockResolvedValue(GUEST_CONFIG.IP_LIMIT + 1); // Limit 초과
+      mockAuthRepository.incrementIpCountAtomic.mockResolvedValue({
+        allowed: false,
+        count: GUEST_CONFIG.IP_LIMIT,
+      });
 
       await expect(service.createGuestToken(clientIp)).rejects.toThrow(ForbiddenException);
     });
 
     it("IP 제한을 초과하지 않으면 게스트 토큰을 생성해야 합니다", async () => {
-      mockAuthRepository.incrementIpCount.mockResolvedValue(1);
+      mockAuthRepository.incrementIpCountAtomic.mockResolvedValue({ allowed: true, count: 1 });
       mockJwtService.signAsync.mockResolvedValue("guest-access-token");
 
       const result = await service.createGuestToken(clientIp);
@@ -295,34 +297,40 @@ describe("AuthService", () => {
     const guestId = "guest-123";
 
     it("게스트 세션이 없으면 UnauthorizedException을 던져야 합니다", async () => {
-      mockAuthRepository.guestSessionExists.mockResolvedValue(false);
+      mockAuthRepository.incrementGuestUsageAtomic.mockResolvedValue({
+        success: false,
+        reason: "not_found",
+      });
 
       await expect(service.incrementGuestUsage(guestId)).rejects.toThrow(UnauthorizedException);
     });
 
     it("사용량을 증가시키고 반환해야 합니다", async () => {
-      mockAuthRepository.guestSessionExists.mockResolvedValue(true);
-      mockAuthRepository.incrementGuestUsage.mockResolvedValue(6);
-      mockAuthRepository.getGuestSession.mockResolvedValue({
-        usageCount: 6,
+      mockAuthRepository.incrementGuestUsageAtomic.mockResolvedValue({
+        success: true,
+        newCount: 6,
         maxUsage: 10,
       });
 
       const result = await service.incrementGuestUsage(guestId);
 
       expect(result).toEqual({ usageCount: 6, maxUsage: 10 });
-      expect(mockAuthRepository.incrementGuestUsage).toHaveBeenCalledWith(guestId);
+      expect(mockAuthRepository.incrementGuestUsageAtomic).toHaveBeenCalledWith(guestId);
     });
 
-    it("게스트 세션이 없으면 기본 maxUsage를 사용해야 합니다", async () => {
-      mockAuthRepository.guestSessionExists.mockResolvedValue(true);
-      mockAuthRepository.incrementGuestUsage.mockResolvedValue(1);
-      mockAuthRepository.getGuestSession.mockResolvedValue(null);
+    it("사용량 제한 초과 시 현재 상태를 반환해야 합니다", async () => {
+      mockAuthRepository.incrementGuestUsageAtomic.mockResolvedValue({
+        success: false,
+        reason: "limit_exceeded",
+      });
+      mockAuthRepository.getGuestSession.mockResolvedValue({
+        usageCount: 10,
+        maxUsage: 10,
+      });
 
       const result = await service.incrementGuestUsage(guestId);
 
-      expect(result.usageCount).toBe(1);
-      expect(result.maxUsage).toBeDefined();
+      expect(result).toEqual({ usageCount: 10, maxUsage: 10 });
     });
   });
 

@@ -78,8 +78,13 @@ export class ChatRepository {
 
   /**
    * 캐릭터 추가 (이미 존재하면 기존 데이터 반환)
+   * Race Condition 방지를 위한 재시도 로직 포함
    */
-  async addCharacter(chatRoomId: string, characterId: string): Promise<ChatCharacterResponse> {
+  async addCharacter(
+    chatRoomId: string,
+    characterId: string,
+    maxRetries: number = 3,
+  ): Promise<ChatCharacterResponse> {
     const includeOptions = {
       character: {
         include: {
@@ -94,42 +99,57 @@ export class ChatRepository {
       },
     };
 
-    try {
-      const chatRoomCharacter = await this.prisma.chatRoomCharacter.upsert({
-        where: {
-          chatRoomId_characterId: {
-            chatRoomId,
-            characterId,
-          },
-        },
-        create: {
-          chatRoomId,
-          characterId,
-        },
-        update: {}, // 이미 존재하면 아무것도 업데이트하지 않음
-        include: includeOptions,
-      });
+    let lastError: Error | null = null;
 
-      return this.mapChatRoomCharacterToResponse(chatRoomCharacter);
-    } catch (error) {
-      // Race condition으로 인한 unique constraint 오류 처리
-      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
-        const existing = await this.prisma.chatRoomCharacter.findUnique({
+    for (let attempt = 0; attempt < maxRetries; attempt++) {
+      try {
+        const chatRoomCharacter = await this.prisma.chatRoomCharacter.upsert({
           where: {
             chatRoomId_characterId: {
               chatRoomId,
               characterId,
             },
           },
+          create: {
+            chatRoomId,
+            characterId,
+          },
+          update: {}, // 이미 존재하면 아무것도 업데이트하지 않음
           include: includeOptions,
         });
 
-        if (existing) {
-          return this.mapChatRoomCharacterToResponse(existing);
+        return this.mapChatRoomCharacterToResponse(chatRoomCharacter);
+      } catch (error) {
+        // Race condition으로 인한 unique constraint 오류 처리
+        if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
+          lastError = error;
+
+          // 기존 레코드 조회 시도
+          const existing = await this.prisma.chatRoomCharacter.findUnique({
+            where: {
+              chatRoomId_characterId: {
+                chatRoomId,
+                characterId,
+              },
+            },
+            include: includeOptions,
+          });
+
+          if (existing) {
+            return this.mapChatRoomCharacterToResponse(existing);
+          }
+
+          // 레코드가 없으면 다음 시도 전 짧은 대기 (exponential backoff)
+          if (attempt < maxRetries - 1) {
+            await new Promise((resolve) => setTimeout(resolve, Math.pow(2, attempt) * 10));
+            continue;
+          }
         }
+        throw error;
       }
-      throw error;
     }
+
+    throw lastError ?? new Error("Failed to add character after retries");
   }
 
   /**

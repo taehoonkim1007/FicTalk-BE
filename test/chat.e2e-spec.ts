@@ -38,6 +38,7 @@ describe("ChatController (E2E)", () => {
   let category: Category;
   let story: Story;
   let character: Character;
+  let secondCharacter: Character;
 
   // Mock User 정보
   const mockUser = {
@@ -126,6 +127,19 @@ describe("ChatController (E2E)", () => {
 
     story = storyRes.body as Story;
     character = (storyRes.body as { characters: Character[] }).characters[0];
+
+    // 게스트 동시성 테스트용 두 번째 캐릭터 생성
+    secondCharacter = await prisma.character.create({
+      data: {
+        storyId: story.id,
+        name: "두 번째 캐릭터",
+        role: "조연",
+        description: "동시성 테스트용 캐릭터",
+        personality: "차분한",
+        firstMessage: "반갑습니다",
+        imageColor: "#ffffff",
+      },
+    });
   });
 
   afterAll(async () => {
@@ -286,6 +300,74 @@ describe("ChatController (E2E)", () => {
 
       const messagesBody = messagesRes.body as ChatMessageListResponse;
       expect(messagesBody.messages).toEqual([]);
+    });
+  });
+
+  describe("Guest Character Concurrency (캐릭터 제한 원자성 테스트)", () => {
+    let guestToken: string;
+
+    beforeEach(async () => {
+      // 각 테스트 전 Redis 게스트 데이터 초기화
+      const keys = await redisClient.keys("guest:*");
+      if (keys.length > 0) {
+        await redisClient.del(...keys);
+      }
+
+      // 새 게스트 토큰 발급
+      const guestRes = await request(app.getHttpServer() as Server)
+        .post("/auth/guest")
+        .send({})
+        .expect(201);
+
+      guestToken = (guestRes.body as { accessToken: string }).accessToken;
+    });
+
+    it("게스트가 동시에 여러 캐릭터 추가 시 제한(1개)을 초과하지 않아야 합니다", async () => {
+      // 두 캐릭터를 동시에 추가 시도
+      const requests = [character.id, secondCharacter.id].map((charId) =>
+        request(app.getHttpServer() as Server)
+          .post("/chat/characters")
+          .set("Authorization", `Bearer ${guestToken}`)
+          .send({ characterId: charId })
+          .then((res) => ({ status: res.status, characterId: charId })),
+      );
+
+      const results = await Promise.all(requests);
+
+      // 성공한 요청과 실패한 요청 분리
+      const succeeded = results.filter((r) => r.status === 201);
+      const forbidden = results.filter((r) => r.status === 403);
+
+      // 정확히 1개만 성공해야 함 (GUEST_MAX_CHARACTERS = 1)
+      expect(succeeded.length).toBe(1);
+      expect(forbidden.length).toBe(1);
+    });
+
+    it("게스트가 같은 캐릭터를 동시에 추가해도 중복 없이 처리되어야 합니다", async () => {
+      // 같은 캐릭터를 동시에 5번 추가 시도
+      const requests = Array.from({ length: 5 }, () =>
+        request(app.getHttpServer() as Server)
+          .post("/chat/characters")
+          .set("Authorization", `Bearer ${guestToken}`)
+          .send({ characterId: character.id })
+          .then((res) => ({ status: res.status })),
+      );
+
+      const results = await Promise.all(requests);
+
+      // 모두 성공해야 함 (같은 캐릭터는 중복 추가 허용 - exists 반환)
+      const succeeded = results.filter((r) => r.status === 201);
+      expect(succeeded.length).toBe(5);
+
+      // 캐릭터 목록 조회 시 1개만 있어야 함
+      const charactersRes = await request(app.getHttpServer() as Server)
+        .get("/chat/characters")
+        .set("Authorization", `Bearer ${guestToken}`)
+        .expect(200);
+
+      const body = charactersRes.body as ChatCharacterListResponse;
+      expect(body.characters.length).toBe(1);
+      expect(body.characters[0].id).toBe(character.id);
     });
   });
 });

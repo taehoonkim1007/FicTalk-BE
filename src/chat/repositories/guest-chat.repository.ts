@@ -104,11 +104,40 @@ export class GuestChatRepository {
   }
 
   /**
-   * 캐릭터 개수 조회
+   * 캐릭터 원자적 추가 (Race Condition 방지)
+   * @returns "added" - 새로 추가됨, "exists" - 이미 존재, "limit" - 제한 초과
    */
-  async getCharacterCount(guestId: string): Promise<number> {
+  async addCharacterAtomic(
+    guestId: string,
+    characterId: string,
+    maxCharacters: number,
+  ): Promise<"added" | "exists" | "limit"> {
     const key = this.getCharactersKey(guestId);
-    return this.redisService.scard(key);
+
+    // Lua Script: 이미 존재하면 "exists", 제한 초과면 "limit", 추가 성공하면 "added"
+    const script = `
+      local key = KEYS[1]
+      local characterId = ARGV[1]
+      local maxCount = tonumber(ARGV[2])
+
+      -- 이미 존재하는지 확인
+      if redis.call('SISMEMBER', key, characterId) == 1 then
+        return 'exists'
+      end
+
+      -- 현재 개수 확인
+      local count = redis.call('SCARD', key)
+      if count >= maxCount then
+        return 'limit'
+      end
+
+      -- 추가
+      redis.call('SADD', key, characterId)
+      return 'added'
+    `;
+
+    const result = await this.redisService.eval(script, [key], [characterId, maxCharacters]);
+    return result as "added" | "exists" | "limit";
   }
 
   /**

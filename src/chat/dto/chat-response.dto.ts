@@ -54,4 +54,6 @@ export class ChatMessagesResponse {
 export class SendMessageResponse {
   userMessage: ChatMessageResponse;
   aiMessage: ChatMessageResponse;
+  usageCount?: number;
+  maxUsage?: number;
 }

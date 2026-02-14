@@ -126,6 +126,14 @@ export class RedisService implements OnModuleDestroy {
     return this.client.scard(key);
   }
 
+  // ========================
+  // Lua Script 메서드 (원자적 연산용)
+  // ========================
+
+  async eval(script: string, keys: string[], args: (string | number)[]): Promise<unknown> {
+    return this.client.eval(script, keys.length, ...keys, ...args);
+  }
+
   async onModuleDestroy() {
     await this.client.quit();
   }

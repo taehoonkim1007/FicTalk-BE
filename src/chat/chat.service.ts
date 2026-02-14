@@ -104,18 +104,16 @@ export class ChatService {
     }
 
     if (user.role === "guest") {
-      // 게스트는 이미 해당 캐릭터가 있으면 그대로 반환
-      const hasCharacter = await this.guestChatRepository.hasCharacter(user.id, characterId);
-      if (hasCharacter) {
-        // 이미 추가된 캐릭터 - 정상 반환
-      } else {
-        // 새 캐릭터 추가 시 1개 제한 확인
-        const characterCount = await this.guestChatRepository.getCharacterCount(user.id);
-        if (characterCount >= GUEST_MAX_CHARACTERS) {
-          throw new ForbiddenException(ERROR_CODES.GUEST_CHARACTER_LIMIT);
-        }
-        await this.guestChatRepository.addCharacter(user.id, characterId);
+      // 원자적으로 캐릭터 추가 (Race Condition 방지)
+      const result = await this.guestChatRepository.addCharacterAtomic(
+        user.id,
+        characterId,
+        GUEST_MAX_CHARACTERS,
+      );
+      if (result === "limit") {
+        throw new ForbiddenException(ERROR_CODES.GUEST_CHARACTER_LIMIT);
       }
+      // "added" 또는 "exists"면 정상 진행
     } else {
       // 채팅방 조회/생성
       const chatRoom = await this.chatRepository.findOrCreateChatRoom(user.id);
@@ -219,15 +217,14 @@ export class ChatService {
       throw new NotFoundException(ERROR_MESSAGES.CHARACTER_NOT_FOUND);
     }
 
-    // 캐릭터가 추가되어 있는지 확인
-    const hasCharacter = await this.guestChatRepository.hasCharacter(user.id, characterId);
-    if (!hasCharacter) {
-      // 새 캐릭터 추가 시 1개 제한 확인
-      const characterCount = await this.guestChatRepository.getCharacterCount(user.id);
-      if (characterCount >= GUEST_MAX_CHARACTERS) {
-        throw new ForbiddenException(ERROR_CODES.GUEST_CHARACTER_LIMIT);
-      }
-      await this.guestChatRepository.addCharacter(user.id, characterId);
+    // 원자적으로 캐릭터 추가 (이미 있으면 무시, Race Condition 방지)
+    const addResult = await this.guestChatRepository.addCharacterAtomic(
+      user.id,
+      characterId,
+      GUEST_MAX_CHARACTERS,
+    );
+    if (addResult === "limit") {
+      throw new ForbiddenException(ERROR_CODES.GUEST_CHARACTER_LIMIT);
     }
 
     // 최근 대화 내역 조회
@@ -258,9 +255,14 @@ export class ChatService {
     );
 
     // 게스트 사용량 증가
-    await this.authService.incrementGuestUsage(user.id);
+    const usage = await this.authService.incrementGuestUsage(user.id);
 
-    return { userMessage, aiMessage };
+    return {
+      userMessage,
+      aiMessage,
+      usageCount: usage.usageCount,
+      maxUsage: usage.maxUsage,
+    };
   }
 
   private async sendUserMessage(

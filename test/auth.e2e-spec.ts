@@ -9,6 +9,7 @@ import request from "supertest";
 
 import { AppModule } from "../src/app.module";
 import { AUTH_CODE_TTL, REDIS_KEY_PREFIX } from "../src/auth/constants";
+import { type GuestTokenResponse } from "../src/auth/dto/guest-token.dto";
 import { GoogleAuthGuard } from "../src/auth/guards/google-auth.guard";
 import { type GoogleAuthRequest } from "../src/auth/types/auth.types";
 import { PrismaService } from "../src/prisma/prisma.service";
@@ -306,6 +307,38 @@ describe("AuthController (E2E)", () => {
       await request(app.getHttpServer() as Server)
         .get("/auth/me")
         .expect(401);
+    });
+  });
+
+  describe("Guest Token Concurrency (IP 제한 원자성 테스트)", () => {
+    beforeEach(async () => {
+      // 각 테스트 전 Redis 초기화
+      await redisClient.flushall();
+    });
+
+    it("동시에 여러 게스트 토큰 요청 시 IP 제한을 초과하지 않아야 합니다", async () => {
+      const concurrentRequests = 10; // IP_LIMIT(5)보다 많은 동시 요청
+
+      // 동시 요청 생성
+      const requests = Array.from({ length: concurrentRequests }, () =>
+        request(app.getHttpServer() as Server)
+          .post("/auth/guest")
+          .send({})
+          .then((res) => ({ status: res.status, body: res.body as GuestTokenResponse })),
+      );
+
+      const results = await Promise.all(requests);
+
+      // 성공한 요청과 실패한 요청 분리
+      const succeeded = results.filter((r) => r.status === 201);
+      const forbidden = results.filter((r) => r.status === 403);
+
+      // IP_LIMIT(5) 이하만 성공해야 함
+      expect(succeeded.length).toBeLessThanOrEqual(5);
+      // 나머지는 403이어야 함
+      expect(forbidden.length).toBeGreaterThanOrEqual(concurrentRequests - 5);
+      // 전체 합이 맞아야 함
+      expect(succeeded.length + forbidden.length).toBe(concurrentRequests);
     });
   });
 

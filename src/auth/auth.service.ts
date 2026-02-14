@@ -138,10 +138,14 @@ export class AuthService {
   async createGuestToken(clientIp: string): Promise<GuestTokenResponse> {
     const ipHash = this.hashIp(clientIp);
 
-    const currentIpCount = await this.authRepository.incrementIpCount(ipHash);
+    // 원자적으로 IP 카운트 증가 및 제한 확인 (Race Condition 방지)
+    const ipResult = await this.authRepository.incrementIpCountAtomic(
+      ipHash,
+      GUEST_CONFIG.IP_LIMIT,
+    );
 
-    if (currentIpCount > GUEST_CONFIG.IP_LIMIT) {
-      this.logger.warn(`Guest IP Limit Exceeded: ${clientIp} (${currentIpCount})`);
+    if (!ipResult.allowed) {
+      this.logger.warn(`Guest IP Limit Exceeded: ${clientIp} (${ipResult.count})`);
       throw new ForbiddenException(
         `IP limit exceeded. Maximum ${GUEST_CONFIG.IP_LIMIT} guest accounts per IP.`,
       );
@@ -217,19 +221,26 @@ export class AuthService {
   }
 
   async incrementGuestUsage(guestId: string): Promise<{ usageCount: number; maxUsage: number }> {
-    const exists = await this.authRepository.guestSessionExists(guestId);
-    if (!exists) {
-      throw new UnauthorizedException("Guest session expired or not found");
+    // 원자적으로 사용량 증가 및 제한 확인 (TOCTOU 방지)
+    const result = await this.authRepository.incrementGuestUsageAtomic(guestId);
+
+    if (!result.success) {
+      if (result.reason === "not_found") {
+        throw new UnauthorizedException("Guest session expired or not found");
+      }
+      // limit_exceeded - 사용량 제한 초과 시에도 현재 상태 반환 (호출자가 처리)
+      const guestData = await this.authRepository.getGuestSession(guestId);
+      return {
+        usageCount: guestData?.usageCount ?? GUEST_CONFIG.MAX_USAGE,
+        maxUsage: guestData?.maxUsage ?? GUEST_CONFIG.MAX_USAGE,
+      };
     }
 
-    const newCount = await this.authRepository.incrementGuestUsage(guestId);
-    this.logger.debug(`Guest Usage Incremented: ${guestId} -> ${newCount}`);
-
-    const guestData = await this.authRepository.getGuestSession(guestId);
+    this.logger.debug(`Guest Usage Incremented: ${guestId} -> ${result.newCount}`);
 
     return {
-      usageCount: newCount,
-      maxUsage: guestData?.maxUsage ?? GUEST_CONFIG.MAX_USAGE,
+      usageCount: result.newCount,
+      maxUsage: result.maxUsage,
     };
   }
 
