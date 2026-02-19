@@ -8,6 +8,7 @@ import { Creative_Summary, Korean_Lit_Summary, World_Lit_Summary } from "./stori
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
+  ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false,
 });
 const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
