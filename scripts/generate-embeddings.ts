@@ -9,6 +9,7 @@ const AI_SERVER_URL = process.env.AI_SERVER_URL || "http://localhost:8000";
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
+  ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false,
 });
 const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
