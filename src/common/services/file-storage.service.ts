@@ -1,7 +1,9 @@
 import { randomUUID } from "crypto";
 import { mkdir, unlink, writeFile } from "fs/promises";
 import { join } from "path";
+import { DeleteObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { BadRequestException, Injectable, Logger } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 
 export type ImageDirectory =
   | "characters/profileImage"
@@ -12,11 +14,35 @@ export type ImageDirectory =
 @Injectable()
 export class FileStorageService {
   private readonly logger = new Logger(FileStorageService.name);
-  private readonly uploadBasePath: string;
   private readonly supportedFormats = ["png", "jpeg", "jpg", "webp", "gif"];
+  private readonly isProduction: boolean;
 
-  constructor() {
+  // Local storage
+  private readonly uploadBasePath: string;
+
+  // S3 storage
+  private readonly s3Client: S3Client | null = null;
+  private readonly s3Bucket: string | null = null;
+  private readonly s3BaseUrl: string | null = null;
+
+  constructor(private readonly configService: ConfigService) {
+    this.isProduction = this.configService.get("NODE_ENV") === "production";
     this.uploadBasePath = join(process.cwd(), "public", "uploads");
+
+    if (this.isProduction) {
+      this.s3Client = new S3Client({
+        region: this.configService.getOrThrow("AWS_REGION"),
+        credentials: {
+          accessKeyId: this.configService.getOrThrow("AWS_ACCESS_KEY_ID"),
+          secretAccessKey: this.configService.getOrThrow("AWS_SECRET_ACCESS_KEY"),
+        },
+      });
+      this.s3Bucket = this.configService.getOrThrow("AWS_S3_BUCKET");
+      this.s3BaseUrl = this.configService.getOrThrow("AWS_S3_BASE_URL");
+      this.logger.log("FileStorageService initialized with S3");
+    } else {
+      this.logger.log("FileStorageService initialized with local storage");
+    }
   }
 
   /**
@@ -40,9 +66,14 @@ export class FileStorageService {
       const { format, data } = this.parseBase64DataUrl(input);
       this.validateFormat(format);
 
-      const urlPath = await this.saveBase64ToFile(data, format, directory);
-      this.logger.log(`Saved image to ${urlPath}`);
+      const buffer = Buffer.from(data, "base64");
+      const key = `${directory}/${randomUUID()}.${format}`;
 
+      const urlPath = this.isProduction
+        ? await this.saveToS3(buffer, key, format)
+        : await this.saveToLocal(buffer, key);
+
+      this.logger.log(`Saved image to ${urlPath}`);
       return urlPath;
     } catch (error) {
       if (error instanceof BadRequestException) {
@@ -52,6 +83,101 @@ export class FileStorageService {
       throw new BadRequestException("이미지 저장에 실패했습니다.");
     }
   }
+
+  /**
+   * 이미지 파일 삭제 (AI 생성 이미지만)
+   * UUID 패턴이 아닌 파일은 seed 데이터로 간주하여 삭제하지 않음
+   */
+  async deleteImage(urlPath: string | null | undefined): Promise<void> {
+    if (!urlPath) {
+      return;
+    }
+
+    const filename = urlPath.split("/").pop();
+    if (!filename || !this.isUuidFilename(filename)) {
+      return;
+    }
+
+    try {
+      if (this.isProduction) {
+        await this.deleteFromS3(urlPath);
+      } else {
+        await this.deleteFromLocal(urlPath);
+      }
+      this.logger.log(`Deleted image: ${urlPath}`);
+    } catch {
+      this.logger.warn(`Failed to delete image: ${urlPath}`);
+    }
+  }
+
+  // ========================
+  // Local Storage Methods
+  // ========================
+
+  private async saveToLocal(buffer: Buffer, key: string): Promise<string> {
+    const dirPath = join(this.uploadBasePath, key.substring(0, key.lastIndexOf("/")));
+    const filePath = join(this.uploadBasePath, key);
+
+    await mkdir(dirPath, { recursive: true });
+    await writeFile(filePath, buffer);
+
+    return `/uploads/${key}`;
+  }
+
+  private async deleteFromLocal(urlPath: string): Promise<void> {
+    if (!urlPath.startsWith("/uploads/")) {
+      return;
+    }
+
+    const filePath = join(this.uploadBasePath, urlPath.replace("/uploads/", ""));
+    await unlink(filePath);
+  }
+
+  // ========================
+  // S3 Storage Methods
+  // ========================
+
+  private async saveToS3(buffer: Buffer, key: string, format: string): Promise<string> {
+    if (!this.s3Client || !this.s3Bucket || !this.s3BaseUrl) {
+      throw new Error("S3 is not configured");
+    }
+
+    const contentType = `image/${format === "jpg" ? "jpeg" : format}`;
+
+    await this.s3Client.send(
+      new PutObjectCommand({
+        Bucket: this.s3Bucket,
+        Key: key,
+        Body: buffer,
+        ContentType: contentType,
+      }),
+    );
+
+    return `${this.s3BaseUrl}/${key}`;
+  }
+
+  private async deleteFromS3(urlPath: string): Promise<void> {
+    if (!this.s3Client || !this.s3Bucket || !this.s3BaseUrl) {
+      return;
+    }
+
+    if (!urlPath.startsWith(this.s3BaseUrl)) {
+      return;
+    }
+
+    const key = urlPath.replace(`${this.s3BaseUrl}/`, "");
+
+    await this.s3Client.send(
+      new DeleteObjectCommand({
+        Bucket: this.s3Bucket,
+        Key: key,
+      }),
+    );
+  }
+
+  // ========================
+  // Utility Methods
+  // ========================
 
   private isBase64DataUrl(input: string): boolean {
     return input.startsWith("data:image/");
@@ -76,50 +202,7 @@ export class FileStorageService {
     }
   }
 
-  private async saveBase64ToFile(
-    base64Data: string,
-    format: string,
-    directory: ImageDirectory,
-  ): Promise<string> {
-    const uuid = randomUUID();
-    const filename = `${uuid}.${format}`;
-    const dirPath = join(this.uploadBasePath, directory);
-    const filePath = join(dirPath, filename);
-
-    await mkdir(dirPath, { recursive: true });
-
-    const buffer = Buffer.from(base64Data, "base64");
-    await writeFile(filePath, buffer);
-
-    return `/uploads/${directory}/${filename}`;
-  }
-
-  /**
-   * 이미지 파일 삭제 (AI 생성 이미지만)
-   * UUID 패턴이 아닌 파일은 seed 데이터로 간주하여 삭제하지 않음
-   */
-  async deleteImage(urlPath: string | null | undefined): Promise<void> {
-    if (!urlPath || !urlPath.startsWith("/uploads/")) {
-      return;
-    }
-
-    const filename = urlPath.split("/").pop();
-    if (!filename || !this.isUuidFilename(filename)) {
-      return; // seed 데이터 보호
-    }
-
-    const filePath = join(this.uploadBasePath, urlPath.replace("/uploads/", ""));
-
-    try {
-      await unlink(filePath);
-      this.logger.log(`Deleted image: ${urlPath}`);
-    } catch {
-      this.logger.warn(`Failed to delete image: ${urlPath}`);
-    }
-  }
-
   private isUuidFilename(filename: string): boolean {
-    // UUID 패턴: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.ext
     const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\.\w+$/i;
     return uuidPattern.test(filename);
   }

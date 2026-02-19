@@ -12,6 +12,23 @@ const pool = new Pool({
 const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
+// ========================
+// 환경별 이미지 경로 변환
+// ========================
+const isProduction = process.env.NODE_ENV === "production";
+const s3BaseUrl = process.env.AWS_S3_BASE_URL;
+
+const convertImagePath = (path: string | null | undefined): string | null | undefined => {
+  if (!path) return path;
+  if (!isProduction || !s3BaseUrl) return path;
+
+  // /uploads/... -> S3 URL로 변환
+  if (path.startsWith("/uploads/")) {
+    return `${s3BaseUrl}${path.replace("/uploads", "")}`;
+  }
+  return path;
+};
+
 type StorySeedData = Prisma.StoryUncheckedCreateInput & {
   id: string;
   characters?: {
@@ -30,6 +47,10 @@ const upsertStory = async (tx: PrismaClient, data: StorySeedData) => {
     }
   }
 
+  // 이미지 경로 변환
+  story.coverImage = convertImagePath(story.coverImage) ?? null;
+  story.backgroundImage = convertImagePath(story.backgroundImage) ?? null;
+
   const result = await tx.story.upsert({
     where: { id: story.id },
     update: story,
@@ -39,10 +60,17 @@ const upsertStory = async (tx: PrismaClient, data: StorySeedData) => {
   if (characters?.create && Array.isArray(characters.create)) {
     for (const char of characters.create) {
       if (char.id) {
+        // 캐릭터 이미지 경로 변환
+        const convertedChar = {
+          ...char,
+          profileImage: convertImagePath(char.profileImage) ?? null,
+          backgroundImage: convertImagePath(char.backgroundImage) ?? null,
+        };
+
         await tx.character.upsert({
           where: { id: char.id },
-          update: { ...char, storyId: story.id },
-          create: { ...char, storyId: story.id },
+          update: { ...convertedChar, storyId: story.id },
+          create: { ...convertedChar, storyId: story.id },
         });
       }
     }
@@ -52,6 +80,12 @@ const upsertStory = async (tx: PrismaClient, data: StorySeedData) => {
 };
 
 const main = async () => {
+  // ========================
+  // 환경 정보 출력
+  // ========================
+  console.log(`Environment: ${isProduction ? "production" : "development"}`);
+  console.log(`Image path: ${isProduction && s3BaseUrl ? s3BaseUrl : "/uploads (local)"}`);
+
   // ========================
   // 카테고리 생성
   // ========================

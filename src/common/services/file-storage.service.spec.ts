@@ -1,5 +1,6 @@
 import { mkdir, unlink, writeFile } from "fs/promises";
 import { BadRequestException } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import { Test, type TestingModule } from "@nestjs/testing";
 
 import { FileStorageService } from "./file-storage.service";
@@ -17,9 +18,20 @@ jest.mock("crypto", () => ({
 describe("FileStorageService", () => {
   let service: FileStorageService;
 
+  const mockConfigService = {
+    get: jest.fn().mockReturnValue("development"),
+    getOrThrow: jest.fn(),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [FileStorageService],
+      providers: [
+        FileStorageService,
+        {
+          provide: ConfigService,
+          useValue: mockConfigService,
+        },
+      ],
     }).compile();
 
     service = module.get<FileStorageService>(FileStorageService);
