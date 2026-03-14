@@ -5,6 +5,10 @@
   "author": "",
   "private": true,
   "license": "UNLICENSED",
+  "engines": {
+    "node": ">=20.19.0",
+    "pnpm": ">=10.0.0"
+  },
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
@@ -17,10 +21,16 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json",
-    "prepare": "husky"
+    "test:e2e": "dotenv -e .env.test -- jest --config ./test/jest-e2e.json --runInBand",
+    "test:e2e:setup": "dotenv -e .env.test -- pnpm prisma db push",
+    "prepare": "husky",
+    "db:migrate:deploy": "pnpm prisma migrate deploy",
+    "db:seed": "pnpm prisma db seed",
+    "embedding:generate": "pnpm ts-node scripts/generate-embeddings.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.993.0",
+    "@nestjs/axios": "^4.0.1",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.1",
@@ -29,8 +39,11 @@
     "@nestjs/platform-express": "^11.0.1",
     "@prisma/adapter-pg": "^7.3.0",
     "@prisma/client": "^7.3.0",
+    "axios": "^1.13.4",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.3",
+    "cookie-parser": "^1.4.7",
+    "express": "^5.2.1",
     "ioredis": "^5.9.2",
     "joi": "^18.0.2",
     "passport": "^0.7.0",
@@ -45,10 +58,12 @@
     "@commitlint/config-conventional": "^20.3.1",
     "@eslint/eslintrc": "^3.2.0",
     "@eslint/js": "^9.18.0",
+    "@golevelup/ts-jest": "^1.2.1",
     "@ianvs/prettier-plugin-sort-imports": "^4.7.0",
     "@nestjs/cli": "^11.0.0",
     "@nestjs/schematics": "^11.0.0",
     "@nestjs/testing": "^11.0.1",
+    "@types/cookie-parser": "^1.4.10",
     "@types/express": "^5.0.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^22.10.7",
@@ -56,6 +71,7 @@
     "@types/passport-jwt": "^4.0.1",
     "@types/pg": "^8.16.0",
     "@types/supertest": "^6.0.2",
+    "dotenv-cli": "^11.0.0",
     "esbuild": "^0.27.2",
     "eslint": "^9.18.0",
     "eslint-config-prettier": "^10.0.1",
@@ -76,7 +92,7 @@
     "typescript-eslint": "^8.20.0"
   },
   "prisma": {
-    "seed": "ts-node prisma/seed.ts"
+    "seed": "pnpm ts-node prisma/seed.ts"
   },
   "jest": {
     "moduleFileExtensions": [
