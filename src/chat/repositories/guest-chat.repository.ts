@@ -176,15 +176,24 @@ export class GuestChatRepository {
   }
 
   /**
-   * 사용자 메시지와 AI 응답을 함께 저장
-   * AI 응답 생성 후에만 호출되어 원자적 저장 보장
+   * 메시지 저장 + 사용량 증가를 단일 Lua 스크립트로 원자적 실행
+   * 세션 만료/사용량 초과 시 메시지 저장 없이 실패 반환
    */
   async saveMessagesAtomic(
     guestId: string,
     characterId: string,
     userContent: string,
     aiContent: string,
-  ): Promise<{ userMessage: ChatMessageResponse; aiMessage: ChatMessageResponse }> {
+  ): Promise<
+    | {
+        success: true;
+        userMessage: ChatMessageResponse;
+        aiMessage: ChatMessageResponse;
+        usageCount: number;
+        maxUsage: number;
+      }
+    | { success: false; reason: "not_found" | "limit_exceeded" }
+  > {
     const now = Date.now();
 
     const userMsg: GuestChatMessage = {
@@ -198,17 +207,56 @@ export class GuestChatRepository {
       id: randomUUID(),
       role: "assistant",
       content: aiContent,
-      createdAt: now + 1, // AI 응답이 사용자 메시지 직후에 오도록
+      createdAt: now + 1,
     };
 
-    const key = this.getMessageKey(guestId, characterId);
+    const messageKey = this.getMessageKey(guestId, characterId);
+    const usageKey = `${REDIS_KEY_PREFIX.GUEST.USAGE}${guestId}`;
 
-    // 두 메시지를 연속으로 저장 (Redis pipeline 효과)
-    await this.redisService.rpush(key, JSON.stringify(userMsg));
-    await this.redisService.rpush(key, JSON.stringify(aiMsg));
-    await this.redisService.pexpire(key, GUEST_CONFIG.TTL_MS);
+    const script = `
+      local messageKey = KEYS[1]
+      local usageKey = KEYS[2]
+      local userMsg = ARGV[1]
+      local aiMsg = ARGV[2]
+      local ttlMs = tonumber(ARGV[3])
+
+      -- 세션 존재 확인
+      if redis.call('EXISTS', usageKey) == 0 then
+        return {'not_found', 0, 0}
+      end
+
+      -- 사용량 제한 확인
+      local currentCount = tonumber(redis.call('HGET', usageKey, 'usageCount')) or 0
+      local maxUsage = tonumber(redis.call('HGET', usageKey, 'maxUsage')) or 0
+
+      if currentCount >= maxUsage then
+        return {'limit_exceeded', currentCount, maxUsage}
+      end
+
+      -- 메시지 저장 + 사용량 증가 (원자적)
+      redis.call('RPUSH', messageKey, userMsg)
+      redis.call('RPUSH', messageKey, aiMsg)
+      redis.call('PEXPIRE', messageKey, ttlMs)
+      local newCount = redis.call('HINCRBY', usageKey, 'usageCount', 1)
+
+      return {'ok', newCount, maxUsage}
+    `;
+
+    const result = (await this.redisService.eval(
+      script,
+      [messageKey, usageKey],
+      [JSON.stringify(userMsg), JSON.stringify(aiMsg), GUEST_CONFIG.TTL_MS],
+    )) as [string, number, number];
+
+    if (result[0] === "not_found") {
+      return { success: false, reason: "not_found" };
+    }
+    if (result[0] === "limit_exceeded") {
+      return { success: false, reason: "limit_exceeded" };
+    }
 
     return {
+      success: true,
       userMessage: {
         id: userMsg.id,
         role: userMsg.role,
@@ -221,6 +269,8 @@ export class GuestChatRepository {
         content: aiMsg.content,
         createdAt: new Date(aiMsg.createdAt),
       },
+      usageCount: result[1],
+      maxUsage: result[2],
     };
   }
 }

@@ -9,6 +9,7 @@ export const ERROR_MESSAGES: Record<ErrorCode, string> = {
   AUTH_EXPIRED_TOKEN: "만료된 토큰입니다.",
   GUEST_NOT_ALLOWED: "게스트는 접근할 수 없습니다.",
   GUEST_CHARACTER_LIMIT: "게스트는 캐릭터를 1개만 추가할 수 있습니다.",
+  GUEST_USAGE_LIMIT: "게스트 사용량 한도를 초과했습니다.",
   TOKEN_INVALID: "인증이 필요합니다.",
 
   // User

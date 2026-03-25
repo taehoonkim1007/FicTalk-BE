@@ -1,4 +1,4 @@
-import { ForbiddenException, NotFoundException } from "@nestjs/common";
+import { ForbiddenException, NotFoundException, UnauthorizedException } from "@nestjs/common";
 import { Test, type TestingModule } from "@nestjs/testing";
 
 import { AiService } from "../ai/ai.service";
@@ -87,6 +87,7 @@ describe("ChatService", () => {
 
   const mockAuthService = {
     incrementGuestUsage: jest.fn(),
+    getGuestInfo: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -318,16 +319,43 @@ describe("ChatService", () => {
         );
       });
 
+      it("게스트 세션이 만료되면 UnauthorizedException을 던져야 합니다", async () => {
+        mockChatRepository.findCharacterById.mockResolvedValue(mockCharacter);
+        mockGuestChatRepository.addCharacterAtomic.mockResolvedValue("exists");
+        mockGuestChatRepository.getRecentMessages.mockResolvedValue([]);
+        mockAuthService.getGuestInfo.mockResolvedValue(null);
+
+        await expect(service.sendMessage(mockGuestUser, "char-123", "Hello")).rejects.toThrow(
+          UnauthorizedException,
+        );
+        expect(mockAiService.generateChatResponse).not.toHaveBeenCalled();
+      });
+
+      it("사용량 초과 시 AI 호출 없이 ForbiddenException을 던져야 합니다", async () => {
+        mockChatRepository.findCharacterById.mockResolvedValue(mockCharacter);
+        mockGuestChatRepository.addCharacterAtomic.mockResolvedValue("exists");
+        mockGuestChatRepository.getRecentMessages.mockResolvedValue([]);
+        mockAuthService.getGuestInfo.mockResolvedValue({ usageCount: 3, maxUsage: 3 });
+
+        await expect(service.sendMessage(mockGuestUser, "char-123", "Hello")).rejects.toThrow(
+          ForbiddenException,
+        );
+        expect(mockAiService.generateChatResponse).not.toHaveBeenCalled();
+      });
+
       it("게스트가 메시지를 보낼 수 있어야 합니다 (기존 캐릭터)", async () => {
         mockChatRepository.findCharacterById.mockResolvedValue(mockCharacter);
         mockGuestChatRepository.addCharacterAtomic.mockResolvedValue("exists");
         mockGuestChatRepository.getRecentMessages.mockResolvedValue([]);
+        mockAuthService.getGuestInfo.mockResolvedValue({ usageCount: 0, maxUsage: 3 });
         mockAiService.generateChatResponse.mockResolvedValue(aiResponse);
         mockGuestChatRepository.saveMessagesAtomic.mockResolvedValue({
+          success: true,
           userMessage: { id: "msg-1", content: "Hello", role: "user" },
           aiMessage: { id: "msg-2", content: aiResponse, role: "assistant" },
+          usageCount: 1,
+          maxUsage: 3,
         });
-        mockAuthService.incrementGuestUsage.mockResolvedValue({ usageCount: 1, maxUsage: 3 });
 
         const result = await service.sendMessage(mockGuestUser, "char-123", "Hello");
 
@@ -335,19 +363,22 @@ describe("ChatService", () => {
         expect(result.aiMessage.content).toBe(aiResponse);
         expect(result.usageCount).toBe(1);
         expect(result.maxUsage).toBe(3);
-        expect(mockAuthService.incrementGuestUsage).toHaveBeenCalledWith("guest-123");
+        expect(mockAuthService.incrementGuestUsage).not.toHaveBeenCalled();
       });
 
       it("게스트가 메시지를 보낼 수 있어야 합니다 (새 캐릭터 추가)", async () => {
         mockChatRepository.findCharacterById.mockResolvedValue(mockCharacter);
         mockGuestChatRepository.addCharacterAtomic.mockResolvedValue("added");
         mockGuestChatRepository.getRecentMessages.mockResolvedValue([]);
+        mockAuthService.getGuestInfo.mockResolvedValue({ usageCount: 0, maxUsage: 3 });
         mockAiService.generateChatResponse.mockResolvedValue(aiResponse);
         mockGuestChatRepository.saveMessagesAtomic.mockResolvedValue({
+          success: true,
           userMessage: { id: "msg-1", content: "Hello", role: "user" },
           aiMessage: { id: "msg-2", content: aiResponse, role: "assistant" },
+          usageCount: 1,
+          maxUsage: 3,
         });
-        mockAuthService.incrementGuestUsage.mockResolvedValue({ usageCount: 1, maxUsage: 3 });
 
         const result = await service.sendMessage(mockGuestUser, "char-123", "Hello");
 
@@ -359,6 +390,38 @@ describe("ChatService", () => {
           "guest-123",
           "char-123",
           GUEST_MAX_CHARACTERS,
+        );
+      });
+
+      it("Lua 스크립트에서 not_found 반환 시 UnauthorizedException을 던져야 합니다", async () => {
+        mockChatRepository.findCharacterById.mockResolvedValue(mockCharacter);
+        mockGuestChatRepository.addCharacterAtomic.mockResolvedValue("exists");
+        mockGuestChatRepository.getRecentMessages.mockResolvedValue([]);
+        mockAuthService.getGuestInfo.mockResolvedValue({ usageCount: 0, maxUsage: 3 });
+        mockAiService.generateChatResponse.mockResolvedValue(aiResponse);
+        mockGuestChatRepository.saveMessagesAtomic.mockResolvedValue({
+          success: false,
+          reason: "not_found",
+        });
+
+        await expect(service.sendMessage(mockGuestUser, "char-123", "Hello")).rejects.toThrow(
+          UnauthorizedException,
+        );
+      });
+
+      it("Lua 스크립트에서 limit_exceeded 반환 시 ForbiddenException을 던져야 합니다 (TOCTOU 방지)", async () => {
+        mockChatRepository.findCharacterById.mockResolvedValue(mockCharacter);
+        mockGuestChatRepository.addCharacterAtomic.mockResolvedValue("exists");
+        mockGuestChatRepository.getRecentMessages.mockResolvedValue([]);
+        mockAuthService.getGuestInfo.mockResolvedValue({ usageCount: 2, maxUsage: 3 });
+        mockAiService.generateChatResponse.mockResolvedValue(aiResponse);
+        mockGuestChatRepository.saveMessagesAtomic.mockResolvedValue({
+          success: false,
+          reason: "limit_exceeded",
+        });
+
+        await expect(service.sendMessage(mockGuestUser, "char-123", "Hello")).rejects.toThrow(
+          ForbiddenException,
         );
       });
     });
