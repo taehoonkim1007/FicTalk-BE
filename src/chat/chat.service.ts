@@ -1,4 +1,9 @@
-import { ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from "@nestjs/common";
 
 import { AiService } from "../ai/ai.service";
 import { AuthService } from "../auth/auth.service";
@@ -234,6 +239,15 @@ export class ChatService {
       RECENT_MESSAGES_FOR_AI,
     );
 
+    // 사용량 사전 확인 (AI 토큰 낭비 방지)
+    const usage = await this.authService.getGuestInfo(user.id);
+    if (!usage) {
+      throw new UnauthorizedException(ERROR_MESSAGES.AUTH_INVALID_TOKEN);
+    }
+    if (usage.usageCount >= usage.maxUsage) {
+      throw new ForbiddenException(ERROR_CODES.GUEST_USAGE_LIMIT);
+    }
+
     // AI 응답 생성 (RAG 적용) - 먼저 응답을 받은 후 저장
     const aiResponse = await this.aiService.generateChatResponse({
       characterName: character.name,
@@ -246,22 +260,26 @@ export class ChatService {
       userMessage: content,
     });
 
-    // AI 응답 성공 후 사용자 메시지와 AI 응답을 함께 저장 (원자적)
-    const { userMessage, aiMessage } = await this.guestChatRepository.saveMessagesAtomic(
+    // 메시지 저장 + 사용량 증가 (단일 Lua 스크립트, 원자적)
+    const result = await this.guestChatRepository.saveMessagesAtomic(
       user.id,
       characterId,
       content,
       aiResponse,
     );
 
-    // 게스트 사용량 증가
-    const usage = await this.authService.incrementGuestUsage(user.id);
+    if (!result.success) {
+      if (result.reason === "not_found") {
+        throw new UnauthorizedException(ERROR_MESSAGES.AUTH_INVALID_TOKEN);
+      }
+      throw new ForbiddenException(ERROR_CODES.GUEST_USAGE_LIMIT);
+    }
 
     return {
-      userMessage,
-      aiMessage,
-      usageCount: usage.usageCount,
-      maxUsage: usage.maxUsage,
+      userMessage: result.userMessage,
+      aiMessage: result.aiMessage,
+      usageCount: result.usageCount,
+      maxUsage: result.maxUsage,
     };
   }
 
