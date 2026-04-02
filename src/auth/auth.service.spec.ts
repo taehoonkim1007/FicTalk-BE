@@ -1,9 +1,10 @@
 import { createHash } from "crypto";
-import { ForbiddenException, UnauthorizedException } from "@nestjs/common";
+import { ForbiddenException, NotFoundException, UnauthorizedException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 import { Test, type TestingModule } from "@nestjs/testing";
 
+import { FileStorageService } from "../common/services/file-storage.service";
 import { AuthService } from "./auth.service";
 import { GUEST_CONFIG } from "./constants";
 import { AuthRepository } from "./repositories/auth.repository";
@@ -34,6 +35,13 @@ describe("AuthService", () => {
     createGuestSession: jest.fn(),
     incrementGuestUsageAtomic: jest.fn(),
     getGuestSession: jest.fn(),
+    deleteUser: jest.fn(),
+    updateUser: jest.fn(),
+  };
+
+  const mockFileStorageService = {
+    processImage: jest.fn(),
+    deleteImage: jest.fn(),
   };
 
   const mockJwtService = {
@@ -61,6 +69,7 @@ describe("AuthService", () => {
         { provide: AuthRepository, useValue: mockAuthRepository },
         { provide: JwtService, useValue: mockJwtService },
         { provide: ConfigService, useValue: mockConfigService },
+        { provide: FileStorageService, useValue: mockFileStorageService },
       ],
     }).compile();
 
@@ -354,6 +363,25 @@ describe("AuthService", () => {
       const result = await service.getGuestInfo(guestId);
 
       expect(result).toEqual({ usageCount: 3, maxUsage: 10 });
+    });
+  });
+
+  describe("deleteAccount", () => {
+    it("유저가 존재하지 않으면 NotFoundException을 던져야 합니다", async () => {
+      mockAuthRepository.findUserById.mockResolvedValue(null);
+
+      await expect(service.deleteAccount("user-123")).rejects.toThrow(NotFoundException);
+      expect(mockAuthRepository.deleteRefreshToken).not.toHaveBeenCalled();
+      expect(mockAuthRepository.deleteUser).not.toHaveBeenCalled();
+    });
+
+    it("유저가 존재하면 토큰 삭제 후 계정을 삭제해야 합니다", async () => {
+      mockAuthRepository.findUserById.mockResolvedValue(mockUser);
+
+      await service.deleteAccount("user-123");
+
+      expect(mockAuthRepository.deleteRefreshToken).toHaveBeenCalledWith("user-123");
+      expect(mockAuthRepository.deleteUser).toHaveBeenCalledWith("user-123");
     });
   });
 

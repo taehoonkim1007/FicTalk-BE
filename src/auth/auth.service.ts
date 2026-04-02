@@ -1,13 +1,21 @@
 import * as crypto from "crypto";
-import { ForbiddenException, Injectable, Logger, UnauthorizedException } from "@nestjs/common";
+import {
+  ForbiddenException,
+  Injectable,
+  Logger,
+  NotFoundException,
+  UnauthorizedException,
+} from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 import { type User } from "@prisma/client";
 
+import { ERROR_MESSAGES } from "../common/constants/error-messages";
+import { FileStorageService } from "../common/services/file-storage.service";
 import { GUEST_CONFIG, JWT_EXPIRES } from "./constants";
 import { type GuestTokenResponse } from "./dto/guest-token.dto";
 import { AuthRepository } from "./repositories/auth.repository";
-import { type GoogleProfile, type JwtPayload } from "./types/auth.types";
+import { type GoogleProfile, type JwtPayload, type UpdateProfileData } from "./types/auth.types";
 
 @Injectable()
 export class AuthService {
@@ -17,6 +25,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
     private readonly authRepository: AuthRepository,
+    private readonly fileStorageService: FileStorageService,
   ) {}
 
   async validateGoogleUser(profile: GoogleProfile): Promise<User> {
@@ -97,6 +106,57 @@ export class AuthService {
 
   async logout(userId: string): Promise<void> {
     await this.authRepository.deleteRefreshToken(userId);
+  }
+
+  async updateProfile(
+    userId: string,
+    data: UpdateProfileData,
+  ): Promise<{ id: string; name: string; profileImage: string | null }> {
+    const user = await this.authRepository.findUserById(userId);
+    if (!user) {
+      throw new NotFoundException(ERROR_MESSAGES.USER_NOT_FOUND);
+    }
+
+    const updateData: UpdateProfileData = {};
+
+    if (data.name !== undefined) {
+      updateData.name = data.name;
+    }
+
+    if (data.profileImage !== undefined) {
+      const savedImagePath = await this.fileStorageService.processImage(
+        data.profileImage,
+        "users/profileImage",
+      );
+
+      if (savedImagePath) {
+        // 기존 이미지 삭제 (새 이미지로 교체 시)
+        if (user.profileImage) {
+          await this.fileStorageService.deleteImage(user.profileImage);
+        }
+        updateData.profileImage = savedImagePath;
+      }
+    }
+
+    const updatedUser = await this.authRepository.updateUser(userId, updateData);
+
+    return {
+      id: updatedUser.id,
+      name: updatedUser.name,
+      profileImage: updatedUser.profileImage,
+    };
+  }
+
+  async deleteAccount(userId: string): Promise<void> {
+    const user = await this.authRepository.findUserById(userId);
+    if (!user) {
+      throw new NotFoundException(ERROR_MESSAGES.USER_NOT_FOUND);
+    }
+
+    await this.authRepository.deleteRefreshToken(userId);
+    await this.authRepository.deleteUser(userId);
+
+    this.logger.log(`Account Deleted: ${user.email} (ID: ${userId})`);
   }
 
   // ========================

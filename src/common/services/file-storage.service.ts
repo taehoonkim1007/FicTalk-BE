@@ -9,7 +9,8 @@ export type ImageDirectory =
   | "characters/profileImage"
   | "characters/backgroundImage"
   | "stories/coverImage"
-  | "stories/backgroundImage";
+  | "stories/backgroundImage"
+  | "users/profileImage";
 
 @Injectable()
 export class FileStorageService {

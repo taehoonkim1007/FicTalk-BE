@@ -47,6 +47,14 @@ export interface AuthenticatedGuest extends BaseAuthenticatedUser {
 export type AuthenticatedUser = AuthenticatedRegularUser | AuthenticatedGuest;
 
 // ========================
+// 프로필 수정 타입
+// ========================
+export interface UpdateProfileData {
+  name?: string;
+  profileImage?: string;
+}
+
+// ========================
 // Google OAuth 관련 타입
 // ========================
 export interface GoogleProfile {

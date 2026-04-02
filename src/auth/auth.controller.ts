@@ -1,9 +1,12 @@
 import {
   Body,
   Controller,
+  Delete,
+  ForbiddenException,
   Get,
   Ip,
   Logger,
+  Patch,
   Post,
   Req,
   Res,
@@ -11,7 +14,7 @@ import {
   UseGuards,
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { type Request, type Response } from "express";
+import { type Response } from "express";
 
 import { CurrentUser } from "../common/decorators/current-user.decorator";
 import { Public } from "../common/decorators/public.decorator";
@@ -19,6 +22,7 @@ import { AuthService } from "./auth.service";
 import { REFRESH_TOKEN_TTL } from "./constants";
 import { ExchangeCodeDto } from "./dto/exchange-code.dto";
 import { GuestTokenDto, type GuestTokenResponse } from "./dto/guest-token.dto";
+import { UpdateProfileDto } from "./dto/update-profile.dto";
 import { GoogleAuthGuard } from "./guards/google-auth.guard";
 import {
   type AuthenticatedUser,
@@ -123,6 +127,38 @@ export class AuthController {
     });
 
     return { message: "Logged out successfully" };
+  }
+
+  @Delete("account")
+  async deleteAccount(
+    @CurrentUser() user: AuthenticatedUser,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    if (user.role === "guest") {
+      throw new ForbiddenException("Guest cannot delete account");
+    }
+
+    await this.authService.deleteAccount(user.id);
+
+    const isProduction = process.env.NODE_ENV === "production";
+
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: isProduction ? true : false,
+      sameSite: isProduction ? "none" : "lax",
+      path: "/",
+    });
+
+    return { message: "Account deleted successfully" };
+  }
+
+  @Patch("profile")
+  async updateProfile(@CurrentUser() user: AuthenticatedUser, @Body() dto: UpdateProfileDto) {
+    if (user.role === "guest") {
+      throw new ForbiddenException("Guest cannot update profile");
+    }
+
+    return this.authService.updateProfile(user.id, dto);
   }
 
   @Get("me")

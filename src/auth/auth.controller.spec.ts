@@ -1,5 +1,5 @@
 import { createMock } from "@golevelup/ts-jest";
-import { UnauthorizedException } from "@nestjs/common";
+import { ForbiddenException, UnauthorizedException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { Test, type TestingModule } from "@nestjs/testing";
 import { type Response } from "express";
@@ -43,6 +43,7 @@ describe("AuthController", () => {
     logout: jest.fn(),
     createGuestToken: jest.fn(),
     refreshGuestToken: jest.fn(),
+    deleteAccount: jest.fn(),
   };
 
   const mockConfigService = {
@@ -179,6 +180,28 @@ describe("AuthController", () => {
       expect(mockAuthService.logout).not.toHaveBeenCalled();
       expect(mockClearCookie).toHaveBeenCalled();
       expect(result).toEqual({ message: "Logged out successfully" });
+    });
+  });
+
+  describe("deleteAccount", () => {
+    it("게스트 유저는 ForbiddenException을 던져야 합니다", async () => {
+      await expect(controller.deleteAccount(mockGuestUser, mockResponse)).rejects.toThrow(
+        ForbiddenException,
+      );
+      expect(mockAuthService.deleteAccount).not.toHaveBeenCalled();
+    });
+
+    it("일반 유저는 계정을 삭제하고 쿠키를 제거해야 합니다", async () => {
+      const result = await controller.deleteAccount(mockRegularUser, mockResponse);
+
+      expect(mockAuthService.deleteAccount).toHaveBeenCalledWith("user-123");
+      expect(mockClearCookie).toHaveBeenCalledWith("refreshToken", {
+        httpOnly: true,
+        secure: false,
+        sameSite: "lax",
+        path: "/",
+      });
+      expect(result).toEqual({ message: "Account deleted successfully" });
     });
   });
 
