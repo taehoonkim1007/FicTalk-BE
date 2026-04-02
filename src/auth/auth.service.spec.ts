@@ -1,5 +1,10 @@
 import { createHash } from "crypto";
-import { ForbiddenException, NotFoundException, UnauthorizedException } from "@nestjs/common";
+import {
+  ForbiddenException,
+  NotFoundException,
+  ServiceUnavailableException,
+  UnauthorizedException,
+} from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 import { Test, type TestingModule } from "@nestjs/testing";
@@ -398,9 +403,29 @@ describe("AuthService", () => {
     });
 
     it("JWT 검증 실패 시 UnauthorizedException을 던져야 합니다", async () => {
-      mockJwtService.verifyAsync.mockRejectedValue(new Error("jwt malformed"));
+      const jwtError = new Error("jwt malformed");
+      jwtError.name = "JsonWebTokenError";
+      mockJwtService.verifyAsync.mockRejectedValue(jwtError);
 
       await expect(service.refreshTokens("invalid-token")).rejects.toThrow(UnauthorizedException);
+    });
+
+    it("토큰 만료 시 UnauthorizedException을 던져야 합니다", async () => {
+      const expiredError = new Error("jwt expired");
+      expiredError.name = "TokenExpiredError";
+      mockJwtService.verifyAsync.mockRejectedValue(expiredError);
+
+      await expect(service.refreshTokens("expired-token")).rejects.toThrow(UnauthorizedException);
+    });
+
+    it("Redis/DB 인프라 오류 시 ServiceUnavailableException을 던져야 합니다", async () => {
+      const payload = { sub: "user-123", role: "user", email: "test@example.com" };
+      mockJwtService.verifyAsync.mockResolvedValue(payload);
+      mockAuthRepository.getRefreshToken.mockRejectedValue(new Error("ECONNREFUSED"));
+
+      await expect(service.refreshTokens("valid-token")).rejects.toThrow(
+        ServiceUnavailableException,
+      );
     });
   });
 });

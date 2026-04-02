@@ -169,7 +169,6 @@ describe("AuthController", () => {
         httpOnly: true,
         secure: false,
         sameSite: "lax",
-        path: "/",
       });
       expect(result).toEqual({ message: "Logged out successfully" });
     });
@@ -199,7 +198,6 @@ describe("AuthController", () => {
         httpOnly: true,
         secure: false,
         sameSite: "lax",
-        path: "/",
       });
       expect(result).toEqual({ message: "Account deleted successfully" });
     });

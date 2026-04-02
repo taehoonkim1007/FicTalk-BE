@@ -4,6 +4,7 @@ import {
   Injectable,
   Logger,
   NotFoundException,
+  ServiceUnavailableException,
   UnauthorizedException,
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
@@ -96,11 +97,24 @@ export class AuthService {
 
       return this.generateTokens(user);
     } catch (error) {
-      // JWT Verify 실패 시 등
-      if (error instanceof Error && error.message !== "Invalid refresh token") {
-        this.logger.warn(`Refresh Token Verify Failed: ${error.message}`);
+      // 의도적으로 던진 인증 오류는 그대로 전달
+      if (error instanceof UnauthorizedException) {
+        throw error;
       }
-      throw new UnauthorizedException("Invalid refresh token");
+
+      // 그 외 (Redis/DB 인프라 오류, JWT 검증 실패 등)
+      this.logger.warn(`Refresh Token Error: ${error instanceof Error ? error.message : error}`);
+
+      // JWT 검증 실패 → 401
+      if (error instanceof Error && error.name === "JsonWebTokenError") {
+        throw new UnauthorizedException("Invalid refresh token");
+      }
+      if (error instanceof Error && error.name === "TokenExpiredError") {
+        throw new UnauthorizedException("Refresh token expired");
+      }
+
+      // 인프라 오류 → 503
+      throw new ServiceUnavailableException("Service temporarily unavailable");
     }
   }
 

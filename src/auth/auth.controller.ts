@@ -123,7 +123,6 @@ export class AuthController {
       httpOnly: true,
       secure: isProduction ? true : false,
       sameSite: isProduction ? "none" : "lax",
-      path: "/",
     });
 
     return { message: "Logged out successfully" };
@@ -146,7 +145,6 @@ export class AuthController {
       httpOnly: true,
       secure: isProduction ? true : false,
       sameSite: isProduction ? "none" : "lax",
-      path: "/",
     });
 
     return { message: "Account deleted successfully" };
