@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { type Prisma } from "@prisma/client";
+import { StoryStatus, type Prisma } from "@prisma/client";
 
 import { generateSearchVariations } from "../../common/utils/korean-search.util";
 import { PrismaService } from "../../prisma/prisma.service";
@@ -64,6 +64,8 @@ export class CharactersRepository {
             authorName: true,
             coverColor: true,
             coverImage: true,
+            status: true,
+            creatorId: true,
           },
         },
       },
@@ -75,10 +77,13 @@ export class CharactersRepository {
   async findMany(
     dto: GetCharactersDto,
   ): Promise<{ characters: CharacterWithStoryResponse[]; total: number }> {
-    const where: Prisma.CharacterWhereInput = {};
+    // 공개 목록은 PUBLISHED 스토리에 속한 캐릭터만 노출
+    const where: Prisma.CharacterWhereInput = {
+      story: { status: StoryStatus.PUBLISHED },
+    };
 
     if (dto.category) {
-      where.story = { category: { slug: dto.category } };
+      where.story = { status: StoryStatus.PUBLISHED, category: { slug: dto.category } };
     }
 
     if (dto.search) {
@@ -117,6 +122,8 @@ export class CharactersRepository {
               authorName: true,
               coverColor: true,
               coverImage: true,
+              status: true,
+              creatorId: true,
             },
           },
         },

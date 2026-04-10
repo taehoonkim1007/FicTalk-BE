@@ -57,6 +57,22 @@ export class StoriesController {
     return this.storiesService.findMyStories(user.id);
   }
 
+  @Get("me/:id")
+  async findMyStoryById(
+    @Param("id") id: string,
+    @CurrentUser() user: AuthenticatedUser,
+  ): Promise<StoryDetailResponse> {
+    return this.storiesService.findOneAsOwner(id, user.id);
+  }
+
+  @Get("me/:id/characters")
+  async findMyStoryCharacters(
+    @Param("id") id: string,
+    @CurrentUser() user: AuthenticatedUser,
+  ): Promise<CharactersListResponse> {
+    return this.storiesService.findCharactersAsOwner(id, user.id);
+  }
+
   @Public()
   @Get()
   async findAll(@Query() dto: GetStoriesDto): Promise<StoriesListResponse> {
@@ -75,6 +91,14 @@ export class StoriesController {
     @CurrentUser() user: AuthenticatedUser,
   ): Promise<CreatedStoryResponse> {
     return this.storiesService.create(dto, user.id);
+  }
+
+  @Patch(":id/publish")
+  async publish(
+    @Param("id") id: string,
+    @CurrentUser() user: AuthenticatedUser,
+  ): Promise<UpdatedStoryResponse> {
+    return this.storiesService.publish(id, user.id);
   }
 
   @Patch(":id")

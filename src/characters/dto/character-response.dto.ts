@@ -1,4 +1,4 @@
-import type { CharacterRole } from "@prisma/client";
+import type { CharacterRole, StoryStatus } from "@prisma/client";
 
 export class CharacterStorySnippet {
   id: string;
@@ -7,6 +7,8 @@ export class CharacterStorySnippet {
   authorName: string;
   coverColor: string;
   coverImage: string | null;
+  status: StoryStatus;
+  creatorId: string | null;
 }
 
 export class CharacterWithStoryResponse {

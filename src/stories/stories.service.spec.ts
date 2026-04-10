@@ -1,5 +1,6 @@
 import { BadRequestException, ForbiddenException, NotFoundException } from "@nestjs/common";
 import { Test, type TestingModule } from "@nestjs/testing";
+import { StoryStatus } from "@prisma/client";
 
 import { AiService } from "../ai/ai.service";
 import type {
@@ -30,6 +31,8 @@ const mockStoriesRepository = () => ({
   findHeroSlides: jest.fn(),
   findCharactersByStoryId: jest.fn(),
   findMyStories: jest.fn(),
+  publishStory: jest.fn(),
+  countCharacters: jest.fn(),
 });
 
 const mockAiService = () => ({
@@ -151,9 +154,17 @@ describe("StoriesService", () => {
   });
 
   describe("findCharacters", () => {
-    it("스토리의 캐릭터 목록을 반환해야 한다", async () => {
+    it("PUBLISHED 스토리의 캐릭터 목록을 반환해야 한다", async () => {
       // Given
+      const meta = {
+        id: "story-1",
+        creatorId: "user-1",
+        coverImage: null,
+        backgroundImage: null,
+        status: StoryStatus.PUBLISHED,
+      };
       const characters = { characters: [{ id: "char-1", name: "캐릭터1" }] };
+      repository.findByIdWithCreator.mockResolvedValue(meta);
       repository.findCharactersByStoryId.mockResolvedValue(characters);
 
       // When
@@ -165,10 +176,27 @@ describe("StoriesService", () => {
 
     it("스토리가 존재하지 않으면 NotFoundException을 던져야 한다", async () => {
       // Given
-      repository.findCharactersByStoryId.mockResolvedValue(null);
+      repository.findByIdWithCreator.mockResolvedValue(null);
 
       // When & Then
       await expect(service.findCharacters("invalid-id")).rejects.toThrow(
+        new NotFoundException(ERROR_MESSAGES.STORY_NOT_FOUND),
+      );
+    });
+
+    it("DRAFT 스토리는 NotFoundException을 던져야 한다", async () => {
+      // Given
+      const meta = {
+        id: "story-1",
+        creatorId: "user-1",
+        coverImage: null,
+        backgroundImage: null,
+        status: StoryStatus.DRAFT,
+      };
+      repository.findByIdWithCreator.mockResolvedValue(meta);
+
+      // When & Then
+      await expect(service.findCharacters("story-1")).rejects.toThrow(
         new NotFoundException(ERROR_MESSAGES.STORY_NOT_FOUND),
       );
     });

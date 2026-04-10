@@ -18,6 +18,9 @@ export const ERROR_MESSAGES: Record<ErrorCode, string> = {
   // Story
   STORY_NOT_FOUND: "스토리를 찾을 수 없습니다.",
   STORY_NOT_OWNER: "본인의 스토리만 수정/삭제할 수 있습니다.",
+  STORY_NOT_PUBLISHED: "비공개된 스토리에는 접근할 수 없습니다.",
+  STORY_PUBLISH_NO_CHARACTER: "캐릭터가 1명 이상 있어야 게시할 수 있습니다.",
+  STORY_ALREADY_PUBLISHED: "이미 게시된 스토리입니다.",
   CATEGORY_NOT_FOUND: "카테고리를 찾을 수 없습니다.",
   CHARACTER_NOT_FOUND: "캐릭터를 찾을 수 없습니다.",
 

@@ -1,4 +1,5 @@
 import { ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
+import { StoryStatus } from "@prisma/client";
 
 import { ERROR_MESSAGES } from "../common/constants/error-messages";
 import { FileStorageService } from "../common/services/file-storage.service";
@@ -46,6 +47,11 @@ export class CharactersService {
     const character = await this.charactersRepository.findByIdWithDetails(id);
 
     if (!character) {
+      throw new NotFoundException(ERROR_MESSAGES.CHARACTER_NOT_FOUND);
+    }
+
+    // DRAFT 스토리의 캐릭터는 공개 엔드포인트에서 노출되지 않음
+    if (character.story.status === StoryStatus.DRAFT) {
       throw new NotFoundException(ERROR_MESSAGES.CHARACTER_NOT_FOUND);
     }
 

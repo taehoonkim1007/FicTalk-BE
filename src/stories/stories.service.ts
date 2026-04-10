@@ -5,6 +5,7 @@ import {
   Logger,
   NotFoundException,
 } from "@nestjs/common";
+import { StoryStatus } from "@prisma/client";
 
 import { AiService } from "../ai/ai.service";
 import {
@@ -80,6 +81,29 @@ export class StoriesService {
 
     if (!story) {
       throw new NotFoundException(ERROR_MESSAGES.STORY_NOT_FOUND);
+    }
+
+    // DRAFT는 공개 엔드포인트에서 노출되지 않음 (존재 자체 숨김)
+    if (story.status === StoryStatus.DRAFT) {
+      throw new NotFoundException(ERROR_MESSAGES.STORY_NOT_FOUND);
+    }
+
+    return story;
+  }
+
+  /**
+   * 본인 소유 스토리 상세 조회 (DRAFT/PUBLISHED 무관)
+   * StoryFormPage 편집 모드 등 본인만 접근하는 케이스에 사용
+   */
+  async findOneAsOwner(id: string, userId: string): Promise<StoryDetailResponse> {
+    const story = await this.storiesRepository.findById(id);
+
+    if (!story) {
+      throw new NotFoundException(ERROR_MESSAGES.STORY_NOT_FOUND);
+    }
+
+    if (story.creator?.id !== userId) {
+      throw new ForbiddenException(ERROR_MESSAGES.STORY_NOT_OWNER);
     }
 
     return story;
@@ -215,6 +239,17 @@ export class StoriesService {
   }
 
   async findCharacters(storyId: string): Promise<CharactersListResponse> {
+    // DRAFT 차단을 위해 status를 별도 조회 (lightweight)
+    const meta = await this.storiesRepository.findByIdWithCreator(storyId);
+
+    if (!meta) {
+      throw new NotFoundException(ERROR_MESSAGES.STORY_NOT_FOUND);
+    }
+
+    if (meta.status === StoryStatus.DRAFT) {
+      throw new NotFoundException(ERROR_MESSAGES.STORY_NOT_FOUND);
+    }
+
     const result = await this.storiesRepository.findCharactersByStoryId(storyId);
 
     if (!result) {
@@ -222,6 +257,54 @@ export class StoriesService {
     }
 
     return result;
+  }
+
+  /**
+   * 본인 소유 스토리의 캐릭터 목록 조회 (DRAFT/PUBLISHED 무관)
+   */
+  async findCharactersAsOwner(storyId: string, userId: string): Promise<CharactersListResponse> {
+    const meta = await this.storiesRepository.findByIdWithCreator(storyId);
+
+    if (!meta) {
+      throw new NotFoundException(ERROR_MESSAGES.STORY_NOT_FOUND);
+    }
+
+    if (meta.creatorId !== userId) {
+      throw new ForbiddenException(ERROR_MESSAGES.STORY_NOT_OWNER);
+    }
+
+    const result = await this.storiesRepository.findCharactersByStoryId(storyId);
+
+    if (!result) {
+      throw new NotFoundException(ERROR_MESSAGES.STORY_NOT_FOUND);
+    }
+
+    return result;
+  }
+
+  async publish(id: string, userId: string): Promise<UpdatedStoryResponse> {
+    const story = await this.storiesRepository.findByIdWithCreator(id);
+
+    if (!story) {
+      throw new NotFoundException(ERROR_MESSAGES.STORY_NOT_FOUND);
+    }
+
+    if (story.creatorId !== userId) {
+      throw new ForbiddenException(ERROR_MESSAGES.STORY_NOT_OWNER);
+    }
+
+    // 이미 게시된 스토리는 재게시 불가 (일방향)
+    if (story.status === StoryStatus.PUBLISHED) {
+      throw new BadRequestException(ERROR_MESSAGES.STORY_ALREADY_PUBLISHED);
+    }
+
+    // 캐릭터 1명 이상 필수
+    const characterCount = await this.storiesRepository.countCharacters(id);
+    if (characterCount < 1) {
+      throw new BadRequestException(ERROR_MESSAGES.STORY_PUBLISH_NO_CHARACTER);
+    }
+
+    return this.storiesRepository.publishStory(id);
   }
 
   async verifyStoryOwnership(storyId: string, userId: string): Promise<void> {
