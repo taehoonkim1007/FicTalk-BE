@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "Story" ADD COLUMN     "seriesTitle" TEXT,
+ALTER COLUMN "summary" SET DATA TYPE VARCHAR(4000),
+ALTER COLUMN "marketingTitle" SET DATA TYPE TEXT,
+ALTER COLUMN "marketingDescription" SET DATA TYPE TEXT;
