@@ -4,6 +4,7 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from "@nestjs/common";
+import { StoryStatus } from "@prisma/client";
 
 import { AiService } from "../ai/ai.service";
 import { AuthService } from "../auth/auth.service";
@@ -106,6 +107,13 @@ export class ChatService {
     const character = await this.chatRepository.findCharacterById(characterId);
     if (!character) {
       throw new NotFoundException(ERROR_MESSAGES.CHARACTER_NOT_FOUND);
+    }
+
+    // DRAFT 스토리의 캐릭터는 본인(작성자)만 채팅 가능 (테스트 목적)
+    if (character.story.status === StoryStatus.DRAFT) {
+      if (user.role === "guest" || character.story.creatorId !== user.id) {
+        throw new NotFoundException(ERROR_MESSAGES.CHARACTER_NOT_FOUND);
+      }
     }
 
     if (user.role === "guest") {
@@ -222,6 +230,11 @@ export class ChatService {
       throw new NotFoundException(ERROR_MESSAGES.CHARACTER_NOT_FOUND);
     }
 
+    // DRAFT 스토리의 캐릭터는 채팅 불가
+    if (character.story.status === StoryStatus.DRAFT) {
+      throw new NotFoundException(ERROR_MESSAGES.CHARACTER_NOT_FOUND);
+    }
+
     // 원자적으로 캐릭터 추가 (이미 있으면 무시, Race Condition 방지)
     const addResult = await this.guestChatRepository.addCharacterAtomic(
       user.id,
@@ -306,6 +319,11 @@ export class ChatService {
     // 캐릭터 정보 조회
     const character = await this.chatRepository.findCharacterById(characterId);
     if (!character) {
+      throw new NotFoundException(ERROR_MESSAGES.CHARACTER_NOT_FOUND);
+    }
+
+    // DRAFT 스토리의 캐릭터는 본인(작성자)만 채팅 가능 (테스트 목적)
+    if (character.story.status === StoryStatus.DRAFT && character.story.creatorId !== user.id) {
       throw new NotFoundException(ERROR_MESSAGES.CHARACTER_NOT_FOUND);
     }
 

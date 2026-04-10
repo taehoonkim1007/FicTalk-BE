@@ -46,21 +46,28 @@ model Category {
 // ========================
 // 스토리 (작품)
 // ========================
+enum StoryStatus {
+  DRAFT
+  PUBLISHED
+}
+
 model Story {
-  id                   String    @id @default(uuid())
-  title                String    @db.VarChar(100)
+  id                   String      @id @default(uuid())
+  title                String      @db.VarChar(100)
   seriesTitle          String?
-  authorName           String    @db.VarChar(50)
-  description          String    @db.VarChar(400)
-  summary              String    @db.VarChar(4000)
-  coverColor           String    @default("bg-stone-800")
-  coverImage           String?   @db.VarChar(2048)
-  backgroundImage      String?   @db.VarChar(2048)
-  isOfficial           Boolean   @default(false)
+  authorName           String      @db.VarChar(50)
+  description          String      @db.VarChar(400)
+  summary              String      @db.VarChar(4000)
+  coverColor           String      @default("bg-stone-800")
+  coverImage           String?     @db.VarChar(2048)
+  backgroundImage      String?     @db.VarChar(2048)
+  isOfficial           Boolean     @default(false)
+  status               StoryStatus @default(DRAFT)
+  publishedAt          DateTime?
   marketingTitle       String?
   marketingDescription String?
-  createdAt            DateTime  @default(now())
-  updatedAt            DateTime  @updatedAt
+  createdAt            DateTime    @default(now())
+  updatedAt            DateTime    @updatedAt
 
   categoryId  Int
   category    Category @relation(fields: [categoryId], references: [id])
@@ -73,6 +80,8 @@ model Story {
 
   @@index([categoryId])
   @@index([createdAt])
+  @@index([status])
+  @@index([categoryId, status])
 }
 
 // ========================

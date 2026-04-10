@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { CharacterRole, type Prisma } from "@prisma/client";
+import { CharacterRole, StoryStatus, type Prisma } from "@prisma/client";
 
 import { type CreateCharacterDto } from "../../characters/dto/create-character.dto";
 import { generateSearchVariations } from "../../common/utils/korean-search.util";
@@ -40,6 +40,8 @@ export class StoriesRepository {
           coverImage: true,
           backgroundImage: true,
           isOfficial: true,
+          status: true,
+          publishedAt: true,
           createdAt: true,
           category: {
             select: {
@@ -73,6 +75,8 @@ export class StoriesRepository {
         coverImage: true,
         backgroundImage: true,
         isOfficial: true,
+        status: true,
+        publishedAt: true,
         createdAt: true,
         category: {
           select: {
@@ -101,6 +105,8 @@ export class StoriesRepository {
         coverImage: true,
         backgroundImage: true,
         isOfficial: true,
+        status: true,
+        publishedAt: true,
         createdAt: true,
         creator: {
           select: {
@@ -150,6 +156,7 @@ export class StoriesRepository {
     creatorId: string | null;
     coverImage: string | null;
     backgroundImage: string | null;
+    status: StoryStatus;
   } | null> {
     return this.prisma.story.findUnique({
       where: { id },
@@ -158,6 +165,7 @@ export class StoriesRepository {
         creatorId: true,
         coverImage: true,
         backgroundImage: true,
+        status: true,
       },
     });
   }
@@ -201,6 +209,7 @@ export class StoriesRepository {
         coverImage: dto.coverImage,
         backgroundImage: dto.backgroundImage,
         isOfficial: false,
+        status: StoryStatus.DRAFT,
         categoryId,
         creatorId,
         characters: {
@@ -218,6 +227,8 @@ export class StoriesRepository {
         coverImage: true,
         backgroundImage: true,
         isOfficial: true,
+        status: true,
+        publishedAt: true,
         createdAt: true,
         category: {
           select: {
@@ -278,11 +289,46 @@ export class StoriesRepository {
         coverImage: true,
         backgroundImage: true,
         isOfficial: true,
+        status: true,
+        publishedAt: true,
         updatedAt: true,
       },
     });
 
     return updatedStory;
+  }
+
+  async publishStory(id: string): Promise<UpdatedStoryResponse> {
+    const updatedStory = await this.prisma.story.update({
+      where: { id },
+      data: {
+        status: StoryStatus.PUBLISHED,
+        publishedAt: new Date(),
+      },
+      select: {
+        id: true,
+        title: true,
+        seriesTitle: true,
+        authorName: true,
+        description: true,
+        summary: true,
+        coverColor: true,
+        coverImage: true,
+        backgroundImage: true,
+        isOfficial: true,
+        status: true,
+        publishedAt: true,
+        updatedAt: true,
+      },
+    });
+
+    return updatedStory;
+  }
+
+  async countCharacters(storyId: string): Promise<number> {
+    return this.prisma.character.count({
+      where: { storyId },
+    });
   }
 
   async delete(id: string): Promise<void> {
@@ -331,9 +377,10 @@ export class StoriesRepository {
   }
 
   async findHeroSlides(): Promise<HeroSlideResponse[]> {
-    // 캐릭터가 있는 스토리를 가져옴 (공식 스토리 우선, 최신순)
+    // 캐릭터가 있는 PUBLISHED 스토리만 가져옴 (공식 스토리 우선, 최신순)
     const stories = await this.prisma.story.findMany({
       where: {
+        status: StoryStatus.PUBLISHED,
         characters: { some: {} },
       },
       orderBy: [{ isOfficial: "desc" }, { createdAt: "desc" }],
@@ -400,7 +447,10 @@ export class StoriesRepository {
   }
 
   private buildWhereClause(dto: GetStoriesDto): Prisma.StoryWhereInput {
-    const where: Prisma.StoryWhereInput = {};
+    // 공개 목록은 PUBLISHED만 노출
+    const where: Prisma.StoryWhereInput = {
+      status: StoryStatus.PUBLISHED,
+    };
 
     if (dto.category) {
       where.category = { slug: dto.category };

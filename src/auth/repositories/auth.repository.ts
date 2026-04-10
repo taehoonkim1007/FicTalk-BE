@@ -4,6 +4,7 @@ import { type Prisma, type User } from "@prisma/client";
 import { PrismaService } from "../../prisma/prisma.service";
 import { RedisService } from "../../redis/redis.service";
 import { AUTH_CODE_TTL, GUEST_CONFIG, REDIS_KEY_PREFIX, REFRESH_TOKEN_TTL } from "../constants";
+import type { UpdateProfileData } from "../types/auth.types";
 
 export interface GuestSessionData {
   usageCount: number;
@@ -33,6 +34,17 @@ export class AuthRepository {
 
   async createUser(data: Prisma.UserCreateInput): Promise<User> {
     return this.prisma.user.create({ data });
+  }
+
+  async updateUser(userId: string, data: UpdateProfileData): Promise<User> {
+    return this.prisma.user.update({ where: { id: userId }, data });
+  }
+
+  async deleteUser(userId: string): Promise<void> {
+    await this.prisma.$transaction([
+      this.prisma.story.deleteMany({ where: { creatorId: userId } }),
+      this.prisma.user.delete({ where: { id: userId } }),
+    ]);
   }
 
   // ========================

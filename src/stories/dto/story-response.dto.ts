@@ -1,4 +1,4 @@
-import { type CharacterRole } from "@prisma/client";
+import { type CharacterRole, type StoryStatus } from "@prisma/client";
 
 export class StoryCategoryResponse {
   id: number;
@@ -28,6 +28,8 @@ export class StoryResponse {
   coverImage: string | null;
   backgroundImage: string | null;
   isOfficial: boolean;
+  status: StoryStatus;
+  publishedAt: Date | null;
   createdAt: Date;
   category: StoryCategoryResponse;
 }
@@ -74,6 +76,8 @@ export class CreatedStoryResponse {
   coverImage: string | null;
   backgroundImage: string | null;
   isOfficial: boolean;
+  status: StoryStatus;
+  publishedAt: Date | null;
   createdAt: Date;
   category: StoryCategoryResponse;
   creator: StoryCreatorResponse;
@@ -91,6 +95,8 @@ export class UpdatedStoryResponse {
   coverImage: string | null;
   backgroundImage: string | null;
   isOfficial: boolean;
+  status: StoryStatus;
+  publishedAt: Date | null;
   updatedAt: Date;
 }
 
